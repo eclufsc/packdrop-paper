@@ -1,0 +1,124 @@
+\section{The Task Packing Approach}
+
+Fast decision making is crucial for the efficiency of global rescheduling.
+To ensure a quick and informed mapping of tasks, we present the \textbf{Task Packing Approach}.
+Sharing global information (e.g. processor affinity, estimated computational load, expected communication patterns, etc) allows a PE to create groups of the best tasks to leave a given processor and take the migration decision with one message, instead of several.
+
+In this work we present the \textit{PackDrop} strategy, a refinement-based technique that behaves similarly to \textit{Grapevine}, implementing our new approach.
+We expect that, reducing unnecessary communication, the accelerated decision making process will result on a better overall runtime for applications.
+First we will explain the \textit{Pack Creation} process of this strategy, then, the \textit{Pack Sending}.
+After this, the complete strategy will be presented in Algorithm~\ref{algo:packdrop}.
+
+\subsection{Pack Creation}
+
+The \textit{Pack Creation} process for the \textit{PackDrop} strategy is presented in Algorithm~\ref{alg::packcreation}.
+It uses an estimated pack size ($ps$), a set of local tasks ($  T$), the current PE $load$ and a threshold for PE loads ($thrs$, based on Equation~\ref{eq:ceil}), to create a set of $Packs$.
+
+\begin{equation}
+	ceil(l,v) = (1+v)\times l
+    \label{eq:ceil}
+\end{equation}
+
+With this information, each PE will take the least loaded task within its pool, and pack it (lines~$3-6$).
+Then, if the sum of all tasks in the pack is greater then the expected pack size ($ps$), the pack is closed and the strategy start filling another one (lines~$7-10$).
+The process is repeated until until the $load$ of the PE becomes less then the upper bound ($ub$).
+
+\begin{algorithm}[!ht]
+    \DontPrintSemicolon
+    \KwIn{$ps$; $  T$; $load$; $thrs$}
+    \KwOut{$Packs$}
+    $P \gets \varnothing,\ Packs \gets \varnothing,\ ub \gets ceil(load,thrs)$ \\
+    \While{$load > ub$}{
+        $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
+        $  T \gets   T\ \backslash\ \{t\} $\\
+        $\textit{P} \gets P\ \cup\ \{t\}$\\
+        $load \gets load - t$\\
+        \If{$sum(P) > ps$}{
+            $Packs \gets Packs\ \cup\ P$\\
+            $P \gets \varnothing $
+        }
+    }
+    $Packs \gets Packs\ \cup\ P$   
+    \caption{Pack Creation} 
+    \label{alg::packcreation}
+\end{algorithm}
+
+\subsection{Pack Sending}
+
+The \textit{Pack Sending} process is presented in Algorithm~\ref{alg::packsend}.
+The algorithm will use the set of $Packs$, produced by \textit{Pack Creation}, and the set of $\ Targets$, produced by the \textit{Gossip Protocol}, in order to schedule packs on remote PEs.
+This will produce a set with expected $Pack/Target$ pairs, which should be confirmed by the remote target.
+
+Basically, while the local PE still have available $Packs$ to send (line~$2$), it will choose a random $Target$ for it (line~$4$) and invoke a remote $Send$ procedure on its $target$ (line~$5$).
+The selected $pack$ will be removed from the $Packs$ set (line~$6$) and paired up with its $target$ on the $R$ set~(line~$7$), waiting for confirmation.
+This process is repeated until all elements in $Packs$ have attempted a $Send$.
+
+\begin{algorithm}[!ht]
+    \DontPrintSemicolon
+    \KwIn{$Packs$, $Targets$}
+    \KwOut{$R$}
+    $R \gets \varnothing$ \\
+    \While{$Packs \neq \varnothing$}{
+        $pack\ \gets p\ |\ p\ \in\ Packs$\\
+        $target\ \gets  rand(Targets)$\\
+        $Send(pack)\rightarrow target$\\
+        $Packs\ \gets\ Packs\ \backslash\ \{pack\}$\\
+        $\textit{R} \gets R\ \cup\ \{(pack,\ target)\}$\\
+    }  
+    \caption{Pack Sending}  
+    \label{alg::packsend}
+\end{algorithm}
+
+\subsection{The PackDrop Algorithm}
+
+The PackDrop strategy is formally presented in Algorithm~\ref{algo:packdrop}. 
+It will run individually on each PE, in a distributed fashion. 
+Using a current local mapping of tasks to PEs ($  M$), local load ($l$) and knowing all PEs in the system ($  P$), to produce a new mapping ($  M'$).
+In this implementation we used two constants: $1.05$, in order to limit the imbalance at $5\%$ (on line~$5$), and $2$, in order to regulate the size of packs (on line~$6$).
+
+The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
+This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
+
+Then (line~$7$) PEs are divided between two different workflows.
+At this time, \textit{overloaded} PEs will start the Pack Creation process (line~$8$), further explained in Algorithm~\ref{alg::packcreation}.
+Meanwhile, \textit{underloaded} PEs will start a \textit{Gossip Protocol}~\cite{gossip} in order to inform other elements they are willing to receive work(line~$11$).
+\textit{Gossip} is a well known epidemic algorithm used to spread information on a system, providing fast convergence and almost-global awareness of what was shared.
+
+Then, each PE must synchronize to start the remap (line~$13$). 
+At this point, the remapping process will begin.
+PEs will send their packs using Algorithm~\ref{alg::packsend}, \textit{Pack Send}, asynchronously (line~$14$).
+After a pack is sent, a PE will accept or reject it based on their current load, this is done via \textit{three-way handshake}, so both parts confirm the migration.
+
+If one or more packs were not successfully exchanged, an \textit{overloaded} PE must attempt a new \textit{Pack Send}, in order to achieve load balance.
+Once the PEs know their new mappings, tasks are migrated and the strategy is finished (line~$15$). 
+
+\begin{algorithm}
+	\DontPrintSemicolon
+    \KwIn{$  M$; $l$; $  P$}
+    \KwOut{$  M'$}
+    $  M' \gets \varnothing$\\
+    $al \gets (AveragePeLoadReduction(l)\rightarrow  P)$ \\
+    $tc \gets (TotalTaskCountReduction(|  M|)\rightarrow  P)$\\
+    //Average~task~size~//5\%~precision~on~balance\quad
+    $ats\gets \frac{al}{tc}$ \quad $thrs \gets 0.05$\\
+    $ub \gets ceil(al,thrs)$ \qquad //Upper migration threshold\\
+    $ps \gets ats\times (2-\frac{|  P|}{tc}$) \qquad\qquad //Pack size\\
+    \uIf{l > ub}{
+    	$packs \gets PackCreation(ps,  T(  M),l,thrs)$
+    }
+    \Else{
+    	$packs \gets \varnothing$\\
+    	$T \gets (Gossip \rightarrow  P)$ \qquad //Targets for migration\\
+    }
+    $---Synchronization Barrier---$\\
+    //Requests are processed as they are received back
+    $R \gets PackSend(packs, T)$\\
+    $TaskMap(R,   M, MyId)$
+    \caption{PackDrop}
+    \label{algo:packdrop}    
+\end{algorithm}
+
+\textit{PackDrop} intends to remap tasks to PEs in a distributed, workload-aware fashion.
+This approach is the basis for new bin packing distributed strategies that may take other factors into account.
+% Since it is similar to the centralized \textit{Refine} and to the distributed \textit{Grapevine} strategies, but using the \textbf{Task Packing Approach}, we intend to compare it to th.
+

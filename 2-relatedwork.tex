@@ -1,0 +1,28 @@
+\section{Related Work}
+
+Global rescheduling is a well studied theme in high performance computing~\cite{grapevine,nuco,hybrid,ZoltanParHypRepart07,Deveci2015,diffus,Zheng2010}. 
+In the centralized domain, strategies implement a variety of heuristics in order to achieve an homogeneous distribution of load.
+Although centralized algorithms are used the most, they lack scalability and new approaches must be pursued as systems grow.
+
+Refinement based solutions in centralized load balancing are very effective in dealing with low imbalance or high migration costs~\cite{MenonPHD}. 
+Since these strategies use a limited migration heuristic, they are able to efficiently balance load with a low overhead.
+However, since refine strategies limit a total number of migrations, they cannot deal with very unbalanced systems.
+
+Different approaches have been used to scale scheduling strategies.
+Hierarchical algorithms will work differently in different levels, exploring parallelism and delivering better performance~\cite{GengbinThesis,nuco,hybrid}.
+Strategies in this domain have been able to ensure scalability so far, but are still limited by a centralized beginning and data dependency.
+
+Also in the hierarchical domain, multilevel graph partitioning has been used to efficiently reschedule tasks~\cite{ZoltanParHypRepart07}.
+The hypergraph abstraction accurately represents communication, which provides more precision for load balance~\cite{commaware,Bathele2011graph}.
+However, the cost of this representation is very high for a first task mapping process, being more recommended for repartitioning.
+
+Work stealing is one of the most broadly used techniques for balancing load in parallel systems~\cite{DBLP:journals/ijpp/YangH18,Janjic2013}.
+The completely distributed essence of this techniques make them very effective scheduling solutions for parallel and distributed irregular applications.
+
+Diffusive load balancing is a completely distributed solution that may benefit iterative applications~\cite{diffus}.
+These schedulers irradiate work from overloaded PEs to their neighbors, in an effort to achieve load balance in an iterative fashion.
+Very unbalanced systems suffer with this kind of approach, since the scheduler may take too long to reach a solution.
+
+\textit{Grapevine} is a completely distributed refinement-based scheduling solution.
+It uses probabilistic transfer of load and epidemic communication protocols to achieve scalability~\cite{grapevine}.
+We intend to use what was created in \textit{Grapevine} and reduce its communication, using the \textit{Task Packing} approach.

@@ -1,0 +1,74 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage[utf8]{inputenc}
+\usepackage[onelanguage,ruled,linesnumbered]{algorithm2e}
+%\usepackage{booktabs} % For formal tables
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage{todonotes}
+
+
+\title{Evaluation of a Bin Packing Approach for Distributed Global Rescheduling}
+
+
+\author{Vinicius Freitas$^{1}$, Alexandre Santana$^{1}$, Márcio Castro$^{1}$ and Laércio L. Pilla$^{2}$% <-this % stops a space
+\thanks{$^{1}$Vinicius Freitas, Alexandre Satana and Márcio Castro with the Department of Computing and Statistics of the
+        Federal University of Santa Catarina, Florianópolis, Brazil. Contact info.: 
+        {\texttt{vinicius.mct.freitas@gmail.com}}}%
+\thanks{$^{2}$Laércio L. Pilla is with ...}%
+}
+
+
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+\lipsum[9]
+
+\end{abstract}
+
+\input{1-introduction.tex}
+\input{2-relatedwork.tex}
+\input{3-taskpack.tex}
+\input{4-implementation.tex}
+\input{6-eval.tex}
+\input{7-conclusion.tex}
+
+\section*{ACKNOWLEDGMENT}
+The authors acknowledge the National Laboratory for Scientific Computing (LNCC/MCTI, Brazil) for providing HPC resources of the SDumont supercomputer, which have contributed to the research results reported within this paper. URL: \texttt{http://sdumont.lncc.br}.
+
+Experiments presented in this paper were carried out using the Grid'5000 testbed, supported by a scientific interest group hosted by Inria and including CNRS, RENATER and several Universities as well as other organizations (see \texttt{https://www.grid5000.fr}).
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEfull,sample-bibliography}
+
+\end{document}
