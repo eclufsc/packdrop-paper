@@ -8,17 +8,17 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
 \begin{table}[ht]
     \centering
 	\begin{tabular}{c|c|c}
-		Node Info. 			& Supercomputer 			& Cluster \\ \hline
-        CPUs	   			& $2\times12$ 				& $4$ \\
-        Intel Xeon			& E5-2695v2 				& X3440\\
-        CPU Freq.  			& $2.4$GHz   				& $2.53$GHz\\
-        RAM        			& $64$GB					& $16$GB\\
-        Network 			& Infiniband FDR 			& Gigabit Ethernet\\
-        OS      			& RedHat Linux 6.4 			& Ubuntu 14.04\\
-        \texttt{GCC}		& $5.3.1$					& $5.4.0$\\
-        \texttt{Charm++} 	& $6.8.1$ 					& $6.8.1$\\
-        \texttt{MPI}		& $3.1.0$					& -\\
-        \texttt{GCC} Flags	& \texttt{-std=c++11 -O3} 	& \texttt{-std=c++11 -O3} \\
+	Node Info.	 		& Supercomputer 		& Cluster \\ \hline
+        CPUs	   			& $2\times12$ 			& $4$ \\
+        Intel Xeon			& E5-2695v2 			& X3440\\
+        CPU Freq.  			& $2.4$GHz   			& $2.53$GHz\\
+        RAM        			& $64$GB			& $16$GB\\
+        Network 			& Infiniband FDR 		& Gigabit Ethernet\\
+        OS      			& RedHat Linux 6.4 		& Ubuntu 14.04\\
+        \texttt{GCC}			& $5.3.1$			& $5.4.0$\\
+        \texttt{Charm++} 		& $6.8.1$ 			& $6.8.1$\\
+        \texttt{MPI}			& $3.1.0$			& -\\
+        \texttt{GCC} Flags		& \texttt{-std=c++11 -O3} 	& \texttt{-std=c++11 -O3} \\
 	\end{tabular}
     \caption{Platform Information of each Node from Supercomputer and Cluster evaluations. }
     \label{tab:ptinfo}
@@ -79,6 +79,8 @@ Each execution ran $100$ iterations, with a first rescheduling step at the $10$t
 Load balancing periods of every $10$ and every $30$ iterations were used, providing different impacts of rescheduling on the application.
 
 Each configuration of LeanMD was executed $10$ times, making a total of $1000$ steps per configuration. 
+
+\todo[inline]{Do experiments with MD again on cluster. Try 3 different LB freq. since Refine seems to produce a more stable mapping of the system.}
 
 \begin{figure}
 	\centering

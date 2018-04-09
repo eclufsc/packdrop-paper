@@ -2,14 +2,13 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+\documentclass[a4paper, 10 pt, conference]{IEEEtran}  % Comment this line out if you need a4paper
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
                                                           % you want to use the \thanks command
 
-\overrideIEEEmargins                                      % Needed to meet printer requirements.
 
 % See the \addtolength command later in the file to balance the column lengths
 % on the last page of the document
@@ -31,13 +30,20 @@
 \title{Evaluation of a Bin Packing Approach for Distributed Global Rescheduling}
 
 
-\author{Vinicius Freitas$^{1}$, Alexandre Santana$^{1}$, Márcio Castro$^{1}$ and Laércio L. Pilla$^{2}$% <-this % stops a space
-\thanks{$^{1}$Vinicius Freitas, Alexandre Satana and Márcio Castro with the Department of Computing and Statistics of the
-        Federal University of Santa Catarina, Florianópolis, Brazil. Contact info.: 
-        {\texttt{vinicius.mct.freitas@gmail.com}}}%
-\thanks{$^{2}$Laércio L. Pilla is with ...}%
+\author{
+\IEEEauthorblockN{Vinicius Freitas}
+\IEEEauthorblockA{Universidade Federal de Santa Catarina\\
+Florianópolis, Brazil\\
+Contact: \texttt{vinicius.mct.freitas@gmail.com}}
+\and
+\IEEEauthorblockN{Márcio Castro and\\ Alexandre de Limas Santana}
+\IEEEauthorblockA{Universidade Federal de Santa Catarina\\
+Florianópolis, Brazil}
+\and
+\IEEEauthorblockN{Laércio Lima Pilla}
+\IEEEauthorblockA{INRIA\\
+Grenoble, France}
 }
-
 
 \begin{document}
 
@@ -58,7 +64,8 @@
 \input{1-introduction.tex}
 \input{2-relatedwork.tex}
 \input{3-taskpack.tex}
-\input{4-implementation.tex}
+\input{4-analysis.tex}
+\input{5-implementation.tex}
 \input{6-eval.tex}
 \input{7-conclusion.tex}
 

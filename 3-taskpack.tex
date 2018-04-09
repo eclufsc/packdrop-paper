@@ -99,11 +99,11 @@ Once the PEs know their new mappings, tasks are migrated and the strategy is fin
     $  M' \gets \varnothing$\\
     $al \gets (AveragePeLoadReduction(l)\rightarrow  P)$ \\
     $tc \gets (TotalTaskCountReduction(|  M|)\rightarrow  P)$\\
-    //Average~task~size~//5\%~precision~on~balance\quad
+    //Average~task~size~\quad//5\%~precision~on~balance\qquad
     $ats\gets \frac{al}{tc}$ \quad $thrs \gets 0.05$\\
     $ub \gets ceil(al,thrs)$ \qquad //Upper migration threshold\\
     $ps \gets ats\times (2-\frac{|  P|}{tc}$) \qquad\qquad //Pack size\\
-    \uIf{l > ub}{
+    \uIf{$l > ub$}{
     	$packs \gets PackCreation(ps,  T(  M),l,thrs)$
     }
     \Else{

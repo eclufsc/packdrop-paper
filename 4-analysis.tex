@@ -1,0 +1,42 @@
+\section{Analysis of the Algorithm}
+
+This section presents an analysis of the Parallel Algorithm~\ref{algo:packdrop}~(PackDrop). 
+The complexity of the information propagation \textit{Gossip} have being evaluated as $O(log_fn)$ on previous work~\cite{grapevine},
+where $f$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
+
+For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
+will be refered to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
+We also assume $c_c > p_c$ for all applying scenarios.
+Unmentioned lines are assumed to have nonvarying cost, and will not being accounted for asymptotic analysis.
+
+Lines~2~and~3 are reductions, which have a well known cost of $O(lg\ n)$.
+Lines 8 and 11 are concurrent, and as such will have a worst case scenario cost, being:
+\begin{equation*}
+  max(T(PackCreation),T(Gossip))
+\end{equation*}
+We also know that the worst case for $PackCreation$ (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
+since it would assume that a single PE contains $m$ tasks and a single task can have $load(task) > \overline{load}$, being $O(m-1)$, assuming $1$ would not be migrated.
+
+Aside from this case, we could assume, for fixed $m$ applications and locality based overdecomposition, a complexity $O(m/n -t)$, 
+where $t$ are the tasks that stay on the PE so it remains balanced.
+The value of $t$ will vary with the imbalance of the entire system, the worst case would be $t=1$, so we assume $T(Pack Creation)\in O(m/n)$.
+
+This takes lines 8 and 11 cost to:
+\begin{equation*}
+ max(O(p_cm/n),O(c_clog_fn))
+\end{equation*}
+and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $T(PackCreation)\in T(Gossip)$, which makes the 
+complexity of these lines to $O(log_fn)$.
+
+Finally, line 14 will have its cost associated directly with the cost of line~8, since it will account $c_c$ for every pack that was created then.
+For the sake of simplicity, $ps$ will be the mean number of tasks inside of a pack, and $m_l$ the local tasks of a PE.
+This is where our approach presents gains in lessening communication costs.
+At this step, a solution without Task Packing would have a $c_c$ associated with $O(m/n)$, in the worst case.
+Whereas in our proposed solution, this value will be divided by $ps$, and since we prioritize migration of low-cost tasks 
+(line~3 of Algorithm~\ref{alg::packcreation}) this can mean a decent improvement in application time.
+
+The final complexity of out parallel algorithm then, is:
+\begin{equation}
+ hello
+ \label{eq:complexity}
+\end{equation}
