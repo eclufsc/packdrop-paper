@@ -7,36 +7,39 @@ where $f$ is the fanout for the algorithm and $n$ is the number of PEs in the sy
 For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
 will be refered to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
 We also assume $c_c > p_c$ for all applying scenarios.
-Unmentioned lines are assumed to have nonvarying cost, and will not being accounted for asymptotic analysis.
+Unmentioned lines are assumed to have nonvarying cost, and thus will not interfer in the asymptotic analysis.
 
-Lines~2~and~3 are reductions, which have a well known cost of $O(lg\ n)$.
-Lines 8 and 11 are concurrent, and as such will have a worst case scenario cost, being:
+Lines~2~and~3 are reductions, which have a well known cost of $O(lg\ n)$ (equal to $O(log_2n)$).
+Lines 8 and 11 are concurrent, so their cost will be the max among both:
 \begin{equation*}
   max(T(PackCreation),T(Gossip))
 \end{equation*}
 We also know that the worst case for $PackCreation$ (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
-since it would assume that a single PE contains $m$ tasks and a single task can have $load(task) > \overline{load}$, being $O(m-1)$, assuming $1$ would not be migrated.
+since it would assume that a single PE contains $m$ tasks and a single task can have $load(task) > \overline{load}$, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
 
-Aside from this case, we could assume, for fixed $m$ applications and locality based overdecomposition, a complexity $O(m/n -t)$, 
-where $t$ are the tasks that stay on the PE so it remains balanced.
-The value of $t$ will vary with the imbalance of the entire system, the worst case would be $t=1$, so we assume $T(Pack Creation)\in O(m/n)$.
+%Aside from this case, we could assume, for fixed $m$ applications and locality based overdecomposition, a complexity $O(m/n -t)$, 
+%where $t$ are the tasks that stay on the PE so it remains balanced.
+%The value of $t$ will vary with the imbalance of the entire system, the worst case would be $t=1$, so we assume $T(Pack Creation)\in O(m/n)$.
 
 This takes lines 8 and 11 cost to:
 \begin{equation*}
- max(O(p_cm/n),O(c_clog_fn))
+ max(O(p_cm),O(c_clog_fn))
 \end{equation*}
 and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $T(PackCreation)\in T(Gossip)$, which makes the 
 complexity of these lines to $O(log_fn)$.
 
-Finally, line 14 will have its cost associated directly with the cost of line~8, since it will account $c_c$ for every pack that was created then.
-For the sake of simplicity, $ps$ will be the mean number of tasks inside of a pack, and $m_l$ the local tasks of a PE.
-This is where our approach presents gains in lessening communication costs.
-At this step, a solution without Task Packing would have a $c_c$ associated with $O(m/n)$, in the worst case.
-Whereas in our proposed solution, this value will be divided by $ps$, and since we prioritize migration of low-cost tasks 
-(line~3 of Algorithm~\ref{alg::packcreation}) this can mean a decent improvement in application time.
+Finally, line 14 will have its cost associated directly with the cost of Algorithm~\ref{alg::packcreation}, since it will account $c_c$ for every pack that was created then.
+Let $ps$ be the mean number of tasks inside of a pack, and $m_l$ the maximum number of tasks in a given overloaded PE.
+%This is where our approach presents gains in lessening communication costs.
+At this step, a solution without Task Packing would have a $c_c$ associated with $O(m_l)$, of value $O(log_nm)$ in the average case.
+This happens because the higher the $m/n$ ratio, the more tasks will be migrated in a decision process similar to the one made on Algorithm~\ref{alg::packcreation}, but as overdecomposition increases and imbalance decreases, $m_l$ is unable to grow as much, following a logarithmic curve. 
 
-The final complexity of out parallel algorithm then, is:
+In our proposed solution, the complexity of line~14 will be divided by $ps$, enabling even higher scalability. Having a fanout $f$ of $2$, we have an asymptotic worst case of:
 \begin{equation}
- hello
- \label{eq:complexity}
+ T(PackDrop) = O(m/ps) + O(lg\ n)
+ \label{eq:worstcase}
+\end{equation}
+and an average case of:
+\begin{equation}
+ T(PackDrop) = O(log_n(m/ps))+O(lg\ n) = O(lg\ n)
 \end{equation}

@@ -1,6 +1,6 @@
 \section{Related Work}
 
-Global rescheduling is a well studied theme in high performance computing~\cite{grapevine,nuco,hybrid,ZoltanParHypRepart07,Deveci2015,diffus,Zheng2010}. 
+Global rescheduling is a well studied theme in high performance computing~\cite{Deveci2015,grapevine,nuco,hybrid,ZoltanParHypRepart07,diffus,Zheng2010}. 
 In the centralized domain, strategies implement a variety of heuristics in order to achieve an homogeneous distribution of load.
 Although centralized algorithms are used the most, they lack scalability and new approaches must be pursued as systems grow.
 
@@ -9,7 +9,7 @@ Since these strategies use a limited migration heuristic, they are able to effic
 However, since refine strategies limit a total number of migrations, they cannot deal with very unbalanced systems.
 
 Different approaches have been used to scale scheduling strategies.
-Hierarchical algorithms will work differently in different levels, exploring parallelism and delivering better performance~\cite{GengbinThesis,nuco,hybrid}.
+Hierarchical algorithms will work differently in different levels, exploring parallelism and delivering better performance~\cite{nuco,hybrid,GengbinThesis}.
 Strategies in this domain have been able to ensure scalability so far, but are still limited by a centralized beginning and data dependency.
 
 Also in the hierarchical domain, multilevel graph partitioning has been used to efficiently reschedule tasks~\cite{ZoltanParHypRepart07}.
