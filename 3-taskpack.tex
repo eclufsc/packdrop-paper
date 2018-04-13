@@ -1,18 +1,23 @@
 \section{The Task Packing Approach}
 
-Fast decision making is crucial for the efficiency of global rescheduling.
-To ensure a quick and informed mapping of tasks, we present the \textit{Task Packing Approach}.
+Global reschedulers must have low overhead in to decrease application time.
+To ensure a quick and informed remapping of tasks, we present the \textit{Task Packing Approach}.
 Sharing global information (e.g. processor affinity, estimated computational load, expected communication patterns, etc) allows a PE to create groups of the best tasks to leave a given processor and take the migration decision with one message, instead of several.
 
 In this work we present the \textit{PackDrop} strategy, a refinement-based technique that behaves similarly to \textit{Grapevine}, implementing our new approach.
-We expect that, reducing unnecessary communication, the accelerated decision making process will result on a better overall runtime for applications.
-First we will explain the \textit{Pack Creation} process of this strategy, then, the \textit{Pack Sending}.
-After this, the complete strategy will be presented in Algorithm~\ref{algo:packdrop}.
+We expect that by reducing unnecessary communication, the accelerated decision making process will result on a better overall runtime for applications.
+Alongside with that, \textit{PackDrop} explores locality of tasks mapped to the same PE, since migrations are done in groups.
+
+First we will explain the \textit{Pack Creation} (Algorithm~\ref{alg::packcreation}) and the \textit{Pack Sending} (Algorithm~\ref{alg::packsend}) processes of this strategy.
+Then the complete strategy will be presented in Algorithm~\ref{algo:packdrop}, $PackDrop$.
+
+For simplicity, in all algorithms presented here: i) the symbol:~``$\rightarrow$'' will represent a remote procedure call; ii) and the symbol:~``$\Rightarrow$'' will  represent the start of a reduction process.
 
 \subsection{Pack Creation}
 
 The \textit{Pack Creation} process for the \textit{PackDrop} strategy is presented in Algorithm~\ref{alg::packcreation}.
-It uses an estimated pack size ($ps$), a set of local tasks ($  T$), the current PE $load$ and a threshold for PE loads ($thrs$, based on Equation~\ref{eq:ceil}), to create a set of $Packs$.
+It uses an estimated pack size ($ps$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($thrs$), to create a set of $Packs$.
+The threshold is used to calculate an upper bound ($ub$) of the average system load ($\overline{load}$), using Equation~\ref{eq:ceil}. 
 
 \begin{equation}
 	ceil(l,v) = (1+v)\times l
@@ -21,13 +26,13 @@ It uses an estimated pack size ($ps$), a set of local tasks ($  T$), the current
 
 With this information, each PE will take the least loaded task within its pool, and pack it (lines~$3-6$).
 Then, if the sum of all tasks in the pack is greater then the expected pack size ($ps$), the pack is closed and the strategy start filling another one (lines~$7-10$).
-The process is repeated until until the $load$ of the PE becomes less then the upper bound ($ub$).
+The process is repeated while $ub$ is greater than $load$~(line~$2$).
 
 \begin{algorithm}[!ht]
     \DontPrintSemicolon
     \KwIn{$ps$; $  T$; $load$; $thrs$}
     \KwOut{$Packs$}
-    $P \gets \varnothing,\ Packs \gets \varnothing,\ ub \gets ceil(load,thrs)$ \\
+    $P \gets \varnothing,\ Packs \gets \varnothing,\ ub \gets ceil(\overline{load},thrs)$ \\
     \While{$load > ub$}{
         $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
         $  T \gets   T\ \backslash\ \{t\} $\\
@@ -46,7 +51,7 @@ The process is repeated until until the $load$ of the PE becomes less then the u
 \subsection{Pack Sending}
 
 The \textit{Pack Sending} process is presented in Algorithm~\ref{alg::packsend}.
-The algorithm will use the set of $Packs$, produced by \textit{Pack Creation}, and the set of $\ Targets$, produced by the \textit{Gossip Protocol}, in order to schedule packs on remote PEs.
+The algorithm will use the set of $Packs$, produced by \textit{Pack Creation}, and the set of $\ Targets$, produced by an information propagation step ($Gossip$~\cite{gossip}), in order to schedule packs on remote PEs.
 This will produce a set with expected $Pack/Target$ pairs, which should be confirmed by the remote target.
 
 Basically, while the local PE still have available $Packs$ to send (line~$2$), it will choose a random $Target$ for it (line~$4$) and invoke a remote $Send$ procedure on its $target$ (line~$5$).
@@ -81,7 +86,7 @@ This process is done through $2$ global reductions of average PE load (line~$2$)
 
 Then (line~$7$) PEs are divided between two different workflows.
 At this time, \textit{overloaded} PEs will start the Pack Creation process (line~$8$), further explained in Algorithm~\ref{alg::packcreation}.
-Meanwhile, \textit{underloaded} PEs will start a \textit{Gossip Protocol}~\cite{gossip} in order to inform other elements they are willing to receive work(line~$11$).
+Meanwhile, \textit{underloaded} PEs will start a \textit{Gossip Protocol}~\cite{gossip} in order to inform other elements they are willing to receive work (line~$11$).
 \textit{Gossip} is a well known epidemic algorithm used to spread information on a system, providing fast convergence and almost-global awareness of what was shared.
 
 Then, each PE must synchronize to start the remap (line~$13$). 
@@ -94,13 +99,13 @@ Once the PEs know their new mappings, tasks are migrated and the strategy is fin
 
 \begin{algorithm}
 	\DontPrintSemicolon
-    \KwIn{$  M$; $l$; $  P$}
+    \KwIn{$  M$, $l$, $  P$}
     \KwOut{$  M'$}
     $  M' \gets \varnothing$\\
-    $al \gets (AveragePeLoadReduction(l)\rightarrow  P)$ \\
-    $tc \gets (TotalTaskCountReduction(|  M|)\rightarrow  P)$\\
+    $al \gets (AveragePeLoadReduction(l)\Rightarrow  P)$ \\
+    $tc \gets (TotalTaskCountReduction(|  M|)\Rightarrow  P)$\\
     //Average~task~size~\quad//5\%~precision~on~balance\qquad
-    $ats\gets \frac{al}{tc}$ \quad $thrs \gets 0.05$\\
+    $ats\gets \frac{al}{tc}$ \qquad\qquad $thrs \gets 0.05$\\
     $ub \gets ceil(al,thrs)$ \qquad //Upper migration threshold\\
     $ps \gets ats\times (2-\frac{|  P|}{tc}$) \qquad\qquad //Pack load\\
     \uIf{$l > ub$}{

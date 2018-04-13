@@ -1,8 +1,8 @@
 \section{Performance Evaluation}
 
 Two platforms were for performance evaluation of our novel \textit{PackDrop} scheduler:
-i) A tightly coupled \textbf{Supercomputer}with $24$ (in $2$ NUMA nodes) PEs per thin node, using a fast Infiniband interconnection supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
-ii) A traditional computational \textbf{Cluster} with $4$ PEs per node, using a Gigabit Ethernet interconnection.
+i) A tightly coupled \textit{Supercomputer} with $24$ (in $2$ separate NUMA nodes) PEs per node, using an Infiniband interconnection supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
+ii) A smaller \textit{Cluster} with $4$ PEs per node, using a Gigabit Ethernet interconnection.
 Details of both platforms are available on Table~\ref{tab:ptinfo}.
 
 \begin{table}[ht]
@@ -20,21 +20,33 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
         \texttt{MPI}			& $3.1.0$			& -\\
         \texttt{GCC} Flags		& \texttt{-std=c++11 -O3} 	& \texttt{-std=c++11 -O3} \\
 	\end{tabular}
-    \caption{Platform Information of each Node from Supercomputer and Cluster evaluations. }
+    \caption{Platform Information of each Node from Supercomputer and Cluster evaluations.}
     \label{tab:ptinfo}
 \end{table}
 
-
+Ahead we'll present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine} and \textit{Distributed}.
+Then, we'll discuss results obtained in both platforms descripted in Table~\ref{tab:ptinfo} and the scalability of our proposed solution.
+All raw data of our results, as well as parsing scripts for analysis are publicly available\footnote{Available at: \texttt{https://github.com/OMMITED-FOR-BLIND-REVIEW}.}.
 
 \subsubsection*{Metrics}
+
+\textit{Application time} is one of the most relevant metrics to evaluate load balancers in \texttt{Charm++}.
+Since migrations may induce high overhead and impact communication costs, a bad algorithm may finish fast, but increase imbalance, and thus, application time.
+
+\textit{Iteration times} are fractions of the total application time, and as such can describe how well a scheduling strategy balances the system.
+The increasing of iteration times after scheduling is an indicator that the algorithm is not supporting the application well.
+
+\textit{Load balancer decision time}, although not the most relevant for the application itself, the decision time is an indicator of its scalability.
+Some centralized schedulers, such as \textit{Greedy}, work very well on local machines, with a reasonable data input.
+However, when executing on distributed memory environments, the scalability of these strategies is limited.
 
 \subsection{Evaluation on Supercomputer}
 
 \subsection{Evaluation on Cluster}
 
 All experiments ran on cluster were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
-$32$ equal compute nodes were used, with a total of \textbf{128 PEs}.
-In addition to previously mentioned schedulers, \textit{Dummy} was added\textbf{} as the representative of a situation with no remap of tasks.
+$32$ equal compute nodes were used, with a total of $128$ PEs.
+In addition to previously mentioned schedulers, \textit{Dummy} was added as the representative of a situation with no remap of tasks.
 
 \subsubsection*{Evaluation with Synthetic Load}
 
