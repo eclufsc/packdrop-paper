@@ -42,6 +42,24 @@ However, when executing on distributed memory environments, the scalability of t
 
 \subsection{Evaluation on Supercomputer}
 
+\subsubsection*{Evaluation with Synthetic Load}
+
+\textbf{LB Test} experiments had a total of $35990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
+\textit{Task} loads vary from $20$ms to $6000$ms. The chosen communication topology was a two-dimensional (2D) mesh.
+
+\subsubsection*{Evaluation with Molecular Dynamics}
+
+\textbf{LeanMD} experiments generated a $10\times15\times10$ space, with a total of $171$K \textit{tasks}.
+Each execution ran $100$ iterations, with a first rescheduling step at the $9$th iteration. 
+Load balancing was performed every $30$ iterations and each configuration of LeanMD was executed $10$ times, making a total of $1000$ steps per configuration. 
+
+\begin{figure}[!ht]
+ \includegraphics[width=0.45\linewidth]{images/steptime_leanmd_sdumont.pdf}\includegraphics[width=0.45\linewidth]{images/schedtime_leanmd_sdumont.pdf}
+ \caption{LeanMD supercomputer execution results.}
+\end{figure}
+\todo[inline]{Check sched time results, almost sure PackDrop and Distributed should be around 500.}
+
+
 \subsection{Evaluation on Cluster}
 
 All experiments ran on cluster were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
@@ -52,7 +70,7 @@ In addition to previously mentioned schedulers, \textit{Dummy} was added as the 
 
 \textbf{LB Test} experiments had a total of $18990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
 \textit{Task} loads vary from $30$ms to $9000$ms, which provides reasonable imbalance of load, causing global rescheduling to be useful in this case.
-Ring, two-dimensional (2D) and 3D mesh communication topologies were used to provide different levels of migration impact and communication cost.
+Ring, 2D mesh and 3D mesh communication topologies were used to provide different levels of migration impact and communication cost.
 
 \begin{table}[t]
 	\centering
@@ -86,11 +104,11 @@ However, since the platform is not large enough to present the potential gains o
 
 \subsubsection*{Evaluation with Molecular Dynamics}
 
-\textbf{LeanMD} experiments generated a $10\times15\times10$ space, with a total of $57000$ \textit{tasks}.
-Each execution ran $100$ iterations, with a first rescheduling step at the $10$th iteration. 
-Load balancing periods of every $10$ and every $30$ iterations were used, providing different impacts of rescheduling on the application.
+\textbf{LeanMD} experiments generated a $9\times9\times9$ space, with a total of $27702$ \textit{tasks}.
+Each execution ran $500$ iterations, with a first rescheduling step at the $10$th iteration. 
+Load balancing periods of every $30$ and every $60$ iterations were used, providing different impacts of rescheduling on the application.
 
-Each configuration of LeanMD was executed $10$ times, making a total of $1000$ steps per configuration. 
+Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration. 
 
 \todo[inline]{Do experiments with MD again on cluster. Try 3 different LB freq. since Refine seems to produce a more stable mapping of the system.}
 
@@ -100,5 +118,6 @@ Each configuration of LeanMD was executed $10$ times, making a total of $1000$ s
     \caption{LeanMD cluster execution results.}
     \label{fig:eval:g5k:leanmd:time}
 \end{figure}
+\todo[inline]{Correct X label on LMD images in cluster subsection}
 
 \subsection{Scalability}
