@@ -1,12 +1,12 @@
 \section{The Task Packing Approach}
 
-Global reschedulers must have low overhead in to decrease application time.
+Global reschedulers must have low overhead in to decrease application time. % sentence does not give the full picture. algorithms must be effective in order to improve scheduling, but also low overhead in order to avoid reducing its benefits
 To ensure a quick and informed remapping of tasks, we present the \textit{Task Packing Approach}.
 Sharing global information (e.g. processor affinity, estimated computational load, expected communication patterns, etc) allows a PE to create groups of the best tasks to leave a given processor and take the migration decision with one message, instead of several.
 
-In this work we present the \textit{PackDrop} strategy, a refinement-based technique that behaves similarly to \textit{Grapevine}, implementing our new approach.
+In this work we present the \textit{PackDrop} strategy, a refinement-based technique that behaves similarly to \textit{Grapevine}, implementing our new approach. % Saying that it is similar to Grapevine here is not helping to sell the strategy
 We expect that by reducing unnecessary communication, the accelerated decision making process will result on a better overall runtime for applications.
-Alongside with that, \textit{PackDrop} explores locality of tasks mapped to the same PE, since migrations are done in groups.
+Alongside with that, \textit{PackDrop} explores locality of tasks mapped to the same PE, since migrations are done in groups. % enumerate expected benefits to highlight them
 
 First we will explain the \textit{Pack Creation} (Algorithm~\ref{alg::packcreation}) and the \textit{Pack Sending} (Algorithm~\ref{alg::packsend}) processes of this strategy.
 Then the complete strategy will be presented in Algorithm~\ref{algo:packdrop}, $PackDrop$.
@@ -24,7 +24,7 @@ The threshold is used to calculate an upper bound ($ub$) of the average system l
     \label{eq:ceil}
 \end{equation}
 
-With this information, each PE will take the least loaded task within its pool, and pack it (lines~$3-6$).
+With this information, each PE will take the least loaded task within its pool, and pack it (lines~$3-6$). % task have load, they are not loaded
 Then, if the sum of all tasks in the pack is greater then the expected pack size ($ps$), the pack is closed and the strategy start filling another one (lines~$7-10$).
 The process is repeated while $ub$ is greater than $load$~(line~$2$).
 
@@ -54,7 +54,7 @@ The \textit{Pack Sending} process is presented in Algorithm~\ref{alg::packsend}.
 The algorithm will use the set of $Packs$, produced by \textit{Pack Creation}, and the set of $\ Targets$, produced by an information propagation step ($Gossip$~\cite{gossip}), in order to schedule packs on remote PEs.
 This will produce a set with expected $Pack/Target$ pairs, which should be confirmed by the remote target.
 
-Basically, while the local PE still have available $Packs$ to send (line~$2$), it will choose a random $Target$ for it (line~$4$) and invoke a remote $Send$ procedure on its $target$ (line~$5$).
+Basically, while the local PE still has available $Packs$ to send (line~$2$), it will choose a random $Target$ for it (line~$4$) and invoke a remote $Send$ procedure on its $target$ (line~$5$).
 The selected $pack$ will be removed from the $Packs$ set (line~$6$) and paired up with its $target$ on the $R$ set~(line~$7$), waiting for confirmation.
 This process is repeated until all elements in $Packs$ have attempted a $Send$.
 
@@ -76,7 +76,7 @@ This process is repeated until all elements in $Packs$ have attempted a $Send$.
 
 \subsection{The PackDrop Algorithm}
 
-The PackDrop strategy is formally presented in Algorithm~\ref{algo:packdrop}. 
+The PackDrop strategy is formally presented in Algorithm~\ref{algo:packdrop}. % What does it mean formally?
 It will run individually on each PE, in a distributed fashion. 
 Using a current local mapping of tasks to PEs ($  M$), local load ($l$) and knowing all PEs in the system ($  P$), to produce a new mapping ($  M'$).
 In this implementation we used two constants: $1.05$, in order to limit the imbalance at $5\%$ (on line~$5$), and $2$, in order to regulate the size of packs (on line~$6$).
