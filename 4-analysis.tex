@@ -3,39 +3,40 @@
 This section presents an analysis of the Parallel Algorithm~\ref{algo:packdrop}~(PackDrop). 
 The complexity of the information propagation ($Gossip$) has being evaluated as $O(log_fn)$~\cite{grapevine},
 where $f$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
-Here we use $f=2$, in order to avoid network congestion in shared clusters. % What does shared cluster mean in this context?
+Here we use $f=2$, in order to avoid network congestion. %in clusters with multiple users. % What does shared cluster mean in this context? Is this cluster part necessary?
 
 For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
 will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
 We also assume $c_c > p_c$ for all concurrent scenarios, since communication costs are several orders of magnitude higher than computational costs.
+$T(f)$ is refered here as the total cost for a given function $f$.
 Unmentioned lines are assumed to have non-varying cost, and thus will not interfere in the asymptotic analysis.
 
-Lines~2~and~3 are global reductions, which have a well known cost of $O(lg\ n)$ (equivalent of $O(log_2n)$).
+Lines~2~and~3 are global reductions, which have a well known cost of $O(log\ n)$.
 Lines~8~and~11 are concurrent, so their cost will be the max among both:
-\begin{equation*}
+\begin{equation}
   max(T(PackCreation),T(Gossip))
-\end{equation*}
+\end{equation}
 We also know that the worst case for $PackCreation$ (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
-since it would assume that a single PE contains $m$ tasks and a single task can have $load(task) > \overline{load}$, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
+since it would assume that a single PE contains $m$ tasks and a single task may have a load greater than the average system load, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
 
 %Aside from this case, we could assume, for fixed $m$ applications and locality based overdecomposition, a complexity $O(m/n -t)$, 
 %where $t$ are the tasks that stay on the PE so it remains balanced.
 %The value of $t$ will vary with the imbalance of the entire system, the worst case would be $t=1$, so we assume $T(Pack Creation)\in O(m/n)$.
 
 This takes lines 8 and 11 cost to:
-\begin{equation*}
+\begin{equation}
  max(O(p_cm),O(c_clog_fn))
-\end{equation*}
+\end{equation}
 and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $T(PackCreation)\in T(Gossip)$, which makes the 
 complexity of these lines to $O(log_fn)$.
 
-Finally, line 14 will have a complexity equal to the higher number of packs migrated by an overloaded PE. % higher? largest? 
+Finally, line 14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
 Let $ps$ be the mean number of tasks inside of a pack, and $m_l$ the maximum number of tasks in a given overloaded PE.
 At this step, a solution without Task Packing would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
 Great gains come with optimizations of this step, since it is the most expensive in Algorithm~\ref{algo:packdrop}.
 Our final asymptotic complexity will be:
 \begin{equation}
- T(PackDrop) = O(m_l/ps) + O(lg\ n)
+ T(PackDrop) = O(m_l/ps) + O(log\ n)
  \label{eq:worstcase}
 \end{equation}
 
