@@ -4,13 +4,13 @@
 \texttt{Charm++} is a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR}.
 \textit{Chares} are mapped as \textit{tasks} onto PEs and the \texttt{Charm++} runtime system (RTS) provides the load information needed for the \textit{PackDrop} strategy.
 
-The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \textit{PackDrop}, creates a need for synchronization mechanisms, in order to guarantee workability.
-This is handled the same way that was in \textit{Grapevine}, giving processes such as resending packs and the \textit{Gossip Protocol} a limited number of rounds, or a \textit{time to live}~\cite{grapevine}.
-The RTS manages application synchronization before load balancing and its restart.
+The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \textit{PackDrop}.
+It also provides necessary reduction and quiescence detection mechanisms, used in this implementation.
+Reductions are used to evaluate the total number of chares and the average load in the system, while the quiescence detection is necessary to finalize the information propagation step of the algorithm.
 
-\texttt{Charm++} provides application-independent load balancing, which means that any application (that implements a PUP framework~\cite{sc14charm}), may use load balancers implemented for this RTS.
-With this in mind, a suite of previously implemented benchmarks and applications to test our novel strategy.
-This also makes the comparison to existing strategies easier, since they are already implemented in this RTS.
+\texttt{Charm++} provides application-independent load balancing, which means that any application (that implements a PUP framework~\cite{sc14charm}), may use global rescheduling strategies implemented for this RTS.
+This means that any of the available applications for \texttt{Charm++} can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
+
 
 \subsection{Benchmarks}
 
