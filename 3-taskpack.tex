@@ -4,6 +4,8 @@ Global rescheduling algorithms must be effective in order to improve scheduling,
 To ensure a quick and informed remapping of tasks, we present the \textit{Task Packing Approach}.
 Sharing global information (e.g. processor affinity, estimated computational load, expected communication patterns, etc) allows a PE to create groups of the best tasks to leave a given processor and take the migration decision with one message, instead of several.
 
+% The role of the global rescheduler is to ultimately reduce the application makespan. Thus, the scheduler policy must incur low overheads as to not overshadow it's benefits. Moreover, we envision that a \textit{Task Packing Approach} can ensure a quick and informed remapping of tasks, ultimately reducing the amount of messages during the scheduling decision process. Therefore, this section is dedicated to present our \textit{PackDrop} strategy as a distributed refinement-based technique that implements our proposed \textit{Task Packing Approach} approach.
+
 In this work we present the \textit{PackDrop} strategy, a distributed refinement-based technique implementing our new approach. % Saying that it is similar to Grapevine here is not helping to sell the strategy
 We expect that: i) reducing unnecessary communication; ii) exploring locality of tasks mapped to the same PE, since migrations are done in groups; thus iii) resulting in an accelerated decision making process, which should bring a better overall runtime for applications. % enumerate expected benefits to highlight them
 
@@ -96,7 +98,7 @@ In this implementation we used two constants: $1.05$, in order to limit the imba
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
 
-Then (line~$7$) PEs are divided between two different workflows.
+Then (line~$7$) PEs are divided between two different workflows. \todo[inline]{Não se começa paragrafo com "then". Parágrafos apresentam ideias novas e then implica em algo do parágrafo anterior}
 At this time, \textit{overloaded} PEs will start the Pack Creation process (line~$8$), further explained in Algorithm~\ref{alg::packcreation}.
 Meanwhile, \textit{underloaded} PEs will start a \textit{Gossip Protocol}~\cite{gossip} in order to inform other elements they are willing to receive work (line~$11$).
 \textit{Gossip} is a well known epidemic algorithm used to spread information on a system, providing fast convergence and almost-global awareness of what was shared.

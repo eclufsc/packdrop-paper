@@ -1,10 +1,14 @@
 \section{Introduction}
 
 With the arrival of Petascale and highly parallel computing platforms, scientific simulations, such as molecular dynamics, have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
+\todo[inline]{Em geral não se começa frases com "With", ainda mais a primeira do artigo. Deve-se evitar a voz passiva, a não ser quando for para quebrar a monotonia da leitura}
 However, load imbalance is a recurrent problem in scientific applications, specially in those with an intrinsic dynamic nature~\cite{Deveci2015}.
 Global rescheduling strategies try to solve this issue, redistributing work amongst Processing Elements (PEs), seeking a more homogeneous state of the system load.
+\todo[inline]{Esse primeiro parágrafo apresenta 3 conceitos ao mesmo tempo: O aumento nas plataformas, o desbalanceamento e global rescheduling mas não apresenta o estado atual e como tudo isso se liga de maneira intuitiva. Deixei comentado uma possível re-escrita.}
 
-The cost of dynamically rescheduling an application is bound to two main steps: i) a decision step, in which the scheduler remaps tasks to PEs; ii) a migration step, in which the data associated to the tasks is migrated~\cite{pillaphd}.
+% Modern parallel computing platforms have achieved petascale computing and will soon embark in the the hexascale era. Nonetheless, as platforms grow on computational power so does the challenge of providing application scalability, majorly due to the load imbalance problem. However, through the aid of global schedulers, it is possible to dynamically redistribute an application work amongst Processing Elements (PEs), ultimately achieving an homogeneous state of the system's load. As such, despite the aforementioned limitations, scientific simulations have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
+
+The cost of dynamically rescheduling an application is bound to two main steps: i) a decision step, in which the scheduler remaps tasks to PEs; ii) a migration step, in which the data associated to the tasks are migrated~\cite{pillaphd}.
 In a small scale system, the higher cost is associated with migration costs, since communication is limited (less PEs to communicate).
 As systems scale, the communication costs associated with the decision step may considerably grow. Thus, applications may present significant performance losses when rescheduling strategies do not take into account the communication costs~\cite{grapevine}.
 

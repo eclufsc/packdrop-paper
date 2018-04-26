@@ -33,7 +33,7 @@ complexity of these lines to $O(log_fn)$.
 Finally, line 14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
 Let $ps$ be the mean number of tasks inside of a pack, and $m_l$ the maximum number of tasks in a given overloaded PE.
 At this step, a solution without Task Packing would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
-Great gains come with optimizations of this step, since it is the most expensive in Algorithm~\ref{algo:packdrop}.
+Great gains come with optimizations of this step, since it is the most expensive in Algorithm~\ref{algo:packdrop}. \todo[inline]{Evitar usar expressões como "great gains", elas não dizem nada cientificamente. Troque por algo mais preciso.}
 Our final asymptotic complexity will be:
 \begin{equation}
  T(PackDrop) = O(m_l/ps) + O(log\ n)
