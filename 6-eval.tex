@@ -7,6 +7,7 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
 
 \begin{table}[ht]
     \centering
+    \caption{Platform Information of each Node from Supercomputer and Cluster evaluations.}
 	\begin{tabular}{c|c|c}
 	Node Info.	 		& Supercomputer 		& Cluster \\ \hline
         CPUs	   			& $2\times12$ 			& $4$ \\
@@ -20,7 +21,6 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
         \texttt{MPI}			& $3.1.0$			& -\\
         \texttt{GCC} Flags		& \texttt{-std=c++11 -O3} 	& \texttt{-std=c++11 -O3} \\
 	\end{tabular}
-    \caption{Platform Information of each Node from Supercomputer and Cluster evaluations.}
     \label{tab:ptinfo}
 \end{table}
 
@@ -51,6 +51,7 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
 
 \begin{table}[t]
 	\centering
+    \caption{LB Test mean application time on the cluster execution.}
 	\begin{tabular}{l | c  c  c}
     	Scheduler & Time (Ring) & Time (2D) & Time (3D) \\ \hline
         Distributed & $47.49298$s & $48.64839$s & $49.05481$s \\
@@ -59,13 +60,12 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
         PackDrop & $46.81598$s & $47.37120$s & $47.97426$s \\
         Refine & $45.49095$s & $46.29277$s & $47.21924$s \\		
 	\end{tabular}
-    \caption{LB Test mean application time on the cluster execution.}
     \label{tab:lbtest:apptime}
 \end{table}
 
 \begin{figure}
 	\centering
-    \includegraphics[width=0.4\textwidth]{images/apptime_lbtest_g5k.pdf}
+    \hspace{-10pt}\includegraphics[width=0.5\textwidth]{images/apptime_lbtest_g5k.pdf}
     \caption{LB Test cluster execution results.}
     \label{fig:eval:g5k:lbtest:apptime}
 \end{figure}
@@ -87,29 +87,41 @@ Each execution ran $500$ iterations, with a first rescheduling step at the $10$t
 Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations were used, providing different impacts of rescheduling on the application.
 \textit{Greedy} and \textit{Dummy} were excluded from this evaluation due to their high cost in an application such as \textit{LeanMD}. 
 
-\begin{figure}
+\begin{table}[!ht]
 	\centering
-    \includegraphics[width=0.4\textwidth]{images/apptime_leanmd_g5k.pdf}
-    \caption{LeanMD cluster execution results.}
-    \label{fig:eval:g5k:leanmd:time}
-\end{figure}
-
-\begin{table}
-	\centering
-	\begin{tabular}{l|c c}
-	Scheduler & Short RP & Long RP \\ \hline
-	Distributed & $69.35606$s & $68.36055$s \\ 
-	PackDrop & $55.98428$s & $55.51554$s \\ 
-	Refine & $59.35696$s & $55.89895$s \\ 
-	\end{tabular}
 	\caption{LeanMD mean application time on the cluster execution.}	
+	\begin{tabular}{l|c c c}
+	Scheduler & Time (Short RP) & Time (Long RP) & Mean LB Time \\ \hline
+	Distributed & $69.35606$s & $68.36055$s & $167.0444$ms \\ 
+	PackDrop & $55.98428$s & $55.51554$s & $143.1028$ms \\ 
+	Refine & $59.35696$s & $55.89895$s & $539.8364$ms \\ 
+	\end{tabular}
 	\label{tab:eval:g5k:leanmd:time} 
 \end{table}
 
-Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration and are depicted in Figure~\ref{fig:eval:g5k:leanmd:time} and Table~\ref{tab:eval:g5k:leanmd:time}.
+\begin{figure}[!ht]
+	\centering
+    \includegraphics[width=0.43\textwidth]{images/apptime_leanmd_g5k.pdf}
+	\caption{LeanMD cluster execution results.}
+    \label{fig:eval:g5k:leanmd:time}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \includegraphics[width=0.43\textwidth]{images/schedtime_leanmd_g5k.pdf}
+	\caption{LeanMD cluster execution results.}
+    \label{fig:eval:g5k:leanmd:schedtime}
+\end{figure}
+
+Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figures~\ref{fig:eval:g5k:leanmd:time},~\ref{fig:eval:g5k:leanmd:schedtime} .
 Observed application times presented a standard deviation from the mean lower than $2\%$ for all results presented.
 
+Results show a better overall performance of \textit{PackDrop}, outperforming both compared strategies in the two scenarios chosen.
+Since our strategy migrates groups of tasks, it improves locality of tasks after migration, outperforming \textit{Distributed} due to this.
 
+Figure~\ref{fig:eval:g5k:leanmd:schedtime} shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
+It shows the increased cost of \textit{Refine}, which is due to both information agregation costs and dealing with the high amounts of application data in a centralized fashion.
+\textit{PackDrop} displays its effectiviness in rescheduling time, outperforming both compared strategies, and resulting in an overall better application time. 
 
 \subsection{Evaluation on Supercomputer}
 
