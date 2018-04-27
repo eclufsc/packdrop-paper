@@ -37,13 +37,13 @@ Since migrations may induce high overhead and impact communication costs, a bad 
 Some centralized schedulers, such as \textit{Greedy}, work very well on local machines, with a reasonable data input.
 However, when executing on distributed memory environments, the scalability of centralized strategies is limited.
 
-\subsection{Evaluation on Cluster}
+\subsection{Evaluation on Cluster} \label{sec:cluster}
 
 All experiments executed on cluster were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 In addition to previously mentioned schedulers, \textit{Dummy} was added as the representative of a situation with no remap of tasks, it only aggregates the information a centralized strategy needs (its cost is the base for every centralized strategy).
 
-\subsubsection*{Evaluation with Synthetic Load}
+\subsubsection{Evaluation with Synthetic Load} \label{sec:cluster:lbtest}
 
 \textit{LB Test} experiments had a total of $18990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
 \textit{Task} loads vary from $30$ms to $9000$ms, which provides reasonable imbalance of load, causing global rescheduling to be useful in this case.
@@ -65,7 +65,7 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
 
 \begin{figure}
 	\centering
-    \hspace{-10pt}\includegraphics[width=0.5\textwidth]{images/apptime_lbtest_g5k.pdf}
+    \includegraphics[width=\linewidth]{images/apptime_lbtest_g5k.pdf}
     \caption{LB Test cluster execution results.}
     \label{fig:eval:g5k:lbtest:apptime}
 \end{figure}
@@ -80,7 +80,7 @@ Our novel approach, \textit{PackDrop} has outperformed the other descentralized 
 However, since the platform is not large enough to present all of the potential gains of decentralized strategies, \textit{Refine}, with a reduced migration count approach, still outperforms any other scheduler in this benchmark.
 Nevertheless, this indicates a good scalability pontetial, specially in a cluster with high communication overhead, due to its Gigabit Ethernet connection.
 
-\subsubsection*{Evaluation with Molecular Dynamics}
+\subsubsection{Evaluation with Molecular Dynamics} \label{sec:cluster:md}
 
 \textit{LeanMD} experiments generated a $9\times9\times9$ space, with a total of $27702$ \textit{tasks}.
 Each execution ran $500$ iterations, with a first rescheduling step at the $10$th iteration. 
@@ -106,7 +106,7 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
     \label{fig:eval:g5k:leanmd:time}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[!t]
 	\centering
     \includegraphics[width=0.43\textwidth]{images/schedtime_leanmd_g5k.pdf}
 	\caption{LeanMD cluster execution results.}
@@ -123,13 +123,13 @@ Figure~\ref{fig:eval:g5k:leanmd:schedtime} shows the time taken by the periodica
 It shows the increased cost of \textit{Refine}, which is due to both information agregation costs and dealing with the high amounts of application data in a centralized fashion.
 \textit{PackDrop} displays its effectiviness in rescheduling time, outperforming both compared strategies, and resulting in an overall better application time. 
 
-\subsection{Evaluation on Supercomputer}
+\subsection{Evaluation on Supercomputer} \label{sec:sdumont}
 
 All experiments executed on supercomputer were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate our strategy's scalability.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
 
-\subsubsection*{Evaluation with Molecular Dynamics}
+\subsubsection{Evaluation with Molecular Dynamics} \label{sec:sdumont:md}
 
 \textbf{LeanMD} experiments generated a $10\times15\times10$ space, with a total of $171$K \textit{tasks}.
 Each execution ran $100$ iterations, with a first rescheduling step at the $9$th iteration. 
@@ -142,12 +142,12 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
  \label{fig:eval:sdumont:leanmd:apptime}
 \end{figure}
 
-\begin{figure}[!ht]
- \centering
- \includegraphics[width=0.9\linewidth]{images/apptime_leanmd_sdumont_bars.pdf}
- \caption{LeanMD supercomputer AppTime execution results.}
- \label{fig:eval:sdumont:leanmd:apptime:bars}
-\end{figure}
+%\begin{figure}[!ht]
+% \centering
+% \includegraphics[width=0.9\linewidth]{images/apptime_leanmd_sdumont_bars.pdf}
+% \caption{LeanMD supercomputer AppTime execution results.}
+% \label{fig:eval:sdumont:leanmd:apptime:bars}
+%\end{figure}
 
 \begin{figure}
 	\centering
@@ -156,7 +156,31 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 	\label{fig:eval:sdumont:leanmd:schedtime}
 \end{figure}
 
+Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
+\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a reasonable time.
 
+\textit{Distributed} benefits from this platform due to the Infiniband low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
+Our novel approach, \textit{PackDrop}, followed it closely and we can see that its rescheduling time in larger systems outperforms \textit{Distributed}, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
 
+The rescheduling and application time results of LeanMD in this platform highlight the importance of using scalable approaches to load balancing, as well as using available parallism in execution environments.
+This is specially visible in \textit{Greedy} results on Figure~\ref{fig:eval:g5k:lbtest:apptime}, where the application performance was decreased after the global rescheduling process.
+Increased migration costs and higher \textit{hop} counts in communication, consequences of load balancing, heavily impacted LeanMD in this case.
 
-\subsection{Scalability}
+\subsection{Performance Evaluation Overview} \label{eval:overview}
+
+Most scientific applications today seek strong scaling, increasing their computational platforms to solve problems faster.
+Our results show that, to achieve such an objective, an application must implement efficient load balancing strategies.
+We present \textit{PackDrop} as a solution for scalable rescheduling of work in distributed memory systems.
+
+Section~\ref{sec:cluster:lbtest} shows the efficiency of our strategy. 
+Results highlight the importance of load balancing even in synthetic loads.
+The \textit{LB Test} benchmark used has very low migration and communication overhead, and most of its work is done locally, which is optimal for rescheduling evaluation of raw computational workload.
+Our strategy was only outperformed by \textit{Refine} in all test cases, which is expected, since the total load dealt with is considerably small ($\sim 19$K tasks) and migrations cheap, which benefits centralized schedulers.
+
+Sections~\ref{sec:cluster:md}~and~\ref{sec:sdumont:md} display evaluation of a MD mini-app, LeanMD (better described in Section~\ref{sec:benchmarks}).
+This represents ``a real world-like" scenario, in which applications may have dynamic communication patterns and high migration overhead.
+Results presented here highlight the overhead of centralized rescheduling approaches when joined with large-scale applications ($171$K tasks) and big environments, which increases work and information aggregation costs, respectively.
+
+\textit{Distributed} outperformed our approach in the Supercomputer platform, due to its more refined approach for load balancing and high-speed network interconnection.
+However, the results show that \textit{PackDrop} and its locality friendly batching of tasks for migration guarantees better performance in the Cluster platform, which portrays a Gigabit Ethernet interconnection.
+\textit{PackDrop} was able to efficiently scale applications among all observed platforms, and had a faster rescheduling time than \textit{Distributed} in most of the observed cases.
