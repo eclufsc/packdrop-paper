@@ -19,15 +19,47 @@ The main benefits we expect with our approach are:
 \end{enumerate}
 
 First we will explain the \textit{Batch Assembly} (Algorithm~\ref{alg::packcreation}) and the \textit{Batch Sending} (Algorithm~\ref{alg::packsend}) processes of this strategy.
-Then the complete strategy will be presented in Algorithm~\ref{algo:packdrop}, $PackDrop$.
+Then the complete strategy will be presented in Algorithm~\ref{alg::packdrop}, $PackDrop$.
 
 For simplicity, in all algorithms presented here: i) the symbol:~``$\rightarrow$'' will represent a remote procedure call; ii) and the symbol:~``$\Rightarrow$'' will  represent the start of a reduction process.
+Other symbols used in the algorithms may be found in Table~\ref{tab:algo:symbols}.
+
+\begin{table}
+	\begin{tabular}{l | l | l }
+		Symbol & Meaning & Definition\\ \hline
+		$\rightarrow$ 	& Remote procedure call &  Section~\ref{sec:algo} \\
+		$\Rightarrow$ 	& Reduction process & Section~\ref{sec:algo} \\
+		$s$			  	& Compute load in a batch of tasks & Section~\ref{sec:algo:creation} \\
+		$T$				& Set of tasks 										& Equations~\ref{eq:load},~\ref{eq:taskmap} \\
+		$load$			& Compute load of the local PE \\
+		$load_{set}(T)$	& Load of a set ($T$) 								& Equation~\ref{eq:load} \\
+		$load_{avg}$	& Average system load of a PE 						& Section~\ref{sec:algo:creation}\\
+		$l$				& Short for $load$ 									& Equation~\ref{eq:ceil} \\
+		$v$				& Load threshold in \% 								& Equation~\ref{eq:ceil} \\
+		$ceil(l,v)$		& Upper bound of $l$ with threshold $v$		 		& Equation~\ref{eq:ceil} \\ 
+		$LT$			& Set of tasks leaving a PE 						& Algorithm~\ref{alg::packcreation} \\
+		$L$				& Set of tasks, subset of $LT$						& Algorithm~\ref{alg::packcreation} \\
+		$G$				& Target for task receiving							& Algorithm~\ref{alg::packsend} \\
+		$BG$			& Pairs expecting migration ack						& Algorithm~\ref{alg::packsend} \\ 
+		$rand(S)$		& Random element of $S$ 							& Section~\ref{sec:algo:sending} \\
+		$Send(T)\rightarrow G $ & Send a set $T$ to target $G$				& Algorithm~\ref{alg::packsend} \\ 
+		$M$				& Mapping of tasks									& Equation~\ref{eq:taskmap} \\
+		$P$				& Global set of PEs 								& Section~\ref{sec:algo:main} \\
+		$Id_l$ 			& Local PE identifier								& Algorithm~\ref{alg::packdrop} \\
+		$|A|$			& Number of elements in a set $A$	\\
+		$Gossip$		& Start of information propagation					& Section~\ref{sec:algo:main} \\
+		$TaskMap$		& Call RTS to start migrations						& Algorithm~\ref{alg::packdrop} \\
+		$pack$			& Set of leaving tasks								& Section~\ref{sec:algo:main} \\
+	\end{tabular}
+	\caption{Important symbols for algorithms}
+	\label{tab:algo:symbols}
+\end{table}
 
 \subsection{Batch Assembly} \label{sec:algo:creation}
 
 The \textit{Batch Assembly} process for the \textit{PackDrop} strategy is presented in Algorithm~\ref{alg::packcreation}.
-It uses an estimated batch size ($s$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($thrs$), to create a set of leaving tasks ($LT$).
-The threshold is used to calculate an upper bound ($ub$) of the average system load ($\overline{load}$), using Equation~\ref{eq:ceil}. 
+It uses an estimated batch size ($s$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($v$), to create a set of leaving tasks ($LT$).
+The threshold is used to calculate an upper bound of the average system load ($load_{avg}$), using Equation~\ref{eq:ceil}. 
 The load of any set of tasks is given by Equation~\ref{eq:load}.
 
 \begin{equation}
@@ -36,20 +68,20 @@ The load of any set of tasks is given by Equation~\ref{eq:load}.
 \end{equation}
 
 \begin{equation}
-	load_{set}(B) = \sum_{t \in B}t\ \ |\ \ B \text{ is a set of tasks}
+	load_{set}(T) = \sum_{t \in T}t\ \ |\ \ T \text{ is a set of tasks}
 	\label{eq:load}
 \end{equation}
 
 With this information, each PE will take the task with the lower load within its pool, and pack it (lines~$3-6$).
 Then, if the sum of all tasks in the pack is greater then the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$7-10$).
-The process is repeated while $ub$ is greater than $load$~(line~$2$).
+The process is repeated while $load$ is greater than the upper bound~(line~$2$).
 
 \begin{algorithm}[!ht]
     \DontPrintSemicolon
-    \KwIn{$s$; $  T$; $load$; $thrs$}
+    \KwIn{$s$; $  T$; $load$; $load_{avg}$; $v$}
     \KwOut{$LT$}
-    $L \gets \varnothing,\ LT \gets \varnothing,\ ub \gets ceil(\overline{load},thrs)$ \\
-    \While{$load > ub$}{
+    $L \gets \varnothing,\ LT \gets \varnothing$ \\
+    \While{$load > ceil(load_{avg},v)$}{
         $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
         $  T \gets   T\ \backslash\ \{t\} $\\
         $\textit{L} \gets L\ \cup\ \{t\}$\\
@@ -74,20 +106,21 @@ The \textit{Batch Sending} process is presented in Algorithm~\ref{alg::packsend}
 The algorithm will use the $LT$s, produced by \textit{Batch Assembly}, and the set of $Targets$, produced by an information propagation step ($Gossip$~\cite{gossip}), in order to schedule packs on remote PEs.
 This will produce a set of expected Batch/Target ($BG$) pairs, which should be confirmed by the remote target.
 
-While the local PE still has available $LT$s to send (line~$2$), it will choose a random target ($G$) for it (line~$4$) and invoke a remote $Send$ procedure on its target ($g$) (line~$5$).
-The selected set of leaving tasks ($b$) will be removed from the $LT$ set (line~$6$) and paired up with its target on the $BG$ set~(line~$7$), waiting for confirmation.
-This process is repeated until all elements in $LT$ have attempted a $Send$.
+Each subset $b \subset LT$ (as assigned in Algorithm~\ref{alg::packcreation}) will select a random target from $G$~(line~$3$).
+It will invoke a remote $Send$ procedure on the target $g$~(line~$4$), and register its attempt in a pair ($b$, $g$).
+This pair is then stored in the expecting confirmation set ($BG$)(line~$5$).
+
 
 \begin{algorithm}[!ht]
     \DontPrintSemicolon
     \KwIn{$LT$, $G$}
     \KwOut{$BG$}
     $BG \gets \varnothing$ \\
-    \While{$LT \neq \varnothing$}{
-        $b\ \gets p\ |\ p\ \in\ LT$\\
+    \ForEach{$b \subset LT$}{
+        %$b\ \gets p\ |\ p\ \in\ LT$\\
         $g\ \gets  rand(G)$\\
         $Send(b)\rightarrow g$\\
-        $LT\ \gets\ LT\ \backslash\ \{b\}$\\
+        %$LT\ \gets\ LT\ \backslash\ \{b\}$\\
         $\textit{BG} \gets BG\ \cup\ \{(b,\ g)\}$\\
     }  
     \caption{Batch Sending}  
@@ -98,11 +131,11 @@ When $Sends$ receive a negative response, Algorithm~\ref{alg::packsend} can be r
 
 \subsection{PackDrop Algorithm} \label{sec:algo:main}
 
-The PackDrop strategy is presented in Algorithm~\ref{algo:packdrop}.
+The PackDrop strategy is presented in Algorithm~\ref{alg::packdrop}.
 For the sake of simplicity, in the explanation of this algorithm \textit{packs} will be a short for ``set of leaving tasks" (seen in Sections~\ref{sec:algo:creation}~and~\ref{sec:algo:sending}).
 
 It will run individually on each PE, in a distributed fashion. 
-Using a current local mapping of tasks to PEs ($M$), local load ($load_{local}$), a local PE identification ($MyId$) and knowing all PEs within the system ($P$), to produce a new mapping ($M'$).
+Using a current local mapping of tasks to PEs ($M$), local load ($load$), a local PE identification ($Id_l$) and knowing all PEs within the system ($P$), to produce a new mapping ($M'$).
 The mapping of tasks is defined by Equation~\ref{eq:taskmap} as a set of pairs ($task, PE$), describing the location of tasks.
 A local map of tasks contains only tasks that are assigned to the current PE.
 
@@ -118,40 +151,39 @@ In this implementation we used two constants: $0.05$, in order to limit the imba
 After setup PEs are divided between two different workflows (line~$7$).
 At this time, \textit{overloaded} PEs will start the Batch Creation process (line~$8$), further explained in Algorithm~\ref{alg::packcreation}.
 Meanwhile, \textit{underloaded} PEs will initiate a \textit{Gossip Protocol}~\cite{gossip} in order to inform other elements they are willing to receive work (line~$11$).
-\textit{Gossip} is a well known epidemic algorithm used to spread information on a system, providing fast convergence and almost-global awareness of what was shared.
+\textit{Gossip} is a well known epidemic algorithm used to spread information on a system, providing fast convergence and near-global awareness of what was shared.
 
 After the information propagation, each PE must synchronize to start the remap (line~$13$). 
 At this point, the remapping process will begin.
 PEs will send their packs using Algorithm~\ref{alg::packsend}, \textit{Batch Send}, asynchronously (line~$14$).
 After a pack is sent, a PE will accept or reject it based on their current load, this is done via \textit{three-way handshake}, so both parts confirm the migration.
 
-If one or more packs were not successfully exchanged, an \textit{overloaded} PE must attempt a new \textit{Batch Send}, in order to achieve load balance, as specified in Algorithm~\ref{alg::packsend}.
-Once the PEs know their new mappings, tasks are migrated and the strategy is finished (line~$15$). 
+If one or more packs were not successfully exchanged, an \textit{overloaded} PE must attempt a new \textit{Batch Send}, in order to achieve load balance, as specified in Section~\ref{sec:algo:sending}.
+Once the PEs know their new mappings, tasks are migrated and the strategy is finished, requesting the confirmed migrations to the RTS (line~$15$). 
 
 \begin{algorithm}
 	\DontPrintSemicolon
-    \KwIn{$M$, $load_{local}$, $P$, $MyId$}
+    \KwIn{$M$, $load$, $P$, $Id_{l}$}
     \KwOut{$  M'$}
     $  M' \gets \varnothing$\\
-    $al \gets (AveragePeLoadReduction(load_{local})\Rightarrow  P)$ \\
-    $tc \gets (TotalTaskCountReduction(| M|)\Rightarrow  P)$\\
-    //Average~task~size~\quad//5\%~precision~on~balance\qquad
-    $ats\gets \frac{al}{tc}$ \qquad\qquad\  $thrs \gets 0.05$\\
-    $ub \gets ceil(al,thrs)$ \qquad //Upper migration threshold\\
-    $s \gets ats\times (2-\frac{|  P|}{tc}$) \qquad\qquad //Pack load\\
-    \uIf{$l > ub$}{
-    	$packs \gets BatchCreation(ps,  T(  M),l,thrs)$
+    $load_{avg} \gets (AveragePeLoadReduction(load)\Rightarrow  P)$ \\
+    $ttc \gets (TotalTaskCountReduction(|M|)\Rightarrow  P)$\\
+    $ats\gets \frac{load_{avg}}{ttc}$ \quad\qquad //Average~task~size\\
+    $v \gets 0.05$ \qquad //5\%~precision~on~balance\\
+    $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad //Pack load\\
+    \uIf{$load > ceil(load_{avg},v)$}{
+    	$packs \gets BatchCreation(ps,  T(  M),load,v)$
     }
     \Else{
     	$packs \gets \varnothing$\\
-    	$T \gets (Gossip \rightarrow  P)$ \qquad //Targets for migration\\
+    	$G \gets (Gossip \rightarrow  P)$ \qquad //Targets for migration\\
     }
     $---Synchronization Barrier---$\\
     //Requests are processed as they are received back
-    $R \gets BatchSend(packs, T)$\\
-    $TaskMap(R,   M, MyId)$
+    $R \gets BatchSend(packs, G)$\\
+    $TaskMap(R,   M, Id_{l})$
     \caption{PackDrop}
-    \label{algo:packdrop}    
+    \label{alg::packdrop}    
 \end{algorithm}
 
 \textit{PackDrop} intends to remap tasks to PEs in a distributed, workload-aware fashion.

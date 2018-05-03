@@ -1,32 +1,42 @@
 \section{Introduction}
 
-With the arrival of Petascale and highly parallel computing platforms, scientific simulations, such as molecular dynamics, have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
-\todo[inline]{Em geral não se começa frases com "With", ainda mais a primeira do artigo. Deve-se evitar a voz passiva, a não ser quando for para quebrar a monotonia da leitura}
-However, load imbalance is a recurrent problem in scientific applications, specially in those with an intrinsic dynamic nature~\cite{Deveci2015}.
-Global rescheduling strategies try to solve this issue, redistributing work amongst Processing Elements (PEs), seeking a more homogeneous state of the system load.
-\todo[inline]{Esse primeiro parágrafo apresenta 3 conceitos ao mesmo tempo: O aumento nas plataformas, o desbalanceamento e global rescheduling mas não apresenta o estado atual e como tudo isso se liga de maneira intuitiva. Deixei comentado uma possível re-escrita.}
+\begin{itemize}
+	\item Motivation: Why load balancing
+	\item Context: Scenarios in which global rescheduling applies
+	\item Problem: Scaling iterative applications: algorithm limitations
+	\item Justification: Scalable load balancing, distributed rescheduling
+	\item Related work: Hierarchical (limited scaling), Distributed (excessive comm), Diffusive (iterative), Refinement Based (centralized)
+	\item Proposed solution: Batch task migration to mitigate communication costs
+	\item Paper contributions	
+	\item Results brief
+	\item Paper structure
+\end{itemize}
 
-% Modern parallel computing platforms have achieved petascale computing and will soon embark in the the hexascale era. Nonetheless, as platforms grow on computational power so does the challenge of providing application scalability, majorly due to the load imbalance problem. However, through the aid of global schedulers, it is possible to dynamically redistribute an application work amongst Processing Elements (PEs), ultimately achieving an homogeneous state of the system's load. As such, despite the aforementioned limitations, scientific simulations have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
-
-The cost of dynamically rescheduling an application is bound to two main steps: i) a decision step, in which the scheduler remaps tasks to PEs; ii) a migration step, in which the data associated to the tasks are migrated~\cite{pillaphd}.
-In a small scale system, the higher cost is associated with migration costs, since communication is limited (less PEs to communicate).
-As systems scale, the communication costs associated with the decision step may considerably grow. Thus, applications may present significant performance losses when rescheduling strategies do not take into account the communication costs~\cite{grapevine}.
-
-Centralized global rescheduling strategies are very efficient when aggregating data and dealing with it \todo{Check new version}{does not create unexpectedly high migration or decision time overheads}. %was: cheap
-However, as researchers want to execute scientific applications to solve larger problems in highly parallel machines, the overhead of centralized rescheduling may be higher than the effects of load imbalance.
-This creates a need for scalable schedulers, able to present close to homogeneous distribution of load with a low overhead.
-
-Distributed rescheduling strategies use the local information available on PEs to redistribute work without global information.
-This way PEs take decisions based on a best local scenario, making most of these algorithms \textit{Greedy}.
-This is advantageous, since scheduling work amongst PEs perfectly is an NP-Hard problem~\cite{npcomplete}.
-
-As Exascale approaches, computing platforms become able of higher levels of scalability.
-Schedulers have to work with ever increasing amounts of information in these platforms, which demands higher performance and efficiency on load balancing.
-Even though few distributed strategies exist~\cite{grapevine,diffus}, it is still a field to be explored since each platform and application may benefit from different strategies.
-
-In this paper, we propose and present an evaluation of a \textit{Bin Packing} approach for refinement-based distributed global rescheduling called \textit{Task Packing}.
-Our novel strategy is based on previous distributed approaches and attempts to minimize the communication during the remapping process.
-Migrating groups of work-units instead one-by-one exchanges should mitigate most network-related issues, such as network congestion and jitter.
-\todo[inline]{Our results show that ...}
-
-\todo[inline]{Add paper structure.}
+%
+%With the arrival of Petascale and highly parallel computing platforms, scientific simulations, such as molecular dynamics, have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
+%\todo[inline]{Em geral não se começa frases com "With", ainda mais a primeira do artigo. Deve-se evitar a voz passiva, a não ser quando for para quebrar a monotonia da leitura}
+%However, load imbalance is a recurrent problem in scientific applications, specially in those with an intrinsic dynamic nature~\cite{Deveci2015}.
+%Global rescheduling strategies try to solve this issue, redistributing work amongst Processing Elements (PEs), seeking a more homogeneous state of the system load.
+%\todo[inline]{Esse primeiro parágrafo apresenta 3 conceitos ao mesmo tempo: O aumento nas plataformas, o desbalanceamento e global rescheduling mas não apresenta o estado atual e como tudo isso se liga de maneira intuitiva. Deixei comentado uma possível re-escrita.}
+%
+%% Modern parallel computing platforms have achieved petascale computing and will soon embark in the the hexascale era. Nonetheless, as platforms grow on computational power so does the challenge of providing application scalability, majorly due to the load imbalance problem. However, through the aid of global schedulers, it is possible to dynamically redistribute an application work amongst Processing Elements (PEs), ultimately achieving an homogeneous state of the system's load. As such, despite the aforementioned limitations, scientific simulations have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.
+%
+%The cost of dynamically rescheduling an application is bound to two main steps: i) a decision step, in which the scheduler remaps tasks to PEs; ii) a migration step, in which the data associated to the tasks are migrated~\cite{pillaphd}.
+%In a small scale system, the higher cost is associated with migration costs, since communication is limited (less PEs to communicate).
+%As systems scale, the communication costs associated with the decision step may considerably grow. Thus, applications may present significant performance losses when rescheduling strategies do not take into account the communication costs~\cite{grapevine}.
+%
+%Centralized global rescheduling strategies are very efficient when aggregating data and dealing with it \todo{Check new version}{does not create unexpectedly high migration or decision time overheads}. %was: cheap
+%However, as researchers want to execute scientific applications to solve larger problems in highly parallel machines, the overhead of centralized rescheduling may be higher than the effects of load imbalance.
+%This creates a need for scalable schedulers, able to present close to homogeneous distribution of load with a low overhead.
+%
+%Distributed rescheduling strategies use the local information available on PEs to redistribute work without global information.
+%This way PEs take decisions based on a best local scenario, making most of these algorithms \textit{Greedy}.
+%This is advantageous, since scheduling work amongst PEs perfectly is an NP-Hard problem~\cite{npcomplete}.
+%
+%As Exascale approaches, computing platforms become able of higher levels of scalability.
+%Schedulers have to work with ever increasing amounts of information in these platforms, which demands higher performance and efficiency on load balancing.
+%Even though few distributed strategies exist~\cite{grapevine,diffus}, it is still a field to be explored since each platform and application may benefit from different strategies.
+%
+%In this paper, we propose and present an evaluation of a \textit{Bin Packing} approach for refinement-based distributed global rescheduling called \textit{Task Packing}.
+%Our novel strategy is based on previous distributed approaches and attempts to minimize the communication during the remapping process.
+%Migrating groups of work-units instead one-by-one exchanges should mitigate most network-related issues, such as network congestion and jitter.
