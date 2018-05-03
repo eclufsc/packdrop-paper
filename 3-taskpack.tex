@@ -33,25 +33,23 @@ Other symbols used in the algorithms may be found in Table~\ref{tab:algo:symbols
 		$T$				& Set of tasks 										& Equations~\ref{eq:load},~\ref{eq:taskmap} \\
 		$load$			& Compute load of the local PE \\
 		$load_{set}(T)$	& Load of a set ($T$) 								& Equation~\ref{eq:load} \\
-		$load_{avg}$	& Average system load of a PE 						& Section~\ref{sec:algo:creation}\\
-		$l$				& Short for $load$ 									& Equation~\ref{eq:ceil} \\
+		$load_{avg}$		& Average system load of a PE 						& Section~\ref{sec:algo:creation}\\
 		$v$				& Load threshold in \% 								& Equation~\ref{eq:ceil} \\
-		$ceil(l,v)$		& Upper bound of $l$ with threshold $v$		 		& Equation~\ref{eq:ceil} \\ 
-		$LT$			& Set of tasks leaving a PE 						& Algorithm~\ref{alg::packcreation} \\
+		$ub(load,v)$		& Upper bound of $l$ with threshold $v$		 		& Equation~\ref{eq:ceil} \\ 
+		$LT$				& Set of tasks leaving a PE 						& Algorithm~\ref{alg::packcreation} \\
 		$L$				& Set of tasks, subset of $LT$						& Algorithm~\ref{alg::packcreation} \\
 		$G$				& Target for task receiving							& Algorithm~\ref{alg::packsend} \\
-		$BG$			& Pairs expecting migration ack						& Algorithm~\ref{alg::packsend} \\ 
+		$BG$				& Pairs expecting migration ack						& Algorithm~\ref{alg::packsend} \\ 
 		$rand(S)$		& Random element of $S$ 							& Section~\ref{sec:algo:sending} \\
 		$Send(T)\rightarrow G $ & Send a set $T$ to target $G$				& Algorithm~\ref{alg::packsend} \\ 
 		$M$				& Mapping of tasks									& Equation~\ref{eq:taskmap} \\
 		$P$				& Global set of PEs 								& Section~\ref{sec:algo:main} \\
 		$Id_l$ 			& Local PE identifier								& Algorithm~\ref{alg::packdrop} \\
-		$|A|$			& Number of elements in a set $A$	\\
-		$Gossip$		& Start of information propagation					& Section~\ref{sec:algo:main} \\
+		$Gossip$			& Start of information propagation					& Section~\ref{sec:algo:main} \\
 		$TaskMap$		& Call RTS to start migrations						& Algorithm~\ref{alg::packdrop} \\
 		$pack$			& Set of leaving tasks								& Section~\ref{sec:algo:main} \\
 	\end{tabular}
-	\caption{Important symbols for algorithms}
+	\caption{Important symbols for the algorithms}
 	\label{tab:algo:symbols}
 \end{table}
 
@@ -63,7 +61,7 @@ The threshold is used to calculate an upper bound of the average system load ($l
 The load of any set of tasks is given by Equation~\ref{eq:load}.
 
 \begin{equation}
-	ceil(l,v) = (1+v)\times l
+	ub(load,v) = (1+v)\times load
     \label{eq:ceil}
 \end{equation}
 
@@ -72,20 +70,20 @@ The load of any set of tasks is given by Equation~\ref{eq:load}.
 	\label{eq:load}
 \end{equation}
 
-With this information, each PE will take the task with the lower load within its pool, and pack it (lines~$3-6$).
-Then, if the sum of all tasks in the pack is greater then the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$7-10$).
-The process is repeated while $load$ is greater than the upper bound~(line~$2$).
+With this information, each PE will take the task with the lower load within its pool, and pack it (lines~$3-5$).
+Then, if the sum of all tasks in the pack is greater then the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
+The process is repeated while the set load is greater than the upper bound~(line~$2$).
 
 \begin{algorithm}[!ht]
     \DontPrintSemicolon
-    \KwIn{$s$; $  T$; $load$; $load_{avg}$; $v$}
+    \KwIn{$s$; $  T$; $load_{avg}$; $v$}
     \KwOut{$LT$}
     $L \gets \varnothing,\ LT \gets \varnothing$ \\
-    \While{$load > ceil(load_{avg},v)$}{
+    \While{$load_{set}(T) > ub(load_{avg},v)$}{
         $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
         $  T \gets   T\ \backslash\ \{t\} $\\
         $\textit{L} \gets L\ \cup\ \{t\}$\\
-        $load \gets load - t$\\
+        %$load \gets load - t$\\
         \If{$load_{set}(L) > s$}{
             $LT \gets LT\ \cup\ L$\\
             $L \gets \varnothing $
@@ -98,7 +96,7 @@ The process is repeated while $load$ is greater than the upper bound~(line~$2$).
 
 Any unfinished $LT$s should be sent even if those are not complete.
 This is done to avoid having an overloaded PE that can still migrate tasks.
-A PE that receives this load will not receive as much load as others, but since the PE will not overload, it should not be prejudicial.
+A PE that receives this load will not receive as much load as others, but since the PE will not overload, it should not be prejudicial to global system balance.
 
 \subsection{Batch Sending} \label{sec:algo:sending}
 
@@ -171,7 +169,7 @@ Once the PEs know their new mappings, tasks are migrated and the strategy is fin
     $ats\gets \frac{load_{avg}}{ttc}$ \quad\qquad //Average~task~size\\
     $v \gets 0.05$ \qquad //5\%~precision~on~balance\\
     $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad //Pack load\\
-    \uIf{$load > ceil(load_{avg},v)$}{
+    \uIf{$load > ub(load_{avg},v)$}{
     	$packs \gets BatchCreation(ps,  T(  M),load,v)$
     }
     \Else{

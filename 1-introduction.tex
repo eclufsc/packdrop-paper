@@ -1,16 +1,87 @@
 \section{Introduction}
 
-\begin{itemize}
-	\item Motivation: Why load balancing
-	\item Context: Scenarios in which global rescheduling applies
-	\item Problem: Scaling iterative applications: algorithm limitations
-	\item Justification: Scalable load balancing, distributed rescheduling
-	\item Related work: Hierarchical (limited scaling), Distributed (excessive comm), Diffusive (iterative), Refinement Based (centralized)
-	\item Proposed solution: Batch task migration to mitigate communication costs
-	\item Paper contributions	
-	\item Results brief
-	\item Paper structure
-\end{itemize}
+%\begin{itemize}
+%	\item Motivation: Why load balancing
+%	\item Context: Scenarios in which global rescheduling applies
+%	\item Problem: Scaling iterative applications: algorithm limitations
+%	\item Justification: Scalable load balancing, distributed rescheduling
+%	\item Related work: Hierarchical (limited scaling), Distributed (excessive comm), Diffusive (iterative), Refinement Based (centralized)
+%	\item Proposed solution: Batch task migration to mitigate communication costs
+%	\item Paper contributions	
+%	\item Results brief
+%	\item Paper structure
+%\end{itemize}
+
+%Growth of systems and applications.
+%Need to achieve high scalability to use platforms.
+%Efficient scheduling and use of resources.
+%
+%Dynamic iterative applications.
+%Unable to use work stealing.
+%Global rescheduling as a solution.
+%
+%Strong scaling of applications.
+%Cost of centralized load balancing.
+%Using platform parallelism to achive performance.
+%Communication costs as a relevant overhead.
+%
+%Present hierarchical LB.
+%Pros: weak scaling, topology.
+%Cons: high comms, bottlenecks.
+%Present distributed LB.
+%Pros: parallel, refinement.
+%Cons: high comms, network contention.
+%
+%\textbf{Cut out topo aware and diffusive, not related enough.}
+%
+%Brief intro to BTM.
+%Reduced communication.
+%Highly parallel.
+%Fast convergence.
+%
+%Present contributions.
+%
+%Brief results.
+%
+%Present paper structure.
+%
+%\hline
+
+Parallel machines are at their best when work is evenly distributed among compute nodes, and idle time is merely a myth.
+Unfortunately, the efficient scaling applications for these platforms has been a challenge as long as they have existed.
+Uneven distribution of work and high communication overheads are the main villains when devoloping parallel applications~\cite{Deveci2015, commaware}.
+Concern towards these problems increases as system grow in size, consuming more power and resources to solve problems.
+
+Applications such as simulations of molecular dynamics~\cite{namd} and hydrodynamics~\cite{IPDPS13:LULESH} suffer from load imbalance due to their intrinsic dynamic and iterative nature.
+Since the load of a simulation will vary over time, it is impossible to statically schedule work evenly if this is done only prior to application execution.
+This creates an impending need for fast and effective scheduling strategies, seeking minimal overhead and maximum increase in performance.
+
+Rescheduling algorithms have been able to take molecular dynamics from a few thousands to the hundreds of millions of atoms in the last 25 years~\cite{namd0}.
+However, centralized algorithms can only take you so far.
+Since mapping work to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size have rapidily made algorithm overheads prohibitive in platforms of today.
+This creates a need for more scalable, decentralized, rescheduling approaches, avoid both excess of data to process and network contention.
+
+In the iterative application domain, there are two main paths to achieve scalability in global rescheduling.
+The first being Hierarchical load balancing, which explores parallelism using different approaches for fine-grain and coarse-grain steps.
+These can scale, but are usually tied to the same limitations as the Centralized, as data is still agregated in master nodes.
+And the second is Distributed load balancing, which seeks to achieve scalability in a decentralized fashion.
+These scale better, but have limited system information and may incur in high amounts of communication.
+
+Few are the Distributed strategies in the domain of global rescheduling, but their effectiviness is notable~\cite{grapevine,diffus}.
+In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique, \textit{PackDrop}.
+Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
+
+Obtained results display the effectiveness of our approach in a costly communication scenario, as well as its capability to balance load and enhance application performance.
+Observed application times were reduced from $13\%$ to $25\%$ when compared to an execution without load balancing in $384-768$ cores experiments.
+Our approach also showed itself more than $2000$ times faster than centralized reschedulers in this same environment.
+
+The remainder of this paper is divided as follows:
+Section~\ref{sec:rw} presents recent work in dynamic rescheduling of scientific applications. 
+Section~\ref{sec:algo} presents our novel approach and the developed algorithms. 
+Section~\ref{sec:analysis} is a complexity analysis of \textit{PackDrop}, our distributed algorithm. 
+Section~\ref{sec:impl} displays implementation details, execution environments and benchmarks used in this paper. 
+Section~\ref{sec:eval} displays our performance evaluation and discussed experiments. 
+And Section~\ref{sec:conclusion} presents the conclusion of this work and our future research.
 
 %
 %With the arrival of Petascale and highly parallel computing platforms, scientific simulations, such as molecular dynamics, have been able to achieve great advance in their respective fields~\cite{namd,IPDPS13:LULESH}.

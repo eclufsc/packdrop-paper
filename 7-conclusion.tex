@@ -1,4 +1,4 @@
-\section{Conclusion}
+\section{Conclusion} \label{sec:conclusion}
 
 In this work we have presented the \textit{Batch Task Migration} approach for distributed global rescheduling.
 It benefits from task communication locality, migrating multiple work units from one source to one destination.
@@ -26,3 +26,9 @@ We believe a novel strategy focused on the Stencil proggraming model is somethin
 Further work will also be developed in order to increase performance in heterogenous clusters.
 These may have heterogenous processing capacities and network capabilities, which enhaces complexity of load balancing significantly.
 In this given scenario, enhancing rescheduling decision processes may be crucial to ensure gains in application performance.
+
+\begin{itemize}
+	\item PackSteal: Similar to PackDrop, but underloaded seek overloaded to steal work.
+	\item AffinityPacks: Create packs priorizing tasks that communicate with each other the most.
+	\item PackAware: Consider communication as part of packload, comm part is increased after migration (req/hops).
+\end{itemize}
