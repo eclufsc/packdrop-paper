@@ -28,5 +28,8 @@ Very unbalanced systems suffer with this kind of approach, since the scheduler m
 It uses probabilistic transfer of load and epidemic communication protocols to achieve scalability~\cite{grapevine}.
 We intend to use what was created in \textit{Grapevine} and reduce its communication, using the \textit{Task Packing} approach.
 
-\todo[inline]{Add related work on BinLPT \@ Marcio}
+\textit{BinLPT} is a centralized workload-aware loop scheduler that adopts a greedy bin packing heuristic to adaptively partition the iteration space of irregular parallel loops into several chunks so as to amortize load imbalance while minimizing the number of chunks that are produced. Thus, runtime scheduling overheads can be reduced and iteration affinity may be exploited efficiently. Then, it assigns the heaviest chunks to the least overloaded cores, and then iteratively assigns lighter chunks to more heavily loaded ones. Finally, whenever a core finishes computing all its chunks, it steals a chunk from other one that still has work left.
+
 \todo[inline]{Add related work to MigBSP~\cite{MigPFrighi} \@ Pilla}
+
+\todo[inline]{Add a final paragraph to explain why our approach solve the aforementioned problems.}
