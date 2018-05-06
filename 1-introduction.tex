@@ -48,7 +48,7 @@
 %\hline
 
 Parallel machines are at their best when work is evenly distributed among compute nodes, and idle time is merely a myth.
-Unfortunately, the efficient scaling applications for these platforms has been a challenge as long as they have existed.
+Unfortunately, the \tofix{efficient scaling applications} for these platforms has been a challenge as long as they have existed.
 Uneven distribution of work and high communication overheads are the main villains when devoloping parallel applications~\cite{Deveci2015, commaware}.
 Concern towards these problems increases as system grow in size, consuming more power and resources to solve problems.
 
@@ -71,9 +71,11 @@ Few are the Distributed strategies in the domain of global rescheduling, but the
 In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique, \textit{PackDrop}.
 Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
 
-Obtained results display the effectiveness of our approach in a costly communication scenario, as well as its capability to balance load and enhance application performance.
+\todo[inline]{Acho que não é o momento de detalhar resultados. Uma visão rápida seria o suficiente. Seria mais importante ressaltar as contribuições do trabalho.}
+
+\tofix{Obtained results display the effectiveness of our approach in a costly communication scenario, as well as its capability to balance load and enhance application performance.
 Observed application times were reduced from $13\%$ to $25\%$ when compared to an execution without load balancing in $384-768$ cores experiments.
-Our approach also showed itself more than $2000$ times faster than centralized reschedulers in this same environment.
+Our approach also showed itself more than $2000$ times faster than centralized reschedulers in this same environment.}
 
 The remainder of this paper is divided as follows:
 Section~\ref{sec:rw} presents recent work in dynamic rescheduling of scientific applications. 

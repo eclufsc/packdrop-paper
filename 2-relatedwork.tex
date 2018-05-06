@@ -1,5 +1,7 @@
 \section{Related Work} \label{sec:rw}
 
+\todo[inline]{Organizar o raciocínio sendo empregado para listar/citar esses trabalhos todos. Por exemplo, falamos de work stealing sem explicar porque não se aplica perfeitamente para o nosso caso nem porque não fazemos o empacotamento para work stealing.}
+
 Global rescheduling is a well studied theme in high performance computing~\cite{Deveci2015,grapevine,nuco,hybrid,ZoltanParHypRepart07,diffus,Zheng2010}. 
 In the centralized domain, strategies implement a variety of heuristics in order to achieve an homogeneous distribution of load.
 Although centralized algorithms are used the most, they lack scalability and new approaches must be pursued as systems grow.
@@ -30,6 +32,6 @@ We intend to use what was created in \textit{Grapevine} and reduce its communica
 
 \textit{BinLPT} is a centralized workload-aware loop scheduler that adopts a greedy bin packing heuristic to adaptively partition the iteration space of irregular parallel loops into several chunks so as to amortize load imbalance while minimizing the number of chunks that are produced~\cite{Castro-Penna-WSCAD:2017}. Thus, runtime scheduling overheads can be reduced and iteration affinity may be exploited efficiently. Then, it assigns the heaviest chunks to the least overloaded cores, and then iteratively assigns lighter chunks to more heavily loaded ones. Finally, whenever a core finishes computing all its chunks, it steals a chunk from other one that still has work left.
 
-\todo[inline]{Add related work to MigBSP~\cite{MigPFrighi} \@ Pilla}
+\todo[inline]{Add related work to MigBSP~\cite{MigPFrighi} \@ Pilla -- MigPF é centralizado, não vejo o que ganhamos em informação nova citando ele. Também não vale a pena correr o risco de ter muitas autocitações.}
 
 \todo[inline]{Add a final paragraph to explain why our approach solve the aforementioned problems.}

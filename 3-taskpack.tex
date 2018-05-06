@@ -4,8 +4,10 @@
 %To ensure a quick and informed remapping of tasks, we present the \textit{Task Packing Approach}.
 %Sharing global information (e.g. processor affinity, estimated computational load, expected communication patterns, etc) allows a PE to create groups of the best tasks to leave a given processor and take the migration decision with one message, instead of several.
 
+\todo[inline]{Mesmo tendo falado que o algoritmo é distribuido, vale a pena ressaltar que os algoritmos apresentados executam um por PE.}
+
 The role of the global rescheduler is to ultimately reduce the application makespan. 
-Thus, the scheduler policy must incur low overheads as to not overshadow it's benefits. 
+Thus, the scheduler policy must incur low overheads as to not overshadow its benefits. 
 Moreover, we envision that a \textit{Batch Task Migration} approach can ensure a quick and informed remapping of tasks, ultimately reducing the amount of messages during the scheduling decision process. 
 Therefore, this section is dedicated to present our \textit{PackDrop} strategy as a distributed refinement-based technique that implements our proposed \textit{Batch Task Migration} approach.
 
@@ -24,7 +26,10 @@ Then the complete strategy will be presented in Algorithm~\ref{alg::packdrop}, $
 For simplicity, in all algorithms presented here: i) the symbol:~``$\rightarrow$'' will represent a remote procedure call; ii) and the symbol:~``$\Rightarrow$'' will  represent the start of a reduction process.
 Other symbols used in the algorithms may be found in Table~\ref{tab:algo:symbols}.
 
+\todo[inline]{Qual a lógica para a ordem na tabela?}
+
 \begin{table}
+	\caption{List of symbols, variables and functions.}
 	\begin{tabular}{l | l | l }
 		Symbol & Meaning & Definition\\ \hline
 		$\rightarrow$ 	& Remote procedure call &  Section~\ref{sec:algo} \\
@@ -49,7 +54,6 @@ Other symbols used in the algorithms may be found in Table~\ref{tab:algo:symbols
 		$TaskMap$		& Call RTS to start migrations						& Algorithm~\ref{alg::packdrop} \\
 		$pack$			& Set of leaving tasks								& Section~\ref{sec:algo:main} \\
 	\end{tabular}
-	\caption{Important symbols for the algorithms}
 	\label{tab:algo:symbols}
 \end{table}
 
@@ -65,14 +69,17 @@ The load of any set of tasks is given by Equation~\ref{eq:load}.
     \label{eq:ceil}
 \end{equation}
 
+\todo[inline]{A carga de um conjunto de tarefas é igual ao somatório de tarefas?}
 \begin{equation}
 	load_{set}(T) = \sum_{t \in T}t\ \ |\ \ T \text{ is a set of tasks}
 	\label{eq:load}
 \end{equation}
 
-With this information, each PE will take the task with the lower load within its pool, and pack it (lines~$3-5$).
-Then, if the sum of all tasks in the pack is greater then the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
+With this information, each PE will take the task with the smallest load within its pool, and pack it (lines~$3-5$).
+Then, if the sum of all tasks in the pack is greater than the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
 The process is repeated while the set load is greater than the upper bound~(line~$2$).
+
+\todo[inline]{Os parâmetros do algoritmo devem ser mais detalhados. Não fica claro de início a quem pertence/de onde vem a informação.}
 
 \begin{algorithm}[!ht]
     \DontPrintSemicolon
@@ -104,9 +111,9 @@ The \textit{Batch Sending} process is presented in Algorithm~\ref{alg::packsend}
 The algorithm will use the $LT$s, produced by \textit{Batch Assembly}, and the set of $Targets$, produced by an information propagation step ($Gossip$~\cite{gossip}), in order to schedule packs on remote PEs.
 This will produce a set of expected Batch/Target ($BG$) pairs, which should be confirmed by the remote target.
 
-Each subset $b \subset LT$ (as assigned in Algorithm~\ref{alg::packcreation}) will select a random target from $G$~(line~$3$).
+For each subset $b \subset LT$ (as assigned in Algorithm~\ref{alg::packcreation}), the algorithm will select a random target from $G$~(line~$3$).
 It will invoke a remote $Send$ procedure on the target $g$~(line~$4$), and register its attempt in a pair ($b$, $g$).
-This pair is then stored in the expecting confirmation set ($BG$)(line~$5$).
+This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
 
 
 \begin{algorithm}[!ht]

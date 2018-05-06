@@ -25,24 +25,27 @@
 \usepackage{amssymb}
 \usepackage{lipsum}
 \usepackage{todonotes}
+\usepackage{xcolor}
 
+\newcommand\tofix[1]{\textcolor{orange}{#1}}
 
 \title{Evaluation of a Batch Task Migration Approach in Distributed Global Rescheduling}
 
+% Organizar as linhas de autores de forma diferente. Está muito caótico com múltiplas pessoas da mesma instituição as vezes separadas e as vezes juntas
 
 \author{
 \IEEEauthorblockN{Vinicius Freitas}
 \IEEEauthorblockA{Universidade Federal de Santa Catarina\\%CNPq Scholarship Receiver - Brazil\\
 Florianópolis, Brazil\\
-vinicius.mct.freitas@gmail.com}
+\tofix{vinicius.mct.freitas@gmail.com}}
 \and
 \IEEEauthorblockN{Alexandre de L. Santana\\ and Márcio Castro}
 \IEEEauthorblockA{Universidade Federal de Santa Catarina\\
 Florianópolis, Brazil\\
-alexandre.limas.santana@gmail.com\\marcio.castro@ufsc.br}
+\tofix{alexandre.limas.santana@gmail.com}\\marcio.castro@ufsc.br}
 \and
 \IEEEauthorblockN{Laércio Lima Pilla}
-\IEEEauthorblockA{INRIA\\
+\IEEEauthorblockA{\tofix{INRIA}\\
 Grenoble, France\\
 laercio.lima@inria.fr}
 }
@@ -71,8 +74,8 @@ laercio.lima@inria.fr}
 \input{6-eval.tex}
 \input{7-conclusion.tex}
 
-\section*{ACKNOWLEDGMENT}
-\todo[inline]{@Laércio, adicionar agradecimentos no contexto do projeto de pesquisa ao CNPq?}
+\section*{ACKNOWLEDGEMENTS}
+\todo[inline]{@Laércio, adicionar agradecimentos no contexto do projeto de pesquisa ao CNPq? -- Acknowledgements são coisas para nos preocuparmos com o artigo aceito. Não vejo como algo necessário para o momento. }
 \todo[inline]{Adicionar agradecimentos para ambas as bolsas de mestrado}
 
 The authors acknowledge the National Laboratory for Scientific Computing (LNCC/MCTI, Brazil) for providing HPC resources of the SDumont supercomputer, which have contributed to the research results reported within this paper. URL: \texttt{http://sdumont.lncc.br}.

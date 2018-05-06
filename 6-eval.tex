@@ -24,8 +24,8 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
     \label{tab:ptinfo}
 \end{table}
 
-Ahead we'll present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine} and \textit{Distributed}.
-Then, we'll discuss results obtained in both platforms descripted in Table~\ref{tab:ptinfo} and the scalability of our proposed solution.
+Ahead we present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine} and \textit{Distributed}.
+Then, we discuss results obtained in both platforms descripted in Table~\ref{tab:ptinfo} and the scalability of our proposed solution.
 All raw data of our results, as well as parsing scripts for analysis are publicly available\footnote{Available at: \texttt{https://github.com/eclufsc/\\packdrop-data-analysis}.}.
 
 \subsubsection*{Metrics}
@@ -49,6 +49,8 @@ In addition to previously mentioned schedulers, \textit{Dummy} was added as the 
 \textit{Task} loads vary from $30$ms to $9000$ms, which provides reasonable imbalance of load, causing global rescheduling to be useful in this case.
 Ring, 2D mesh and 3D mesh communication topologies were used to provide different levels of migration impact and communication cost.
 
+\todo[inline]{Acho que não faz sentido apresentarmos tantas casas depois da vírgula. Não é como se tivéssemos um precisão nos tempos onde isso fizesse diferença.}
+
 \begin{table}[t]
 	\centering
     \caption{LB Test mean application time on the cluster execution.}
@@ -63,6 +65,8 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
     \label{tab:lbtest:apptime}
 \end{table}
 
+\todo[inline]{Figuras estão muito longas.}
+
 \begin{figure}
 	\centering
     \includegraphics[width=\linewidth]{images/apptime_lbtest_g5k.pdf}
@@ -70,6 +74,7 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
     \label{fig:eval:g5k:lbtest:apptime}
 \end{figure}
 
+\todo[inline]{Análise estatística para poder dizer que esses tempos são verdadeiramente diferentes?}
 
 Each configuration of the benchmark was executed $15$ times, with results depicted on Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime}.
 Results for \textit{Greedy} show how different communication topologies affect the scheduling performance.
@@ -105,6 +110,8 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 	\caption{LeanMD cluster execution results.}
     \label{fig:eval:g5k:leanmd:time}
 \end{figure}
+
+\todo[inline]{Não acho que precisamos da figura dos tempos de escalonamento.}
 
 \begin{figure}[!t]
 	\centering
@@ -157,7 +164,7 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 \end{figure}
 
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
-\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a reasonable time.
+\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a \tofix{reasonable time}. % Nenhuma ideia de tempo geral? O que é razoável?
 
 \textit{Distributed} benefits from this platform due to the Infiniband low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 Our novel approach, \textit{PackDrop}, followed it closely and we can see that its rescheduling time in larger systems outperforms \textit{Distributed}, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
@@ -175,7 +182,7 @@ We present \textit{PackDrop} as a solution for scalable rescheduling of work in 
 Section~\ref{sec:cluster:lbtest} shows the efficiency of our strategy. 
 Results highlight the importance of load balancing even in synthetic loads.
 The \textit{LB Test} benchmark used has very low migration and communication overhead, and most of its work is done locally, which is optimal for rescheduling evaluation of raw computational workload.
-Our strategy was only outperformed by \textit{Refine} in all test cases, which is expected, since the total load dealt with is considerably small ($\sim 19$K tasks) and migrations cheap, which benefits centralized schedulers.
+Our strategy was only outperformed by \tofix{\textit{Refine} in all test cases, which is expected, since the total load dealt with is considerably small ($\sim 19$K tasks) and migrations cheap, which benefits centralized schedulers.}
 
 Sections~\ref{sec:cluster:md}~and~\ref{sec:sdumont:md} display evaluation of a MD mini-app, LeanMD (better described in Section~\ref{sec:benchmarks}).
 This represents ``a real world-like" scenario, in which applications may have dynamic communication patterns and high migration overhead.

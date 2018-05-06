@@ -8,7 +8,8 @@ The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \textit
 It also provides necessary reduction and quiescence detection mechanisms, used in this implementation.
 Reductions are used to evaluate the total number of chares and the average load in the system, while the quiescence detection is necessary to finalize the information propagation step of the algorithm.
 
-\texttt{Charm++} provides application-independent load balancing, which means that any application (that implements a PUP framework~\cite{sc14charm}), may use global rescheduling strategies implemented for this RTS.
+\texttt{Charm++} provides application-independent load balancing, which means that any application % (that implements a PUP framework~\cite{sc14charm}), % Existe isomalloc também
+may use global rescheduling strategies implemented for this RTS.
 This means that any of the available applications for \texttt{Charm++} can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
 
 
@@ -26,13 +27,13 @@ However, since the number of simulated atoms in each region affects the number o
 
 \subsection{Other schedulers}
 
-\textit{PackDrop} was compared strategies available on the \texttt{Charm++} benchmark suite.
+\textit{PackDrop} was compared to strategies available on the \texttt{Charm++} benchmark suite.
 More specifically, strategies that may be selected by \texttt{Charm++}'s workload-aware \textit{Meta-balancer}~\cite{MenonPHD}.
 Their behavior is briefly presented ahead.
 
 \begin{itemize}
 	\item \textit{Refine} is a refinement-based strategy that tries to minimize the number of migrated \textit{tasks}, exchanging load among PEs.
-This strategy is specially efficient if the imbalance isn't too high.
+This strategy is specially efficient if the imbalance is low.
 	\item \textit{Greedy} creates two heaps, one for \textit{tasks} (max-min) and one for PEs (min-max). 
 Then, it assigns tasks to PEs, putting the most work-heavy tasks on the least loaded PEs.
 This strategy provides a good load balance, but may incur in high migration overhead.

@@ -5,7 +5,7 @@ It benefits from task communication locality, migrating multiple work units from
 This increases communication efficiency in comparison to other workload-aware strategies.
 
 Our approach also mitigates communication costs during algorithm execution time.
-We do this by transmiting information on multiple migrations at a time.
+We do this by transmitting information on multiple migrations at a time.
 Thanks to this, our novel scheduler (presented in Section~\ref{sec:algo:main}) has an increased performance in high communication overhead platforms, discussed in Section~\ref{sec:cluster}.
 
 We have evaluated our strategy in two different execution environments. 
@@ -14,21 +14,21 @@ In this scenario, \textit{PackDrop} had a rescheduling speedup of up to $3.77$ a
 
 The second scenario was a highly coupled cluster with low communication overhead, with $24$ cores/node.
 We executed our experiments varying platform size from $16$ to $32$ nodes.
-In this scenario, rescheduling time of \textit{PackDrop} and \textit{Distributed} were, statiscally, equal, although both had a time up to $3$ orders of magnitude faster than any centralized approach.
+In this scenario, rescheduling time of \textit{PackDrop} and \textit{Distributed} were, statically, equal, although both had a time up to $3$ orders of magnitude faster than any centralized approach.
 This reinforces the relevance of work in the distributed scheduling domain, and approaches such as \textit{Batch Task Migration}.
 
 \subsection{Future Work}
 
 Future work on this theme includes the use of \textit{Batch Task Migration} in the communication-aware domain.
 Since our approach already has locality-based benefits, combining this with communication pattern information may incur on even greater performance increase in applications.
-We believe a novel strategy focused on the Stencil proggraming model is something to be considered, prioritizing migration of the \todo{add stencil basis and communication citation}{edges, instead of random parts of the stencil}.
+We believe a novel strategy focused on the Stencil programming model is something to be considered, prioritizing migration of the \todo{add stencil basis and communication citation}{edges, instead of random parts of the stencil}.
 
-Further work will also be developed in order to increase performance in heterogenous clusters.
-These may have heterogenous processing capacities and network capabilities, which enhaces complexity of load balancing significantly.
+Further work will also be developed in order to increase performance in heterogeneous clusters.
+These may have heterogeneous processing capacities and network capabilities, which enhances complexity of load balancing significantly.
 In this given scenario, enhancing rescheduling decision processes may be crucial to ensure gains in application performance.
 
 \begin{itemize}
 	\item PackSteal: Similar to PackDrop, but underloaded seek overloaded to steal work.
-	\item AffinityPacks: Create packs priorizing tasks that communicate with each other the most.
+	\item AffinityPacks: Create packs prioritizing tasks that communicate with each other the most.
 	\item PackAware: Consider communication as part of packload, comm part is increased after migration (req/hops).
 \end{itemize}
