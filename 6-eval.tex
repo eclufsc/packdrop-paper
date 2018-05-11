@@ -8,7 +8,7 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
 \begin{table}[ht]
     \centering
     \caption{Platform Information of each Node from Supercomputer and Cluster evaluations.}
-	\begin{tabular}{c|c|c}
+	\begin{tabular}{l|l|l}
 	Node Info.	 		& Supercomputer 		& Cluster \\ \hline
         CPUs	   			& $2\times12$ 			& $4$ \\
         Intel Xeon			& E5-2695v2 			& X3440\\
@@ -24,7 +24,7 @@ Details of both platforms are available on Table~\ref{tab:ptinfo}.
     \label{tab:ptinfo}
 \end{table}
 
-Ahead we present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine} and \textit{Distributed}.
+Ahead we present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine} and \textit{Distributed}.   
 Then, we discuss results obtained in both platforms descripted in Table~\ref{tab:ptinfo} and the scalability of our proposed solution.
 All raw data of our results, as well as parsing scripts for analysis are publicly available\footnote{Available at: \texttt{https://github.com/eclufsc/\\packdrop-data-analysis}.}.
 
@@ -53,7 +53,7 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
 
 \begin{table}[t]
 	\centering
-    \caption{LB Test mean application time on the cluster execution.}
+    \caption{Average LB Test application time on the cluster execution.}
 	\begin{tabular}{l | c  c  c}
     	Scheduler & Time (Ring) & Time (2D) & Time (3D) \\ \hline
         Distributed & $47.49298$s & $48.64839$s & $49.05481$s \\
@@ -67,11 +67,29 @@ Ring, 2D mesh and 3D mesh communication topologies were used to provide differen
 
 \todo[inline]{Figuras estão muito longas.}
 
+%\begin{figure}
+%	\begin{subfigure}[a]{0.45\linewidth}
+%		\centering
+%		\includegraphics[width=\linewidth]{images/apptime_lbtest_g5k.pdf}
+%    		\caption{LB Test cluster execution results.}
+%    		\label{fig:eval:g5k:lbtest:apptime}
+%	\end{subfigure}
+%	\begin{subfigure}[b]{0.45\linewidth}
+%		\centering
+%		\includegraphics[width=\textwidth]{images/apptime_lbtest_g5k.pdf}
+%    		\caption{LB Test cluster execution results.}
+%    		\label{fig:eval:g5k:lbtest:apptime1}
+%	\end{subfigure}	
+%	\caption{LB Test cluster execution results.}
+%    	\label{fig:eval:g5k:lbtest:apptime2}
+%\end{figure}
+
 \begin{figure}
 	\centering
-    \includegraphics[width=\linewidth]{images/apptime_lbtest_g5k.pdf}
-    \caption{LB Test cluster execution results.}
-    \label{fig:eval:g5k:lbtest:apptime}
+	\subfigure[LB Test]{\includegraphics[width=0.45\linewidth]{images/apptime_lbtest_g5k.pdf}\label{fig:eval:g5k:lbtest:apptime}}	
+	\subfigure[LeanMD]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_g5k.pdf}\label{fig:eval:g5k:leanmd:time}}
+	\caption{Cluster Execution Results for both applications.}
+	\label{fofinho3}
 \end{figure}
 
 \todo[inline]{Análise estatística para poder dizer que esses tempos são verdadeiramente diferentes?}
@@ -104,29 +122,29 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 	\label{tab:eval:g5k:leanmd:time} 
 \end{table}
 
-\begin{figure}[!ht]
-	\centering
-    \includegraphics[width=0.43\textwidth]{images/apptime_leanmd_g5k.pdf}
-	\caption{LeanMD cluster execution results.}
-    \label{fig:eval:g5k:leanmd:time}
-\end{figure}
+%\begin{figure}[!ht]
+%	\centering
+%    \includegraphics[width=0.43\textwidth]{images/apptime_leanmd_g5k.pdf}
+%	\caption{LeanMD cluster execution results.}
+%    \label{fig:eval:g5k:leanmd:time}
+%\end{figure}
 
-\todo[inline]{Não acho que precisamos da figura dos tempos de escalonamento.}
+%\todo[inline]{Não acho que precisamos da figura dos tempos de escalonamento.}
 
-\begin{figure}[!t]
-	\centering
-    \includegraphics[width=0.43\textwidth]{images/schedtime_leanmd_g5k.pdf}
-	\caption{LeanMD cluster execution results.}
-    \label{fig:eval:g5k:leanmd:schedtime}
-\end{figure}
+%\begin{figure}[!t]
+%	\centering
+%    \includegraphics[width=0.43\textwidth]{images/schedtime_leanmd_g5k.pdf}
+%	\caption{LeanMD cluster execution results.}
+%    \label{fig:eval:g5k:leanmd:schedtime}
+%\end{figure}
 
-Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figures~\ref{fig:eval:g5k:leanmd:time},~\ref{fig:eval:g5k:leanmd:schedtime}.
+Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}.
 Observed application times presented a standard deviation from the mean lower than $2\%$ for all results presented.
 
 Results show a better overall performance of \textit{PackDrop}, outperforming both compared strategies in the two scenarios chosen.
 Since our strategy migrates groups of tasks, it improves locality of tasks after migration, outperforming \textit{Distributed} due to this.
 
-Figure~\ref{fig:eval:g5k:leanmd:schedtime} shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
+The \textit{Mean LB Time}, presented in Table~\ref{tab:eval:g5k:leanmd:time}, shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
 It shows the increased cost of \textit{Refine}, which is due to both information agregation costs and dealing with the high amounts of application data in a centralized fashion.
 \textit{PackDrop} displays its effectiviness in rescheduling time, outperforming both compared strategies, and resulting in an overall better application time. 
 
@@ -142,11 +160,26 @@ We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluati
 Each execution ran $100$ iterations, with a first rescheduling step at the $9$th iteration. 
 Rescheduling was performed every $30$ iterations and each configuration of LeanMD was executed $10$ times, making a total of $1000$ steps per configuration. 
 
+%\begin{table}
+%	\centering
+%	\caption{LeanMD Supercomputer Results.}
+%	\begin{table}{l|c|c}
+%	Scheduler 	& Application Time 	& LB Time \\ \hline
+%	Dummy 		& $59.35696$s 		& $539.8364$ms \\ 
+%	Greedy 		& 					& \\
+%	Distributed	& $69.35606$s  		& $167.0444$ms \\ 
+%	PackDrop 	& $55.98428$s 		& $143.1028$ms \\ 
+%	
+%	\end{table}
+%	\label{tab:eval:sdumont:leanmd}
+%\end{table}
+
 \begin{figure}[!ht]
  \centering
- \includegraphics[width=0.9\linewidth]{images/apptime_leanmd_sdumont.pdf}
- \caption{LeanMD supercomputer AppTime execution results.}
- \label{fig:eval:sdumont:leanmd:apptime}
+ \subfigure[Application Time (s)]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
+ \subfigure[Rescheduling Time (s)]{\includegraphics[width=0.45\linewidth]{images/schedtime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
+ \caption{LeanMD supercomputer execution results.}
+ \label{fig:eval:sdumont:leanmd}
 \end{figure}
 
 %\begin{figure}[!ht]
@@ -156,15 +189,15 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 % \label{fig:eval:sdumont:leanmd:apptime:bars}
 %\end{figure}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.9\linewidth]{images/schedtime_leanmd_sdumont.pdf}
-	\caption{LeanMD supercomputer SchedTime execution results.}
-	\label{fig:eval:sdumont:leanmd:schedtime}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.9\linewidth]{images/schedtime_leanmd_sdumont.pdf}
+%	\caption{LeanMD supercomputer SchedTime execution results.}
+%	\label{fig:eval:sdumont:leanmd:schedtime}
+%\end{figure}
 
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
-\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a \tofix{reasonable time}. % Nenhuma ideia de tempo geral? O que é razoável?
+\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a \tofix{reasonable time}, being in average $1000$ms slower than \textit{Greedy} in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
 
 \textit{Distributed} benefits from this platform due to the Infiniband low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 Our novel approach, \textit{PackDrop}, followed it closely and we can see that its rescheduling time in larger systems outperforms \textit{Distributed}, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
