@@ -1,7 +1,6 @@
 \section{Implementation} \label{sec:impl}
 
-\textit{PackDrop} was implemented as a load balancing strategy in \texttt{Charm++}\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}.
-\texttt{Charm++} is a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR,sc14charm}.
+\textit{PackDrop} was implemented as a load balancing strategy in \texttt{Charm++}\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR,sc14charm}.
 \textit{Chares} are mapped as \textit{tasks} to PEs and the \texttt{Charm++} runtime system (RTS) provides the load information needed for our rescheduling strategy.
 
 The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \textit{PackDrop}.
@@ -15,11 +14,11 @@ This way, any of the available applications for \texttt{Charm++} can be used to 
 \subsection{Benchmarks} \label{sec:benchmarks}
 
 We experimented our strategy with $2$ benchmarks that are publicly available for \texttt{Charm++}.
-The first is a synthetic benchmark called \textbf{LB Test}. 
+The first is a synthetic benchmark called \textit{LB Test}. 
 It simulates work with a variety of communication topologies, such as ring, meshes and randomized patterns.
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
-The second is a molecular dynamics (MD) mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
+The second is a MD mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
 This mini-app simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art MD application NAMD, winner of the Golden Bell Award~\cite{grapevine}.
 LeanMD uses geometric decomposition in a three-dimensional ($3$D) simulation space.
 However, since the number of simulated atoms in each region affects the number of exchanged messages, it has an irregular and dynamic communication pattern, even though it respects the geometric distribution.
@@ -38,6 +37,8 @@ Then, it assigns tasks to PEs, associating the most work-heavy tasks with the le
 This strategy provides a good load balance, but may incur in high migration overhead.
     \item \textit{Distributed}, also known as \textit{Grapevine}, is a distributed strategy based on epidemic communication and probabilistic transfer of work.
    This strategy has good scalability, but does not performs as well as centralized ones in smaller scenarios.
+   \item \textit{Dummy}, a centralized load balancer that does not remap tasks, only gather system information other centralized approaches also use.
+   This is the representative of a scenario without load balancing.
 
 \end{itemize}
 

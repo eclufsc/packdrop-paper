@@ -16,51 +16,35 @@
 Global rescheduling is a well studied problem in high performance computing~\cite{Deveci2015,Zheng2010}.
 Redistributing work inside the parallel system is a way to mitigate load imbalance created by dynamic applications.
 This is done in order to achieve strong scalability, and thus, efficient use of computing resources.
-In this section, we will present how different approaches seek balancing load in distributed systems, why the scalability of these approaches is important, and how we mitigate these issues.
+In this section, we will present how different approaches seek balancing load in distributed systems, why they lack scalability, and how we intend to mitigate migration, communication, and scalability issues in our proposed solution.
 
-We define efficient global rescheduling as the ability of redistributing work between PEs during runtime while reducing the total execution time of the application.
-The more this time is diminished, the more efficient a technique is.
-Specifically, in the iterative application domain, this rescheduling is performed between iterations, while the application is ``paused".
-Thus, the rescheduler must perform its work fast, in order to provide benefits to the application.
+%We define efficient global rescheduling as the ability of redistributing work between PEs during runtime while reducing the total execution time of the application.
+%The more this time is diminished, the more efficient a technique is.
+%Specifically, in the iterative application domain, this rescheduling is performed between iterations, while the application is ``paused".
+%Thus, the rescheduler must perform its work fast, in order to provide benefits to the application.
 
 In the centralized domain, strategies implement a variety of heuristics in order to achieve an homogeneous distribution of load.
-Although centralized algorithms are used the most, they lack scalability and new approaches must be pursued as systems grow.
+Although centralized algorithms are used the most, their sequential and data dependent approach lacks scalability and new approaches must be pursued as systems grow.
 Different approaches have been used to scale scheduling strategies, being \textit{Hierarchical} and \textit{Distributed} the most widespread ones.
 In this work we propose a new approach for the Distributed rescheduling domain.
 
-Hierarchical algorithms will work differently in different granularity levels, exploring parallelism and delivering better performance~\cite{nuco,hybrid}.
+Hierarchical algorithms will work differently in different granularity levels, exploring parallelism and delivering better performance~\cite{hybrid,nuco}.
 These strategies are able to acquire as much static system information as the centralized techniques, while taking advantage of system parallelism.
 Some hierarchical strategies have used topology-aware approaches to increase mapping affinity~\cite{nuco,hwtopo}, while others rely on a hypergraph representation to precisely describe application communication~\cite{ZoltanParHypRepart07}.
 However, these approaches still tend to create communication bottlenecks and may take too long to aggregate the necessary information to perform the rescheduling itself.
 As parallel systems grow, the cost of having all this system information increases, and tend become inefficient.
 
-Distributed global rescheduling algorithms try to provide an homogenous distribution of load based mostly on local information, in order to avoid communication and computing bottlenecks, being completely decentralized.
-\textit{Work stealing} is one of the most broadly used techniques for balancing load in parallel systems~\cite{DBLP:journals/ijpp/YangH18,Janjic2013}.
+\textit{Work stealing} is one of the most broadly used distributed techniques for balancing load in parallel systems~\cite{DBLP:journals/ijpp/YangH18,Janjic2013}.
 The essence of work stealing makes it a very effective solution for highly irregular parallel and distributed applications.
-However, in the iterative application domain, work stealing may not be as effective, since its concurrent and randomized nature may interfer with application execution~\cite{lifflander2012work}.
+However, work stealing may not be as effective, since its concurrent and randomized nature may interfer with iterative application execution~\cite{lifflander2012work}.
 
 Also in the distributed domain, diffusive techniques have been used to irradiate work in an iterative fashion among PEs~\cite{diffus}.
 Although such an approach is interesting since it may not impact much communication costs, it may also have a high convergence time, easily becoming inefficient in very imbalanced scenarios.
-Differing this approach, refinement-based distributed techniques are able to provide fast and efficient rescheduling while not needing much system information to do so~\cite{grapevine}.
-The main disadvantage of these techniques is the lack of affinity in migrated tasks, diminishing task locallity, and thus, increasing their total workload.
+Differing this approach, refinement-based distributed techniques are able to provide fast and efficient rescheduling unaware of much system information to do so~\cite{grapevine}.
+The main disadvantage of these techniques is the lack of affinity in migrated tasks, diminishing task locallity, and thus, increasing their total communication load.
 
 In the loop scheduling domain, a \textit{Bin Packing} oriented approach has been able to exploit iteration affinity by adaptively partitioning loops~\cite{Castro-Penna-WSCAD:2017}.
 Due to its greedy approach, this strategy can efficiently distribute work among chunks before scheduling, increasing the overall application performance.
-We intend to utilize a similar approach to increase affinity and diminish communication overheads in a Distributed rescheduler.
-Our novel completely decentralized algorithm intends to take profit from both distributed and affinity oriented approaches.
+We intend to utilize a similar approach to preserve affinity and diminish communication overheads in a Distributed rescheduler.
+Our novel completely decentralized approach intends to take profit from both distributed and affinity oriented strategies alike.
 
-
-
-%Diffusive load balancing is a completely distributed solution that may benefit iterative applications~\cite{diffus}.
-%These schedulers irradiate work from overloaded PEs to their neighbors, in an effort to achieve load balance in an iterative fashion.
-%Very unbalanced systems suffer with this kind of approach, since the scheduler may take too long to reach a solution.
-%
-%\textit{Grapevine} is a completely distributed refinement-based scheduling solution.
-%It uses probabilistic transfer of load and epidemic communication protocols to achieve scalability~\cite{grapevine}.
-%We intend to use what was created in \textit{Grapevine} and reduce its communication, using the \textit{Task Packing} approach.
-%
-%\textit{BinLPT} is a centralized workload-aware loop scheduler that adopts a greedy bin packing heuristic to adaptively partition the iteration space of irregular parallel loops into several chunks so as to amortize load imbalance while minimizing the number of chunks that are produced~\cite{Castro-Penna-WSCAD:2017}. Thus, runtime scheduling overheads can be reduced and iteration affinity may be exploited efficiently. Then, it assigns the heaviest chunks to the least overloaded cores, and then iteratively assigns lighter chunks to more heavily loaded ones. Finally, whenever a core finishes computing all its chunks, it steals a chunk from other one that still has work left.
-%
-%\todo[inline]{Add related work to MigBSP~\cite{MigPFrighi} \@ Pilla -- MigPF é centralizado, não vejo o que ganhamos em informação nova citando ele. Também não vale a pena correr o risco de ter muitas autocitações.}
-%
-%\todo[inline]{Add a final paragraph to explain why our approach solve the aforementioned problems.}
