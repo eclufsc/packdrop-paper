@@ -135,7 +135,7 @@ This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
     \label{alg::packsend}
 \end{algorithm}
 
-When $Sends$ receive a negative response, Algorithm~\ref{alg::packsend} can be refed with the failed attempts and initiate another round of sends, until every member of $LT$ is migrated.
+When $Sends$ receive a negative response, Algorithm~\ref{alg::packsend} may initiate another round of sends with the failed attempts so every member of $LT$ is migrated.
 
 \subsection{PackDrop Algorithm} \label{sec:algo:main}
 

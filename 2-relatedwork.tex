@@ -41,7 +41,7 @@ However, work stealing may not be as effective, since its concurrent and randomi
 Also in the distributed domain, diffusive techniques have been used to irradiate work in an iterative fashion among PEs~\cite{diffus}.
 Although such an approach is interesting since it may not impact much communication costs, it may also have a high convergence time, easily becoming inefficient in very imbalanced scenarios.
 Differing this approach, refinement-based distributed techniques are able to provide fast and efficient rescheduling unaware of much system information to do so~\cite{grapevine}.
-The main disadvantage of these techniques is the lack of affinity in migrated tasks, diminishing task locallity, and thus, increasing their total communication load.
+The main disadvantage of these techniques is the lack of affinity in migrated tasks, diminishing task locality, and thus, increasing their total communication load.
 
 In the loop scheduling domain, a \textit{Bin Packing} oriented approach has been able to exploit iteration affinity by adaptively partitioning loops~\cite{Castro-Penna-WSCAD:2017}.
 Due to its greedy approach, this strategy can efficiently distribute work among chunks before scheduling, increasing the overall application performance.

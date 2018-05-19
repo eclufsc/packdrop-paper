@@ -54,12 +54,12 @@ Concern towards these problems increases as system grow in size, consuming more 
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
 Although rescheduling algorithms have been able to greatly improve applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
-Since mapping work to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized approaches to rescheduling innefficient.
+Since mapping work to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized approaches to rescheduling inefficient.
 This creates a need for scalable, decentralized, rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
 The two main paths to achieve scalable global rescheduling in the iterative application domain are Hierarchical and Distributed approaches.
 Hierarchical load balancing explores parallelism using different approaches for fine-grain and coarse-grain steps~\cite{hybrid}.
-These can scale, but are usually tied to the same limitations as the Centralized, as data is still agregated in master nodes.
+These can scale, but are usually tied to the same limitations as the Centralized, as data is still aggregated in master nodes.
 On the other hand, Distributed load balancing seeks to achieve scalability in a decentralized fashion.
 These scale better, but have limited system information and may incur in high amounts of communication.
 
