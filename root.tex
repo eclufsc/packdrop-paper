@@ -2,7 +2,7 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[a4paper, 10 pt, conference]{IEEEtran}  % Comment this line out if you need a4paper
+\documentclass[a4paper, 10pt, conference]{IEEEtran}  % Comment this line out if you need a4paper
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
 
@@ -30,25 +30,15 @@
 
 \newcommand\tofix[1]{\textcolor{orange}{#1}}
 
-\title{A Batch Task Migration Approach for Distributed Global Rescheduling}
+\title{A Batch Task Migration Approach\\ for Decentralized Global Rescheduling}
 
 % Organizar as linhas de autores de forma diferente. Está muito caótico com múltiplas pessoas da mesma instituição as vezes separadas e as vezes juntas
 
 \author{
-\IEEEauthorblockN{Vinicius Freitas}
-\IEEEauthorblockA{Universidade Federal de Santa Catarina\\%CNPq Scholarship Receiver - Brazil\\
-Florianópolis, Brazil\\
-vinicius.mctf@posgrad.ufsc.br}
-\and
-\IEEEauthorblockN{Alexandre de L. Santana\\ and Márcio Castro}
-\IEEEauthorblockA{Universidade Federal de Santa Catarina\\
-Florianópolis, Brazil\\
-alexandre.santana@posgrad.ufsc.br\\marcio.castro@ufsc.br}
-\and
-\IEEEauthorblockN{Laércio Lima Pilla}
-\IEEEauthorblockA{\tofix{INRIA}\\
-Grenoble, France\\
-laercio.lima@inria.fr}
+\IEEEauthorblockN{Vinicius Freitas$^\star$, Alexandre de L. Santana$^\star$, Márcio Castro$^\star$, Laércio L. Pilla$^{\star\dagger}$}
+\IEEEauthorblockA{$^\star$ Universidade Federal de Santa Catarina (UFSC), Florianópolis, Brazil\\
+$^\dagger$ Institut National de Recherche en Informatique (INRIA), Grenoble, France\\
+Email: {\smaller\texttt{\{vinicius.mctf,alexandre.santana\}@posgrad.ufsc.br, marcio.castro@ufsc.br, laercio.lima@inria.fr}}}
 }
 
 \begin{document}
@@ -63,7 +53,16 @@ laercio.lima@inria.fr}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-\lipsum[9]
+  Effectively mapping tasks on parallel systems is crucial to assure performance on demanding applications. 
+  Throughout the years, global rescheduling of work has been a viable solution to mitigate the problem of load imbalance. 
+  As platforms and applications grow, load imbalance becomes a priority issue, and the previous algorithms are not able to deal with it as efficiently. 
+  In this paper we propose a novel approach and algorithm to improve decentralized global rescheduling, ultimately reducing communication costs and conserving task locality. 
+  We evaluated our approach in two different parallel platforms, using both synthetic load and a molecular dynamics (MD) benchmark, obtaining speedup of up to $3.75$ and $1.15$ on rescheduling time, when compared to centralized and distributed approaches, respectively;
+  and up to $1.34$ and $1.22$ on MD application time, when compared to no rescheduling in both our two platforms.
+%\lipsum[9]
+
+\textit{Keywords---}High Performance Computing, Global Rescheduling, Load Balancing, Performance Evaluation, Parallel Algorithms
+
 
 \end{abstract}
 

@@ -31,11 +31,13 @@ All raw data of our results, as well as parsing scripts for analysis are publicl
 \subsection{Metrics}
 
 \textit{Application time} is one of the most relevant metrics to evaluate load balancers in \texttt{Charm++}.
-Since migrations may induce high overhead and impact communication costs, a bad algorithm may finish fast, but increase imbalance, and thus, application time.
+Since migrations may induce high overhead and impact communication costs, a bad algorithm may finish fast, but increase imbalance, and thus, increased application time.
+This is a powerful metric to measure both load balancing precision and the overall impact application impact of a strategy.
 
 \textit{Load balancer decision time}, although not the most relevant for the application itself, the decision time is an indicator of its scalability.
 Some centralized schedulers, such as \textit{Greedy}, work very well on local machines, with a reasonable data input.
-However, when executing on distributed memory environments, the scalability of centralized strategies is limited.
+However, when executing on distributed memory environments, the scalability of centralized strategies is limited, having a longer decision time.
+Throughout this section, load balancer decision time will also be referred to as \textit{rescheduling time}.
 
 \subsection{Evaluation on Cluster} \label{sec:cluster}
 
@@ -95,7 +97,7 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 	\begin{tabular}{l|c c c}
 	Scheduler & Time (Short RP) & Time (Long RP) & Mean LB Time \\ \hline
 	Distributed & $69.356$s & $68.360$s & $167.044$ms \\ 
-	PackDrop & $55.984$s & $55.51554$s & $143.103$ms \\ 
+	PackDrop & $55.984$s & $55.516$s & $143.103$ms \\ 
 	Refine & $59.357$s & $55.899$s & $539.836$ms \\ 
 	\end{tabular}
 	\label{tab:eval:g5k:leanmd:time} 

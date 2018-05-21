@@ -1,11 +1,17 @@
 \section{Analysis of the Algorithm} \label{sec:analysis}
 
-\begin{table}[!t]
+This section presents an analysis of the Parallel Algorithm~\ref{alg::packdrop}~(PackDrop). 
+Symbols presented in this section are available on Tables~\ref{tab:algo:symbols}~and~\ref{tab:analysis:symbols}.
+The complexity of the information propagation ($Gossip$) has being evaluated as $O(log_{fout}n)$~\cite{grapevine},
+where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
+Here we use $fout=2$, in order to avoid network congestion. 
+
+\begin{table}[!ht]
 	\caption{List of symbols used in the Analysis of the Algorithm}
 	\centering	
 	\begin{tabular}{l |l}
 		Symbol			& Meaning\\		\hline
-		$fout$			& Fanout for $Gossip$ protocol						 \\ 
+		$fout$			& $Gossip$ protocol's \textit{fanout}						 \\ 
 		$p_c$			& Computational (processing) base cost				 \\
 		$c_c$			& Communication base cost							 \\
 		$C(A)$			& The total cost of a given fuction $A$				 \\
@@ -15,12 +21,6 @@
 	\end{tabular}
 	\label{tab:analysis:symbols}
 \end{table}
-
-This section presents an analysis of the Parallel Algorithm~\ref{alg::packdrop}~(PackDrop). 
-Symbols presented in this section are available on Tables~\ref{tab:algo:symbols}~and~\ref{tab:analysis:symbols}.
-The complexity of the information propagation ($Gossip$) has being evaluated as $O(log_{fout}n)$~\cite{grapevine},
-where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
-Here we use $fout=2$, in order to avoid network congestion. 
 
 For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
 will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.

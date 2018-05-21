@@ -150,6 +150,32 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
 	M:\ T \rightarrow P
 	\label{eq:taskmap}
 \end{equation}
+\vspace{-20pt}
+\begin{algorithm}[ht]
+	\DontPrintSemicolon
+    \KwIn{$M$, local mapping of tasks; $load$, local PE load; $P$, set of all PEs in the system; $Id_{l}$, local PE identifier}
+    \KwOut{$  M'$, new mapping of local tasks}
+    $  M' \gets \varnothing$\\
+    $load_{avg} \gets (AveragePeLoadReduction(load)\Rightarrow  P)$ \\
+    $ttc \gets (TotalTaskCountReduction(|M|)\Rightarrow  P)$\\
+    $ats\gets \frac{load_{avg}}{ttc}$ \qquad\qquad\qquad \tcp{{\small Average~task~size}}
+    $v \gets 0.05$ \qquad \qquad\ \tcp{{\small 5\%~precision~on~balance}}
+    $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad\qquad\qquad \tcp{{\small Pack load}}
+    \uIf{$load > ub(load_{avg},v)$}{
+    	$packs \gets BatchCreation(ps,  T(M),load,v)$
+    }
+    \Else{
+    	$packs \gets \varnothing$\\
+    	$G \gets (Gossip \rightarrow  P)$ \tcp{{\small Targets for migration}}
+    }
+    $---Synchronization Barrier---$\\
+    \tcc{{\small Requests are processed as they are received back}}
+    $R \gets BatchSend(packs, G)$\\
+    \tcp{{\small Implicit synchronization in TaskMap}}
+    $TaskMap(R,M, M',Id_{l})$
+    \caption{PackDrop}
+    \label{alg::packdrop}    
+\end{algorithm}
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
@@ -172,28 +198,3 @@ The $TaskMap$ function will take care of informing on the new mapping ($M'$) all
 \textit{PackDrop} intends to remap tasks to PEs in a distributed, workload-aware fashion.
 This approach is the basis for new batch task migration distributed strategies that may take other factors into account.
 
-\begin{algorithm}[t]
-	\DontPrintSemicolon
-    \KwIn{$M$, local mapping of tasks; $load$, local PE load; $P$, set of all PEs in the system; $Id_{l}$, local PE identifier}
-    \KwOut{$  M'$, new mapping of local tasks}
-    $  M' \gets \varnothing$\\
-    $load_{avg} \gets (AveragePeLoadReduction(load)\Rightarrow  P)$ \\
-    $ttc \gets (TotalTaskCountReduction(|M|)\Rightarrow  P)$\\
-    $ats\gets \frac{load_{avg}}{ttc}$ \qquad\qquad\qquad \tcp{{\small Average~task~size}}
-    $v \gets 0.05$ \qquad \qquad \tcp{{\small 5\%~precision~on~balance}}
-    $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad\qquad\qquad \tcp{{\small Pack load}}
-    \uIf{$load > ub(load_{avg},v)$}{
-    	$packs \gets BatchCreation(ps,  T(M),load,v)$
-    }
-    \Else{
-    	$packs \gets \varnothing$\\
-    	$G \gets (Gossip \rightarrow  P)$ \tcp{{\small Targets for migration}}
-    }
-    $---Synchronization Barrier---$\\
-    \tcc{{\small Requests are processed as they are received back}}
-    $R \gets BatchSend(packs, G)$\\
-    \tcp{{\small Implicit synchronization for TaskMap}}
-    $TaskMap(R,M, M',Id_{l})$
-    \caption{PackDrop}
-    \label{alg::packdrop}    
-\end{algorithm}
