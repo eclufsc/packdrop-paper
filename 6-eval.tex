@@ -178,13 +178,13 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 %\end{figure}
 
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
-\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a \tofix{reasonable time}, being in average $1000$ms slower than \textit{Greedy} in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
+\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a reasonable time, being in average $1000$ms slower than \textit{Greedy} in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
 
-\textit{Distributed} benefits from this platform due to the Infiniband low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
+\textit{Distributed} benefits from this platform due to Infiniband's low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 Our novel approach, \textit{PackDrop}, followed it closely and we can see that its rescheduling time in larger systems outperforms \textit{Distributed}, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
 
-The rescheduling and application time results of LeanMD in this platform highlight the importance of using scalable approaches to load balancing, as well as using available parallism in execution environments.
-This is specially visible in \textit{Greedy} results on Figure~\ref{fig:eval:g5k:lbtest:apptime}, where the application performance was decreased after the global rescheduling process.
+The rescheduling and application time results of LeanMD in this platform highlight the importance of using scalable approaches to balance system load, as well as using available parallism in execution environments.
+This is specially visible in \textit{Greedy} results on Figure~\ref{fig:eval:sdumont:leanmd:apptime}, where the application performance was decreased after the global rescheduling process.
 Increased migration costs and higher \textit{hop} counts in communication, consequences of load balancing, heavily impacted LeanMD in this case.
 
 \subsection{Performance Evaluation Overview} \label{eval:overview}
@@ -197,7 +197,7 @@ Section~\ref{sec:cluster:lbtest} shows our strategy's ability of balancing load.
 Results highlight the importance of load balancing even in synthetic loads.
 The \textit{LB Test} benchmark used has very low migration and communication overhead, and most of its work is done locally, which is optimal for rescheduling evaluation of raw computational workload.
 Moreover, \textit{LB Test} is known for having a very low migration cost and simple tasks, which enhances the effectiveness of centralized approaches such as \textit{Refine}.
-These results also portray the addition of communication overheads in different topologies ($2$, $4$, and $6$ \tofix{peers} for Ring, $2$D, and $3$D Mesh, respectively). %Can I use peers here?
+These results also portray the addition of communication overheads in different topologies ($2$, $4$, and $6$ communication edges for Ring, $2$D, and $3$D Mesh, respectively). %Can I use peers here?
 As communication affects the application time more, migrations impact the total application time more, as we can see in the \textit{Greedy} results.
 
 %Our strategy was only outperformed by \tofix{\textit{Refine} in all test cases, which is expected, since the total load dealt with is considerably small ($\sim 19$K tasks) and migrations cheap, which benefits centralized schedulers.}

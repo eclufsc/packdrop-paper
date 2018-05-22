@@ -49,17 +49,17 @@
 
 Parallel machines are at their best when work is evenly distributed among compute nodes, and idle time is merely a myth.
 Unfortunately, strong scaling applications for these platforms has been a challenge as long as they have existed.
-Uneven distribution of work and high communication overheads are the main villains when devoloping parallel applications~\cite{Deveci2015, commaware}.
-Concern towards these problems increases as system grow in size, consuming more power and resources to solve problems.
+In this context, uneven distribution of work and high communication overheads are the main villains when devoloping parallel applications~\cite{Deveci2015, commaware}.
+Concerns towards these problems increase as systems grow in size and performance, consuming more resources, specially power, to solve some the most complex problems in scientific computing~\cite{exapower2015,padoin2017energy}.
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
 Although rescheduling algorithms have been able to greatly improve applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
 Since mapping work to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized approaches to rescheduling inefficient.
-This creates a need for scalable, decentralized, rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
+This creates a need for scalable and decentralized rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
-The two main paths to achieve scalable global rescheduling in the iterative application domain are Hierarchical and Distributed approaches.
+The two main paths to achieve scalability in global rescheduling for iterative applications are Hierarchical and Distributed approaches.
 Hierarchical load balancing explores parallelism using different approaches for fine-grain and coarse-grain steps~\cite{hybrid}.
-These can scale, but are usually tied to the same limitations as the Centralized, as data is still aggregated in master nodes.
+These can scale, but are usually tied to the same limitations as the Centralized, as data is still aggregated in parent nodes.
 On the other hand, Distributed load balancing seeks to achieve scalability in a decentralized fashion.
 These scale better, but have limited system information and may incur in high amounts of communication.
 
