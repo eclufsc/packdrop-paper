@@ -162,7 +162,7 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
     $v \gets 0.05$ \qquad \qquad\ \tcp{{\small 5\%~precision~on~balance}}
     $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad\qquad\qquad \tcp{{\small Pack load}}
     \uIf{$load > ub(load_{avg},v)$}{
-    	$packs \gets BatchCreation(ps,  T(M),load,v)$
+    	$packs \gets BatchCreation(s,  T(M),load,v)$
     }
     \Else{
     	$packs \gets \varnothing$\\

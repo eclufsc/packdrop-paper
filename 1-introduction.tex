@@ -49,7 +49,7 @@
 
 Parallel machines are at their best when work is evenly distributed among compute nodes, and idle time is merely a myth.
 Unfortunately, strong scaling applications for these platforms has been a challenge as long as they have existed.
-In this context, uneven distribution of work and high communication overheads are the main villains when devoloping parallel applications~\cite{Deveci2015, commaware}.
+In this context, uneven distribution of work and high communication overheads are the main villains when developing parallel applications~\cite{Deveci2015, commaware}.
 Concerns towards these problems increase as systems grow in size and performance, consuming more resources, specially power, to solve some the most complex problems in scientific computing~\cite{exapower2015,padoin2017energy}.
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
@@ -63,7 +63,7 @@ These can scale, but are usually tied to the same limitations as the Centralized
 On the other hand, Distributed load balancing seeks to achieve scalability in a decentralized fashion.
 These scale better, but have limited system information and may incur in high amounts of communication.
 
-Few are the Distributed strategies in the domain of global rescheduling, but their effectiviness is notable~\cite{grapevine,diffus}.
+Few are the Distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{grapevine,diffus}.
 In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique, \textit{PackDrop}.
 Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
 
