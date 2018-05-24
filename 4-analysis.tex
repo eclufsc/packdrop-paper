@@ -1,23 +1,26 @@
 \section{Analysis of the Algorithm} \label{sec:analysis}
 
-This section presents an analysis of the Parallel Algorithm~\ref{alg::packdrop}~(PackDrop). 
+This section presents an analysis of \packdrop (Algorithm~\ref{alg::packdrop}). 
 Symbols presented in this section are available on Tables~\ref{tab:algo:symbols}~and~\ref{tab:analysis:symbols}.
 The complexity of the information propagation ($Gossip$) has being evaluated as $O(log_{fout}n)$~\cite{grapevine},
 where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
 Here we use $fout=2$, in order to avoid network congestion. 
 
-\begin{table}[!ht]
-	\caption{List of symbols used in the Analysis of the Algorithm}
+\begin{table}[b]
+	\caption{List of symbols used in the Analysis of the Algorithm.}
 	\centering	
-	\begin{tabular}{l |l}
-		Symbol			& Meaning\\		\hline
-		$fout$			& $Gossip$ protocol's \textit{fanout}						 \\ 
-		$p_c$			& Computational (processing) base cost				 \\
-		$c_c$			& Communication base cost							 \\
-		$C(A)$			& The total cost of a given function $A$				 \\
-		$m$				& Number of tasks in the system						 \\
-		$ps$				& The average number of tasks in $LT$s				 \\
-		$m_l$			& $max(|T|)$ in an overloaded PE						 \\
+	\begin{tabular}{l l}
+		\toprule
+		\textbf{Symbol}		& \textbf{Meaning} \\
+		\midrule
+		$fout$			& $Gossip$ protocol's \textit{fanout} \\ 
+		$p_c$			& Computational (processing) base cost \\
+		$c_c$			& Communication base cost \\
+		$C(A)$			& The total cost of a given function $A$ \\
+		$m$				& Number of tasks in the system \\
+		$ps$				& The average number of tasks in $LT$s \\
+		$m_l$			& $max(|T|)$ in an overloaded PE \\
+		\bottomrule
 	\end{tabular}
 	\label{tab:analysis:symbols}
 \end{table}
@@ -28,26 +31,28 @@ We also assume $c_c > p_c$ for all concurrent scenarios, since communication cos
 $C(A)$ is referred here as the total cost for a given workload $A$.
 Unmentioned lines are assumed to have non-varying cost, and thus will not interfere in the asymptotic analysis.
 
-Lines~2~and~3 are global reductions, which have a well known cost of $O(log\ n)$.
-Lines~8~and~11 are concurrent, so their cost will be the max among both:
+Lines~2~and~3 are global reductions, which have a well-known cost of $O(log\ n)$.
+Lines~8~and~11 are concurrent, so their cost will be the maximum among them:
 \begin{equation}
-  max(C(BatchCreation),C(Gossip))
+  max(C(BatchAssembly),C(Gossip))
 \end{equation}
-We also know that the worst case for $BatchCreation$ (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
+
+We also know that the worst case for \batchassembly (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
 since it would assume that a single PE contains $m$ tasks and a single task may have a load greater than the average system load, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
 
-This takes lines~8~and~11 cost to:
+Thus, the cost of lines~8~and~11 is:
 \begin{equation}
  max((p_c\times m),\ (c_c\times log\ n))
 \end{equation}
-and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchCreation)\in C(Gossip)$, which makes the 
+and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchAssembly)\in C(Gossip)$, which makes the 
 complexity of these lines to $O(log\ n)$.
 
 Finally, line~14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
 Let $ps$ be the average number of tasks inside of a $LT$, and $m_l$ the maximum number of tasks in a given overloaded PE.
-At this step, a solution without Batch Task Migration would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
+At this step, a solution without \textit{Batch Task Migration} would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
 This is the most expensive in Algorithm~\ref{alg::packdrop}, and as such it is the most interesting one to optimize.
-Our final asymptotic complexity will be:
+Our final asymptotic complexity is:
+
 \begin{equation}
  C(PackDrop) = O(m_l/ps) + O(log\ n)
  \label{eq:worstcase}
@@ -55,5 +60,5 @@ Our final asymptotic complexity will be:
 
 This shows that determining a good $ps$ value is crucial to achieve the best performance with this algorithm.
 Higher values of $ps$ will lower communication complexity, but may lead to an imprecise scheduling.
-In our Implementation, we chose a moderate value of $ps$, of around $2$ average tasks, varying to smaller values according to system load.
+In our implementation, we chose a moderate value of $ps$ (recall Equation~\ref{eq:ps}) varying to smaller values according to system load.
 This guarantees a precise scheduling, but still gives margin to have several small tasks migrating at once, saving communication costs.

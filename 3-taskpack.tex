@@ -34,7 +34,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 	\begin{tabular}{l l l}
 		\toprule
 		\textbf{Symbol} & \textbf{Meaning} & \textbf{Definition}\\ 
-		\midrule	
+		\midrule
 		$v$				& Load threshold in \% 								& Equation~\ref{eq:ceil} \\
 		$ub(load,v)$		& Upper bound of $l$ with threshold $v$		 		& Equation~\ref{eq:ceil} \\
 		$load$			& Compute load of the local PE \\
@@ -154,7 +154,16 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
-In this implementation we used two constants: $0.05$, in order to limit the imbalance at $5\%$ (on line~$5$), and $2$, in order to regulate the size of packs (on line~$6$).
+\tofix{
+	In this implementation we used two constants. The first one ($v$) was set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$).
+	The second one was defined in $ps$ and set to $2$ in order to regulate the size of packs (line~$6$).
+	The value of $ps$ is defined by Equation~\ref{eq:ps}. The rationale behind this is... COMPLETE THE SENTENCE.
+}
+
+\begin{equation}
+	ps = 2-\frac{|  P|}{ttc}
+	\label{eq:ps}
+\end{equation}
 
 Next, PEs are divided between two different workflows (line~$7$).
 At this time, \textit{overloaded} PEs will start the \batchassembly algorithm (line~$8$), which was previously explained in Algorithm~\ref{alg::packcreation}.
@@ -174,7 +183,7 @@ After a pack is sent, PEs will accept or reject it based on their current load, 
     $ttc \gets (TotalTaskCountReduction(|M|)\Rightarrow  P)$\\
     $ats\gets \frac{load_{avg}}{ttc}$ \qquad\qquad\qquad \tcp{{\small Average~task~size}}
     $v \gets 0.05$ \qquad \qquad\ \tcp{{\small 5\%~precision~on~balance}}
-    $s \gets ats\times (2-\frac{|  P|}{ttc}$) \qquad\qquad\qquad\qquad \tcp{{\small Pack load}}
+    $s \gets ats\times ps$ \qquad\qquad\qquad\qquad\qquad \tcp{{\small Pack load}}
     \uIf{$load > ub(load_{avg},v)$}{
     	$packs \gets BatchAssembly(s,  T(M),load,v)$
     }
