@@ -31,6 +31,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 \begin{table}[t]
 	\centering
 	\caption{List of symbols, variables and functions.}
+	\resizebox{\columnwidth}{!}{
 	\begin{tabular}{l l l}
 		\toprule
 		\textbf{Symbol} & \textbf{Meaning} & \textbf{Definition}\\ 
@@ -60,9 +61,10 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$BG$				& Pairs expecting migration ack						& Algorithm~\ref{alg::packsend} \\ 
 		$Send(T)\rightarrow G $ & Send a set $T$ to target $G$				& Algorithm~\ref{alg::packsend} \\ 
 		$Id_l$ 			& Local PE identifier								& Algorithm~\ref{alg::packdrop} \\
-		$TaskMap$		& Call RTS to start migrations						& Algorithm~\ref{alg::packdrop} \\
+		$TaskMap$		& Call runtime system to start migrations					& Algorithm~\ref{alg::packdrop} \\
 		\bottomrule
 	\end{tabular}
+	}
 	\label{tab:algo:symbols}
 \end{table}
 

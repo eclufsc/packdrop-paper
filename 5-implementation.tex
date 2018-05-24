@@ -1,33 +1,34 @@
 \section{Implementation} \label{sec:impl}
 
-\textit{PackDrop} was implemented as a load balancing strategy in \texttt{Charm++}\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR,sc14charm}.
+\packdrop was implemented as a load balancing strategy in \texttt{Charm++}\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR,sc14charm}.
 \textit{Chares} are mapped as \textit{tasks} to PEs and the \texttt{Charm++} runtime system (RTS) provides the load information needed for our rescheduling strategy.
 
-The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \textit{PackDrop}.
+The \texttt{Charm++} RTS allows for the desired asynchronous behavior of \packdrop.
 It also provides necessary reduction and quiescence detection mechanisms, used in this implementation.
 Reductions are used to evaluate the total number of chares and the average load in the system, while the quiescence detection is necessary to finalize the information propagation step of the algorithm.
 
 \texttt{Charm++} provides application-independent load balancing, which means that any application may use global rescheduling strategies implemented for this RTS.
 This way, any of the available applications for \texttt{Charm++} can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
 
+\todo[inline]{I know that it may be not the focus here but I think that you could give more details of how Algorithms 1, 2 and 3 were implemented in the Charm++ LB framework. In other words, how those communications, sychronizations, and task migrations required by the algorithms work in Charm++. Since we have some space left I think you may include these details here.}
 
 \subsection{Benchmarks} \label{sec:benchmarks}
 
 We experimented our strategy with $2$ benchmarks that are publicly available for \texttt{Charm++}.
-The first is a synthetic benchmark called \textit{LB Test}. 
+The first is one a synthetic benchmark called \textit{LB Test}. 
 It simulates work with a variety of communication topologies, such as ring, meshes and randomized patterns.
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
-The second is a MD mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
+The second one is a MD mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
 This mini-app simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art MD application NAMD, winner of the Golden Bell Award~\cite{grapevine}.
 LeanMD uses geometric decomposition in a three-dimensional ($3$D) simulation space.
 However, since the number of simulated atoms in each region affects the number of exchanged messages, it has an irregular and dynamic communication pattern, even though it respects the geometric distribution.
 
 \subsection{Other schedulers}
 
-\textit{PackDrop} was compared to strategies available on the \texttt{Charm++} load balancing suite.
+We compare the performance of \packdrop to other strategies available on the \texttt{Charm++}.
 More specifically, strategies that may be selected by \texttt{Charm++}'s workload-aware \textit{Meta-balancer}~\cite{MenonPHD}.
-Their behavior is briefly presented ahead:
+An overall description of each one of these load balancing strategies is presented bellow:
 
 \begin{itemize}
 	\item \textit{Refine} is a refinement-based strategy that tries to minimize the number of migrated \textit{tasks}, exchanging load among PEs.
@@ -36,8 +37,8 @@ This strategy is specially efficient if the system imbalance is low, and may not
 Then, it assigns tasks to PEs, associating the most work-heavy tasks with the least loaded PEs.
 This strategy provides a good load balance, but may incur in high migration overhead.
     \item \textit{Distributed}, also known as \textit{Grapevine}, is a distributed strategy based on epidemic communication and probabilistic transfer of work.
-   This strategy has good scalability, but does not performs as well as centralized ones in smaller scenarios.
-   \item \textit{Dummy}, a centralized load balancer that does not remap tasks, only gather system information other centralized approaches also use.
+   This strategy has good scalability, but does not perform as well as centralized ones in smaller scenarios.
+   \item \textit{Dummy}, a centralized load balancer that does not remap tasks but still gathers system information as other centralized approaches.
    This is the representative of a scenario without load balancing.
 
 \end{itemize}
