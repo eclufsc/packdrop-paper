@@ -47,40 +47,40 @@
 %
 %\hline
 
-Parallel machines are at their best when work is evenly distributed among compute nodes, and idle time is merely a myth.
+Parallel machines are at their best when the workload is evenly distributed among compute nodes, and idle time is merely a myth.
 Unfortunately, strong scaling applications for these platforms has been a challenge as long as they have existed.
-In this context, uneven distribution of work and high communication overheads are the main villains when developing parallel applications~\cite{Deveci2015, commaware}.
+In this context, uneven workload distribution and high communication overheads are the main villains when developing parallel applications~\cite{Deveci2015, commaware}.
 Concerns towards these problems increase as systems grow in size and performance, consuming more resources, specially power, to solve some the most complex problems in scientific computing~\cite{exapower2015,padoin2017energy}.
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
-Although rescheduling algorithms have been able to greatly improve applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
-Since mapping work to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized approaches to rescheduling inefficient.
+Although rescheduling algorithms have been able to greatly improve the performance of these applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
+Since mapping tasks to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized rescheduling approaches inefficient.
 This creates a need for scalable and decentralized rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
 The two main paths to achieve scalability in global rescheduling for iterative applications are Hierarchical and Distributed approaches.
 Hierarchical load balancing explores parallelism using different approaches for fine-grain and coarse-grain steps~\cite{hybrid}.
-These can scale, but are usually tied to the same limitations as the Centralized, as data is still aggregated in parent nodes.
-On the other hand, Distributed load balancing seeks to achieve scalability in a decentralized fashion.
+These can scale, but are usually tied to the same limitations as the centralized ones, as data is still aggregated in parent nodes.
+On the other hand, distributed load balancing approaches seek to achieve scalability in a decentralized fashion.
 These scale better, but have limited system information and may incur in high amounts of communication.
 
-Few are the Distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{grapevine,diffus}.
-In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique, \textit{PackDrop}.
+Few are the distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{grapevine,diffus}.
+In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique called \textit{PackDrop}.
 Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
 
 % Main contributions
 In this paper, we present the following contributions: 
 \begin{enumerate}
 	\item A \textit{Batch Task Migration} approach for distributed rescheduling algorithms, which presents high scalability and task affinity potential.
-	\item A novel distributed rescheduling algorithm, using our \textit{Batch Task Migration} approach, \textit{PackDrop}.
-	\item An implementation of our algorithm, as well as a performance evaluation of this implementation.
+	\item A novel distributed rescheduling algorithm, using our \textit{Batch Task Migration} approach named \textit{PackDrop}.
+	\item An implementation of our algorithm in a well-known distributed framework as well as a performance evaluation of this implementation.
 \end{enumerate}
 
-The remainder of this paper is divided as follows:
+The remainder of this paper is divided as follows.
 Section~\ref{sec:rw} presents recent work in dynamic rescheduling of scientific applications. 
 Section~\ref{sec:algo} presents our novel approach and the developed algorithms. 
 Section~\ref{sec:analysis} is a complexity analysis of \textit{PackDrop}, our distributed algorithm. 
 Section~\ref{sec:impl} displays implementation details, execution environments and benchmarks used in this paper. 
-Section~\ref{sec:eval} displays our performance evaluation and discussed experiments. 
-And Section~\ref{sec:conclusion} presents the conclusion of this work and our plans for future research.
+Section~\ref{sec:eval} presents our performance evaluation methodology and discusses the obtained results. 
+Finally, Section~\ref{sec:conclusion} presents the conclusion of this work and our plans for future research.
 
 
