@@ -72,6 +72,7 @@ The \batchassembly algorithm is presented in Algorithm~\ref{alg::packcreation}.
 It uses an estimated batch size ($s$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($v$), to create a set of leaving tasks ($LT$).
 The threshold is used to calculate an upper bound of the average system load ($load_{avg}$), using Equation~\ref{eq:ceil}. 
 The load of any set of tasks is given by Equation~\ref{eq:load}.
+
 \begin{equation}
 	ub(load,v) = (1+v)\times load
     \label{eq:ceil}
@@ -91,8 +92,8 @@ A PE that receives this load will not receive as much load as others, but since 
 
 \begin{algorithm}[b]
     \DontPrintSemicolon
-    \KwIn{$s$, expected load of a batch; $T$, set of local tasks; $load_{avg}$, average global PE load; $v$, imbalance tolerance ratio}
-    \KwOut{$LT$, set of tasks leaving this PE}
+    \KwIn{$s$, expected load of a batch; $T$, set of local tasks; $load_{avg}$, average global PE load; $v$, imbalance tolerance ratio.}
+    \KwOut{$LT$, set of tasks leaving this PE.}
     $L \gets \varnothing,\ LT \gets \varnothing$ \\
     \While{$load_{set}(T) > ub(load_{avg},v)$}{
         $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
@@ -121,8 +122,8 @@ This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
 
 \begin{algorithm}[t]
     \DontPrintSemicolon
-    \KwIn{$LT$, set of tasks leaving the local PE; $G$, set of possible migration targets}
-    \KwOut{$BG$, set of expected migrations}
+    \KwIn{$LT$, set of tasks leaving the local PE; $G$, set of possible migration targets.}
+    \KwOut{$BG$, set of expected migrations.}
     $BG \gets \varnothing$ \\
     \ForEach{$b \subset LT$}{
         %$b\ \gets p\ |\ p\ \in\ LT$\\
@@ -161,7 +162,7 @@ This process is done through $2$ global reductions of average PE load (line~$2$)
 }
 
 \begin{equation}
-	ps = 2-\frac{|  P|}{ttc}
+	ps = 2-\frac{|P|}{ttc}
 	\label{eq:ps}
 \end{equation}
 
@@ -176,8 +177,8 @@ After a pack is sent, PEs will accept or reject it based on their current load, 
 
 \begin{algorithm}[t]
 	\DontPrintSemicolon
-    \KwIn{$M$, local mapping of tasks; $load$, local PE load; $P$, set of all PEs in the system; $Id_{l}$, local PE identifier}
-    \KwOut{$  M'$, new mapping of local tasks}
+    \KwIn{$M$, local mapping of tasks; $load$, local PE load; $P$, set of all PEs in the system; $Id_{l}$, local PE identifier.}
+    \KwOut{$  M'$, new mapping of local tasks.}
     $  M' \gets \varnothing$\\
     $load_{avg} \gets (AveragePeLoadReduction(load)\Rightarrow  P)$ \\
     $ttc \gets (TotalTaskCountReduction(|M|)\Rightarrow  P)$\\

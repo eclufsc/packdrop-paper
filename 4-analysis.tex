@@ -59,6 +59,8 @@ Our final asymptotic complexity is:
 \end{equation}
 
 This shows that determining a good $ps$ value is crucial to achieve the best performance with this algorithm.
-Higher values of $ps$ will lower communication complexity, but may lead to an imprecise scheduling.
-In our implementation, we chose a moderate value of $ps$ (recall Equation~\ref{eq:ps}) varying to smaller values according to system load.
+\tofix{Higher values of $ps$ will lower communication complexity, but may lead to an imprecise scheduling.
+In our implementation, we chose a moderate value of $ps$ (recall Equation~\ref{eq:ps}) varying to smaller values according to system load.}
 This guarantees a precise scheduling, but still gives margin to have several small tasks migrating at once, saving communication costs.
+
+\todo[inline]{Please, fix the highlighted sentences and correlate them to Equation~\ref{eq:ps}. How do you vary the value of $ps$? How this correlate to application specific characteristics?}
