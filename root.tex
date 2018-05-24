@@ -55,13 +55,12 @@ Email: {\smaller\texttt{\{vinicius.mctf,alexandre.santana\}@posgrad.ufsc.br, mar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-  Effectively mapping tasks on parallel systems is crucial to assure performance in demanding applications.
+  Effectively mapping tasks of High Performance Computing (HPC) applications on parallel systems is crucial to assure substantial performance gains.
   As platforms and applications grow, load imbalance becomes a priority issue. %, and the previous algorithms are not able to deal with it as efficiently.
-  Even though centralized rescheduling of work has been a viable solution to mitigate this problem, the efficiency of such an approach is not able to keep up with the increasing size of shared memory platforms.
-  To efficiently solve load imbalance today, and in the years to come, we should prioritize strategies developed for large scale multi-computers, decentralized approaches.
+  Even though centralized rescheduling has been a viable solution to mitigate this problem, the efficiency of such an approach is not able to keep up with the increasing size of shared memory platforms.
+  To efficiently solve load imbalance today, and in the years to come, we should prioritize decentralized strategies developed for large scale platforms.
   In this paper we propose our \textit{Batch Task Migration} approach, and an algorithm implementing it, to improve decentralized global rescheduling, ultimately reducing communication costs and preserving task locality.
-  We evaluated our approach in two different parallel platforms, using both synthetic load and a molecular dynamics (MD) benchmark, obtaining speedup of up to $3.75$ and $1.15$ on rescheduling time, when compared to centralized and distributed approaches, respectively;
-  and up to $1.34$ and $1.22$ on MD application time, when compared to no rescheduling in both our two platforms.
+  We evaluated our approach in two different parallel platforms, using both synthetic workloads and a molecular dynamics (MD) benchmark. Our solution was able to achieve speedups of up to $3.75$x and $1.15$x on rescheduling time, when compared to other centralized and distributed approaches, respectively. Moreover, it improved the execution time of MD in up to $1.34$x and $1.22$x, when compared to a scenario without load balancing on two different platforms.
 %\lipsum[9]
 % 165 words
 \textit{Keywords---}High Performance Computing, Global Rescheduling, Load Balancing, Performance Evaluation, Parallel Algorithms
