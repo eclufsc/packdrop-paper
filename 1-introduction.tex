@@ -64,21 +64,21 @@ On the other hand, distributed load balancing approaches seek to achieve scalabi
 These scale better, but have limited system information and may incur in high amounts of communication.
 
 Few are the distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{grapevine,diffus}.
-In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique called \textit{PackDrop}.
+In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique called \packdrop.
 Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
 
 % Main contributions
 In this paper, we present the following contributions: 
 \begin{enumerate}
 	\item A \textit{Batch Task Migration} approach for distributed rescheduling algorithms, which presents high scalability and task affinity potential.
-	\item A novel distributed rescheduling algorithm, using our \textit{Batch Task Migration} approach named \textit{PackDrop}.
+	\item A novel distributed rescheduling algorithm, using our \textit{Batch Task Migration} approach named \packdrop.
 	\item An implementation of our algorithm in a well-known distributed framework as well as a performance evaluation of this implementation.
 \end{enumerate}
 
 The remainder of this paper is divided as follows.
 Section~\ref{sec:rw} presents recent work in dynamic rescheduling of scientific applications. 
 Section~\ref{sec:algo} presents our novel approach and the developed algorithms. 
-Section~\ref{sec:analysis} is a complexity analysis of \textit{PackDrop}, our distributed algorithm. 
+Section~\ref{sec:analysis} is a complexity analysis of \packdrop, our distributed algorithm. 
 Section~\ref{sec:impl} displays implementation details, execution environments and benchmarks used in this paper. 
 Section~\ref{sec:eval} presents our performance evaluation methodology and discusses the obtained results. 
 Finally, Section~\ref{sec:conclusion} presents the conclusion of this work and our plans for future research.
