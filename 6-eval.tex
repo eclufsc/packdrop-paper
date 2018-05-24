@@ -1,65 +1,80 @@
 \section{Performance Evaluation} \label{sec:eval}
 
-Two platforms were for performance evaluation of our novel \textit{PackDrop} scheduler:
-i) A tightly coupled \textit{Supercomputer}\footnote{\texttt{CPU} nodes in \textit{Santos Dumont} (LNCC-BR).} with $24$ (in $2$ separate NUMA nodes) PEs per node, using an Infiniband interconnection supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
-ii) A smaller \textit{Cluster}\footnote{Nancy's \textit{Graphene} cluster in \textit{Grid'5000}.} with $4$ PEs per node, using a Gigabit Ethernet interconnection.
-Details of both platforms are available on Table~\ref{tab:ptinfo}.
+We used two platforms to evaluate the performance of \textit{PackDrop}:
 
-\begin{table}[ht]
+\begin{itemize}
+	\item \textbf{Platform 1:} A cluster called \textit{Graphene} from \textit{Grid'5000} with $4$ PEs per node and  a Gigabit Ethernet interconnection network.
+	\item \textbf{Platform 2:} A subset of a tightly coupled supercomputer called \textit{Santos Dumont} from the Brazilian National Laboratory for Scientific Computing (LNCC) with $24$ PEs per node and an Infiniband interconnection network.% supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
+\end{itemize}
+
+All applications were compiled with \texttt{gcc} with the following flags: \texttt{-std=c++11 -O3}. Details of both platforms are available on Table~\ref{tab:ptinfo}.
+
+\todo[inline]{I've changed the name of the platforms because both of them are clusters. Moreover, I've changed the order they appear in Table~\ref{tab:ptinfo} since we first present results for the Grid'5000. Please confirm the number of nodes in each cluster in Table~\ref{tab:ptinfo} and complete the information concerning the MPI version in Platform 1.}
+
+\begin{table}[t]
     \centering
-    \caption{Platform Information of each Node from Supercomputer and Cluster evaluations.}
-	\begin{tabular}{l|l|l}
-	Node Info.	 		& Supercomputer 		& Cluster \\ \hline
-        CPUs	   			& $2\times12$ 			& $4$ \\
-        Intel Xeon			& E5-2695v2 			& X3440\\
-        CPU Freq.  			& $2.4$GHz   			& $2.53$GHz\\
-        RAM        			& $64$GB			& $16$GB\\
-        Network 			& Infiniband FDR 		& Gigabit Ethernet\\
-        OS      			& RedHat Linux 6.4 		& Ubuntu 14.04\\
-        \texttt{GCC}			& $5.3.1$			& $5.4.0$\\
-        \texttt{Charm++} 		& $6.8.1$ 			& $6.8.1$\\
-        \texttt{MPI}			& $3.1.0$			& -\\
-        \texttt{GCC} Flags		& \texttt{-std=c++11 -O3} 	& \texttt{-std=c++11 -O3} \\
+    	\caption{Overview of the experimental platforms.}
+	\begin{tabular}{lll}
+	\toprule
+	\textbf{Characteristics}	& \textbf{Platform 1} 		& \textbf{Platform 2}	\\
+	\midrule
+	\# of nodes	   		& 32 					& 32 \\
+        \# of CPUs/node	   	& $4$ (UMA) 			& $2\times12$ (NUMA) \\
+        CPU Model			& Intel Xeon X3440 		& Intel Xeon E5-2695v2 \\
+        CPU Freq.  			& $2.53$GHz			& $2.4$GHz \\
+        RAM/node    			& $16$GB				& $64$GB	 \\
+        Network 				& Gigabit Ethernet		& Infiniband FDR \\
+        OS      				& Ubuntu 14.04			& RedHat Linux 6.4 \\
+        GCC	version			& $5.4.0$				& $5.3.1$	\\
+        Charm++ version		& $6.8.1$				& $6.8.1$ 	\\
+        MPI version			& \tofix{???}			& $3.1.0$	\\
+        \bottomrule
 	\end{tabular}
     \label{tab:ptinfo}
 \end{table}
 
-Ahead we present the metrics used to compare our new global rescheduling strategy with \textit{Greedy}, \textit{Refine}, \textit{Distributed} and \textit{Dummy}.   
-Then, we discuss results obtained in both platforms presented in Table~\ref{tab:ptinfo} and the scalability of our proposed solution.
-All raw data of our results, as well as parsing scripts for analysis are publicly available\footnote{Available at: \texttt{https://github.com/eclufsc/\\packdrop-data-analysis}.}.
+In the next sections we present the metrics used to compare \packdrop with \greedylb, \refinelb, \distributedlb and \dummylb.
+Then, we discuss the results obtained in both platforms presented in Table~\ref{tab:ptinfo} and the scalability of \packdrop.
+All raw data of our results, as well as parsing scripts for analysis are publicly available\footnote{Available at: \texttt{https://github.com/eclufsc/\\packdrop-data-analysis}}.
 
 \subsection{Metrics}
 
-\textit{Application time} is one of the most relevant metrics to evaluate load balancers in \texttt{Charm++}.
-Since migrations may induce high overhead and impact communication costs, a bad algorithm may finish fast, but increase imbalance, and thus, increased application time.
-This is a powerful metric to measure both load balancing precision and the overall impact application impact of a strategy.
+\textit{Application time} (makespan) is one of the most relevant metrics to evaluate load balancers in \texttt{Charm++}.
+Since migrations may induce high overheads and could impact communication costs, a bad load balancing strategy algorithm may present fast decision times but it may increase load imbalance considerably. Thus, the overall execution time of the application will also be increased.
+This is a powerful metric to measure both load balancing precision and the overall impact of the strategy on parallel applications.
 
-\textit{Load balancer decision time}, although not the most relevant for the application itself, the decision time is an indicator of its scalability.
-Some centralized schedulers, such as \textit{Greedy}, work very well on local machines, with a reasonable data input.
-However, when executing on distributed memory environments, the scalability of centralized strategies is limited, having a longer decision time.
+\textit{Load balancer decision time}, on the other hand, is an indicator of its scalability.
+Some centralized schedulers, such as \greedylb, work very well on local machines, with a reasonable data input.
+However, when executing on distributed memory environments, the scalability of centralized strategies is limited due to their high decision time in these scenarios.
 Throughout this section, load balancer decision time will also be referred to as \textit{rescheduling time}.
 
-\subsection{Evaluation on Cluster} \label{sec:cluster}
+\subsection{Evaluation on Platform 1} \label{sec:cluster}
 
-All experiments executed on cluster were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
-$32$ homogeneous compute nodes were used, with a total of $128$ PEs.
+All experiments executed on platform 1 were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+Overall, $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 
 \subsubsection{Evaluation with Synthetic Load} \label{sec:cluster:lbtest}
 
-\textit{LB Test} experiments had a total of $18990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
-\textit{Task} loads vary from $30$ms to $9000$ms, which provides reasonable imbalance of load, causing global rescheduling to be useful in this case.
-Ring, $2$D mesh and $3$D mesh communication topologies were used to provide different levels of migration impact and communication cost.
+\textit{LB Test} experiments had a total of $18,990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
+\textit{Task} loads varied from $30$ms to $9000$ms, which provides reasonable load imbalance, causing global rescheduling to be useful in this case.
+Ring, $2$D mesh and $3$D mesh communication topologies were used to provide different levels of migration impact and communication costs.
+
+\todo[inline]{Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime} present the \textbf{very same result}. The same observation holds for Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}. You should either use tables or the figures. If you put both, it seems to me that you're trying to ``encher linguiça''.}
 
 \begin{table}[h]
 	\centering
-    \caption{Average LB Test application time on the cluster execution.}
-	\begin{tabular}{l | c  c  c}
-    	Scheduler & Time (Ring) & Time (2D) & Time (3D) \\ \hline
-        Distributed & $47.493$s & $48.648$s & $49.055$s \\
-        Greedy & $46.541$s & $49.560$s & $51.068$s \\
-        Dummy & $52.430$s & $53.172$s & $53.941$s \\
-        PackDrop & $46.816$s & $47.371$s & $47.974$s \\
-        Refine & $45.491$s & $46.293$s & $47.219$s \\		
+    \caption{Average application time for \textit{LB Test} on platform 1.}
+	\begin{tabular}{l  c  c  c}
+    	\toprule
+	\multirow{2}{*}{\textbf{Scheduler}} 	& \multicolumn{3}{c}{\textbf{Network Topologies}} \\ \cmidrule{2-4}
+ 								& Ring & Mesh2D & Mesh3D \\
+	\midrule
+        \distributedlb 		& $47.493$s & $48.648$s & $49.055$s \\
+        \greedylb 			& $46.541$s & $49.560$s & $51.068$s \\
+        \dummylb 			& $52.430$s & $53.172$s & $53.941$s \\
+        \packdrop 			& $46.816$s & $47.371$s & $47.974$s \\
+        \refinelb 			& $45.491$s & $46.293$s & $47.219$s \\
+        \bottomrule
 	\end{tabular}
     \label{tab:lbtest:apptime}
 \end{table}
@@ -76,24 +91,26 @@ Ring, $2$D mesh and $3$D mesh communication topologies were used to provide diff
 
 Each configuration of the benchmark was executed $15$ times, with results depicted on Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime}.
 Observed application times present a maximum $2\%$ standard deviation from the mean. 
-Results for \textit{Greedy} show how different communication topologies affect the scheduling performance.
-Since \textit{Greedy} migrates many \textit{tasks}, the more they communicate, the more migrations impact the application time.
+Results for \greedylb show how different communication topologies affect the scheduling performance.
+Since \greedylb migrates many \textit{tasks}, the more they communicate, the more migrations impact the application time.
 
-The increased in communication cost can be verified among all scheduling strategies, but in none as much as in \textit{Greedy}.
-Our novel approach, \textit{PackDrop} has outperformed the other descentralized strategy, \textit{Distributed}, in the \textit{LB Test} case in this scale.
-However, since the platform is not large enough to present all of the potential gains of decentralized strategies, \textit{Refine}, with a reduced migration count approach, still outperforms any other scheduler in this benchmark.
-Nevertheless, this indicates a good scalability pontetial, specially in a cluster with high communication overhead, due to its Gigabit Ethernet connection.
+The increased in communication cost can be verified among all scheduling strategies, but in none as much as in \greedylb.
+Our novel approach (\packdrop) has outperformed the other descentralized strategy (\distributedlb) in the \textit{LB Test} case in this scale.
+However, since the platform is not large enough to present all of the potential gains of decentralized strategies, \refinelb still outperformed any other scheduler in this benchmark.
+Nevertheless, this indicates a good scalability potential for \packdrop, specially in a cluster with high communication overhead due to its Gigabit Ethernet connection.
 
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:cluster:md}
 
-\textit{LeanMD} experiments generated a $9\times9\times9$ space, with a total of $27702$ \textit{tasks}.
+\textit{LeanMD} experiments generated a $9\times9\times9$ space, with a total of $27,702$ \textit{tasks}.
 Each execution ran $500$ iterations, with a first rescheduling step at the $10$th iteration. 
 Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations were used, providing different impacts of rescheduling on the application.
-\textit{Greedy} and \textit{Dummy} were excluded from this evaluation due to their high cost in an application such as \textit{LeanMD}. 
+\greedylb and \dummylb were excluded from this evaluation due to their high cost in an application such as \textit{LeanMD}. 
+
+\todo[inline]{If you decide to stay with tables instead of graphs, you should update the style of Table \ref{tab:eval:g5k:leanmd:time}.}
 
 \begin{table}[!ht]
 	\centering
-	\caption{LeanMD mean application time on the cluster execution.}	
+	\caption{Average application time for \textit{LeanMD} on platform 1.}	
 	\begin{tabular}{l|c c c}
 	Scheduler & Time (Short RP) & Time (Long RP) & Mean LB Time \\ \hline
 	Distributed & $69.356$s & $68.360$s & $167.044$ms \\ 
@@ -119,27 +136,27 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 %    \label{fig:eval:g5k:leanmd:schedtime}
 %\end{figure}
 
-Each configuration of LeanMD was executed $10$ times, making a total of $5000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}.
+Each configuration of \textit{LeanMD} was executed $10$ times, making a total of $5,000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}.
 Observed application times presented a standard deviation from the mean lower than $2\%$ for all results presented.
 
-Results show a better overall performance of \textit{PackDrop}, outperforming both compared strategies in the two scenarios chosen.
-Since our strategy migrates groups of tasks, it improves locality of tasks after migration, outperforming \textit{Distributed} due to this.
+Results show a better overall performance of \packdrop, outperforming the other strategies in the two scenarios chosen.
+Since our strategy migrates groups of tasks, it improves locality of tasks after migration. Because of that, it was able to outperform \distributedlb.
 
-The \textit{Mean LB Time}, presented in Table~\ref{tab:eval:g5k:leanmd:time}, shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
-It shows the increased cost of \textit{Refine}, which is due to both information aggregation costs and dealing with the high amounts of application data in a centralized fashion.
-\textit{PackDrop} displays its effectiveness in rescheduling time, outperforming both compared strategies, and resulting in an overall better application time. 
+The \textit{load balancer decision time}, presented in Table~\ref{tab:eval:g5k:leanmd:time}, shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
+It shows the increased cost of \refinelb, which is due to both information aggregation costs and dealing with the high amounts of application data in a centralized fashion.
+\packdrop displays its effectiveness in rescheduling time, outperforming the other strategies and resulting in an overall better application time. 
 
-\subsection{Evaluation on Supercomputer} \label{sec:sdumont}
+\subsection{Evaluation on Platform 2} \label{sec:sdumont}
 
-All experiments executed on supercomputer were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
-Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate our strategy's scalability.
+All experiments executed on platform 2 were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate the scalability of \packdrop.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
 
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:sdumont:md}
 
 \textit{LeanMD} experiments generated a $10\times15\times10$ space, with a total of $171$K \textit{tasks}.
 Each execution ran $100$ iterations, with a first rescheduling step at the $9$th iteration. 
-Rescheduling was performed every $30$ iterations and each configuration of LeanMD was executed $10$ times, making a total of $1000$ steps per configuration. 
+Rescheduling was performed every $30$ iterations and each configuration of \textit{LeanMD} was executed $10$ times, making a total of $1,000$ steps per configuration. 
 
 %\begin{table}
 %	\centering
@@ -155,11 +172,13 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 %	\label{tab:eval:sdumont:leanmd}
 %\end{table}
 
+\todo[inline]{It seems that these graphs have different font sizes.}
+
 \begin{figure}[!ht]
  \centering
- \subfigure[Application Time (s)]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
- \subfigure[Rescheduling Time (s)]{\includegraphics[width=0.45\linewidth]{images/schedtime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
- \caption{\textit{LeanMD} supercomputer execution results.}
+ \subfigure[Application Time (s).]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
+ \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.45\linewidth]{images/schedtime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
+ \caption{\textit{LeanMD} execution results on platform 2.}
  \label{fig:eval:sdumont:leanmd}
 \end{figure}
 
@@ -178,34 +197,34 @@ Rescheduling was performed every $30$ iterations and each configuration of LeanM
 %\end{figure}
 
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
-\textit{Refine} was excluded from this evaluation since this LeanMD input presents more data than Refine is able to process in a reasonable time, being in average $1000$ms slower than \textit{Greedy} in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
+\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being in average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
 
-\textit{Distributed} benefits from this platform due to Infiniband's low latency communication, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
-Our novel approach, \textit{PackDrop}, followed it closely and we can see that its rescheduling time in larger systems outperforms \textit{Distributed}, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
+\distributedlb benefits from this platform due to Infiniband low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
+\packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
 
-The rescheduling and application time results of LeanMD in this platform highlight the importance of using scalable approaches to balance system load, as well as using available parallism in execution environments.
-This is specially visible in \textit{Greedy} results on Figure~\ref{fig:eval:sdumont:leanmd:apptime}, where the application performance was decreased after the global rescheduling process.
-Increased migration costs and higher \textit{hop} counts in communication, consequences of load balancing, heavily impacted LeanMD in this case.
+The rescheduling and application time results of \textit{LeanMD} in this platform highlight the importance of using scalable approaches to balance system load, as well as using available parallelism in execution environments.
+This is specially visible in \greedylb results on Figure~\ref{fig:eval:sdumont:leanmd:apptime}, where the application performance was decreased after the global rescheduling process.
+Increased migration costs and higher \textit{hop} counts in communication, consequences of load balancing, heavily impacted \textit{LeanMD} in this case.
 
 \subsection{Performance Evaluation Overview} \label{eval:overview}
 
 Most scientific applications today seek strong scaling, increasing their computational platforms to solve problems faster.
-Our results show that, to achieve such an objective, an application must implement efficient load balancing strategies.
-We present \textit{PackDrop} as a solution for scalable rescheduling of work in distributed memory systems.
+Our results showed that, to achieve such an objective, an application must implement efficient load balancing strategies.
+We presented \packdrop as a solution for scalable rescheduling of work in distributed memory systems.
 
-Section~\ref{sec:cluster:lbtest} shows our strategy's ability of balancing load. 
+Section~\ref{sec:cluster:lbtest} showed that \packdrop is able to effectively balance the load. 
 Results highlight the importance of load balancing even in synthetic loads.
 The \textit{LB Test} benchmark used has very low migration and communication overhead, and most of its work is done locally, which is optimal for rescheduling evaluation of raw computational workload.
-Moreover, \textit{LB Test} is known for having a very low migration cost and simple tasks, which enhances the effectiveness of centralized approaches such as \textit{Refine}.
-These results also portray the addition of communication overheads in different topologies ($2$, $4$, and $6$ communication edges for Ring, $2$D, and $3$D Mesh, respectively). %Can I use peers here?
-As communication affects the application time more, migrations impact the total application time more, as we can see in the \textit{Greedy} results.
+Moreover, \textit{LB Test} is known for having a very low migration cost and simple tasks, which enhances the effectiveness of centralized approaches such as \refinelb.
+These results also portray the addition of communication overheads in different topologies ($2$, $4$, and $6$ communication edges for Ring, Mesh2D, and Mesh3D, respectively). %Can I use peers here?
+As communication affects the application time more, migrations impact the total application time more, as we can see in the \greedylb results.
 
 %Our strategy was only outperformed by \tofix{\textit{Refine} in all test cases, which is expected, since the total load dealt with is considerably small ($\sim 19$K tasks) and migrations cheap, which benefits centralized schedulers.}
 
-Sections~\ref{sec:cluster:md}~and~\ref{sec:sdumont:md} display evaluation of a MD mini-app, LeanMD (better described in Section~\ref{sec:benchmarks}).
+In Sections~\ref{sec:cluster:md}~and~\ref{sec:sdumont:md}, we evaluated \packdrop in \textit{LeanMD} (better described in Section~\ref{sec:benchmarks}).
 This represents ``a real world-like" scenario, in which applications may have dynamic communication patterns and high migration overhead.
 Results presented here highlight the overhead of centralized rescheduling approaches when joined with large-scale applications ($171$K tasks) and big environments, which increases work and information aggregation costs, respectively.
 
-\textit{Distributed} outperformed our approach in the Supercomputer platform, due to its more refined approach for load balancing and high-speed network interconnection.
-However, the results show that \textit{PackDrop} and its locality friendly batching of tasks for migration guarantees better performance in the Cluster platform, which portrays a Gigabit Ethernet interconnection.
-\textit{PackDrop} was able to efficiently scale applications among all observed platforms, and had a faster rescheduling time than \textit{Distributed} in most of the observed cases.
+\distributedlb outperformed our approach in the platform 2, due to its more refined approach for load balancing and high-speed network interconnection.
+However, the results show that \packdrop and its locality friendly batching of tasks for migration guarantees better performance in platform 1, which portrays a Gigabit Ethernet interconnection.
+\packdrop was able to efficiently scale applications among all observed platforms, and had a faster rescheduling time than \distributedlb in most of the observed cases.

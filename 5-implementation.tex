@@ -31,14 +31,14 @@ More specifically, strategies that may be selected by \texttt{Charm++}'s workloa
 An overall description of each one of these load balancing strategies is presented bellow:
 
 \begin{itemize}
-	\item \textit{Refine} is a refinement-based strategy that tries to minimize the number of migrated \textit{tasks}, exchanging load among PEs.
+	\item \refinelb is a refinement-based strategy that tries to minimize the number of migrated \textit{tasks}, exchanging load among PEs.
 This strategy is specially efficient if the system imbalance is low, and may not be able to deal with high imbalance due to its limited migration approach.
-	\item \textit{Greedy} creates two heaps, one for \textit{tasks} (max-min) and one for PEs (min-max). 
+	\item \greedylb creates two heaps, one for \textit{tasks} (max-min) and one for PEs (min-max). 
 Then, it assigns tasks to PEs, associating the most work-heavy tasks with the least loaded PEs.
 This strategy provides a good load balance, but may incur in high migration overhead.
-    \item \textit{Distributed}, also known as \textit{Grapevine}, is a distributed strategy based on epidemic communication and probabilistic transfer of work.
+    \item \distributedlb, also known as \textit{Grapevine}, is a distributed strategy based on epidemic communication and probabilistic transfer of work.
    This strategy has good scalability, but does not perform as well as centralized ones in smaller scenarios.
-   \item \textit{Dummy}, a centralized load balancer that does not remap tasks but still gathers system information as other centralized approaches.
+   \item \dummylb, a centralized load balancer that does not remap tasks but still gathers system information as other centralized approaches.
    This is the representative of a scenario without load balancing.
 
 \end{itemize}
