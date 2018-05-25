@@ -43,6 +43,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$load_{set}(T)$	& Load of a set ($T$) 								& Equation~\ref{eq:load} \\
 		$T$				& Set of tasks 										& Equations~\ref{eq:load},~\ref{eq:taskmap} \\		
 		$M$				& Mapping of tasks									& Equation~\ref{eq:taskmap} \\
+		$ps$			& Estimate number of tasks in a $LT$				& Equation~\ref{eq:ps} \\
 		& &\\	
 
 		$\rightarrow$ 	& Remote procedure call 								& Section~\ref{sec:algo} \\
@@ -157,11 +158,12 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
-\tofix{
-	In this implementation we used two constants. The first one ($v$) was set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$).
-	The second one was defined in $ps$ and set to $2$ in order to regulate the size of packs (line~$6$).
-	The value of $ps$ is defined by Equation~\ref{eq:ps}. The rationale behind this is... COMPLETE THE SENTENCE.
-}
+In this implementation we used two constants. 
+The first one ($v$) was set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$).
+The second one ($ps$) is defined in Equation~\ref{eq:ps} and was set to $2$.
+This was done in order to both increase communication efficiency (later explained in Section~\ref{sec:analysis}) and ensure precise balancing.
+As $ps$ grows, so does communication efficiency, but in order to do so, fine-grain migrations are compromised.
+% We could add another sentence claming the application's dynamic nature would impact the fine-grain migrations anyway, but this paragraph is already waaaaaay too long.
 
 \begin{equation}
 	ps = 2-\frac{|P|}{ttc}

@@ -6,7 +6,7 @@ The complexity of the information propagation ($Gossip$) has being evaluated as 
 where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
 Here we use $fout=2$, in order to avoid network congestion. 
 
-\begin{table}[b]
+\begin{table}[t]
 	\caption{List of symbols used in the Analysis of the Algorithm.}
 	\centering	
 	\begin{tabular}{l l}
@@ -18,7 +18,6 @@ Here we use $fout=2$, in order to avoid network congestion.
 		$c_c$			& Communication base cost \\
 		$C(A)$			& The total cost of a given function $A$ \\
 		$m$				& Number of tasks in the system \\
-		$ps$				& The average number of tasks in $LT$s \\
 		$m_l$			& $max(|T|)$ in an overloaded PE \\
 		\bottomrule
 	\end{tabular}
@@ -59,8 +58,12 @@ Our final asymptotic complexity is:
 \end{equation}
 
 This shows that determining a good $ps$ value is crucial to achieve the best performance with this algorithm.
-\tofix{Higher values of $ps$ will lower communication complexity, but may lead to an imprecise scheduling.
-In our implementation, we chose a moderate value of $ps$ (recall Equation~\ref{eq:ps}) varying to smaller values according to system load.}
-This guarantees a precise scheduling, but still gives margin to have several small tasks migrating at once, saving communication costs.
+Higher values of $ps$ will lower communication complexity, but may lead to an imprecise scheduling.
+In our implementation, we chose to vary the value of $ps$ around a base value of $2$, according to system load and characteristics, as described in Equation~\ref{eq:ps}.
+\batchassembly (Algorithm~\ref{alg::packcreation}) stores tasks in $LT$ in an increasing load order.
+So, even though our average pack should have around $2$ tasks, as their load vary, we are able to include more tasks at a lower communication cost.
+This way, we attempt precise load balance, while still preserving task locality after migration.
 
-\todo[inline]{Please, fix the highlighted sentences and correlate them to Equation~\ref{eq:ps}. How do you vary the value of $ps$? How this correlate to application specific characteristics?}
+It is important to note that different applications may react differently to different values of $ps$.
+This is specially related to application load variance.
+The $ps$ factor may be fine-tuned to each specific application and platform, but we believe a reasonable, generic, approach such as the provided by Equation~\ref{eq:ps} is enough to provide balance to most applications and systems, while still harvesting the advantages of the \textit{Batch Task Migration} approach.
