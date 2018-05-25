@@ -4,18 +4,19 @@
 \textit{Chares} are mapped as \textit{tasks} to PEs and the \charm runtime system (RTS) provides the load information needed for our rescheduling strategy.
 
 The \charm RTS allows for the desired asynchronous behavior of \packdrop.
-It also provides necessary reduction and quiescence detection mechanisms, used in this implementation.
+It also provides the necessary reduction and quiescence detection mechanisms used in this implementation.
 Reductions are used to evaluate the total number of chares and the average load in the system, while the quiescence detection is necessary to finalize the information propagation step of the algorithm.
 
 \charm provides application-independent load balancing, which means that any application may use global rescheduling strategies implemented for this RTS.
 This way, any of the available applications for \charm can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
 
-\todo[inline]{I know that it may be not the focus here but I think that you could give more details of how Algorithms 1, 2 and 3 were implemented in the \charm LB framework. In other words, how those communications, sychronizations, and task migrations required by the algorithms work in \charm. Since we have some space left I think you may include these details here.}
+\todo[inline]{I know that it may be not the focus here but I think that you could give more details of how Algorithms 1, 2 and 3 were implemented in the \charm LB framework. In other words, how those communications, synchronizations, and task migrations required by the algorithms work in \charm. Since we have some space left I think you may include these details here.}
+    % Agreed
 
 \subsection{Benchmarks} \label{sec:benchmarks}
 
 We experimented our strategy with $2$ benchmarks that are publicly available for \charm.
-The first is one a synthetic benchmark called \textit{LB Test}. 
+The first one is a synthetic benchmark called \textit{LB Test}. 
 It simulates work with a variety of communication topologies, such as ring, meshes and randomized patterns.
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
@@ -26,9 +27,9 @@ However, since the number of simulated atoms in each region affects the number o
 
 \subsection{Other schedulers}
 
-We compare the performance of \packdrop to other strategies available on the \charm.
+We compare the performance of \packdrop to other strategies available on \charm.
 More specifically, strategies that may be selected by \charm 's workload-aware \textit{Meta-balancer}~\cite{MenonPHD}.
-An overall description of each one of these load balancing strategies is presented bellow:
+An overall description of each one of these load balancing strategies is presented below:
 
 \begin{itemize}
 	\item \refinelb is a refinement-based strategy that tries to minimize the number of migrated \textit{tasks}, exchanging load among PEs.
