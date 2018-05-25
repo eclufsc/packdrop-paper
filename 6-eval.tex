@@ -7,9 +7,7 @@ We used two platforms to evaluate the performance of \textit{PackDrop}:
 	\item \textbf{Platform 2:} A subset of a tightly coupled supercomputer called \textit{Santos Dumont} from the Brazilian National Laboratory for Scientific Computing (LNCC) with $24$ PEs per node and an Infiniband interconnection network.% supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
 \end{itemize}
 
-All applications were compiled with \texttt{gcc} with the following flags: \texttt{-std=c++11 -O3}. Details of both platforms are available on Table~\ref{tab:ptinfo}.
-
-\todo[inline]{I've changed the name of the platforms because both of them are clusters. Moreover, I've changed the order they appear in Table~\ref{tab:ptinfo} since we first present results for the Grid'5000. Please confirm the number of nodes in each cluster in Table~\ref{tab:ptinfo} and complete the information concerning the MPI version in Platform 1.}
+All applications were compiled with {\small\texttt{gcc}} with the following flags: {\small\texttt{-std=c++11 -O3}}. Details of both platforms are available on Table~\ref{tab:ptinfo}.
 
 \begin{table}[t]
     \centering
@@ -18,7 +16,7 @@ All applications were compiled with \texttt{gcc} with the following flags: \text
 	\toprule
 	\textbf{Characteristics}	& \textbf{Platform 1} 		& \textbf{Platform 2}	\\
 	\midrule
-	\# of nodes	   		& 32 					& 32 \\
+	\# of nodes	   		& 32 					& 16-32 \\
         \# of CPUs/node	   	& $4$ (UMA) 			& $2\times12$ (NUMA) \\
         CPU Model			& Intel Xeon X3440 		& Intel Xeon E5-2695v2 \\
         CPU Freq.  			& $2.53$GHz			& $2.4$GHz \\
@@ -27,7 +25,7 @@ All applications were compiled with \texttt{gcc} with the following flags: \text
         OS      				& Ubuntu 14.04			& RedHat Linux 6.4 \\
         GCC	version			& $5.4.0$				& $5.3.1$	\\
         Charm++ version		& $6.8.1$				& $6.8.1$ 	\\
-        MPI version			& \tofix{???}			& $3.1.0$	\\
+        Communication		& \charm				& MPI $3.1.0$	\\
         \bottomrule
 	\end{tabular}
     \label{tab:ptinfo}
@@ -39,7 +37,7 @@ All raw data of our results, as well as parsing scripts for analysis are publicl
 
 \subsection{Metrics}
 
-\textit{Application time} (makespan) is one of the most relevant metrics to evaluate load balancers in \texttt{Charm++}.
+\textit{Application time} (makespan) is one of the most relevant metrics to evaluate load balancers in \charm.
 Since migrations may induce high overheads and could impact communication costs, a bad load balancing strategy algorithm may present fast decision times but it may increase load imbalance considerably. Thus, the overall execution time of the application will also be increased.
 This is a powerful metric to measure both load balancing precision and the overall impact of the strategy on parallel applications.
 
@@ -50,7 +48,7 @@ Throughout this section, load balancer decision time will also be referred to as
 
 \subsection{Evaluation on Platform 1} \label{sec:cluster}
 
-All experiments executed on platform 1 were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+All experiments executed on platform 1 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Overall, $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 
 \subsubsection{Evaluation with Synthetic Load} \label{sec:cluster:lbtest}
@@ -59,7 +57,7 @@ Overall, $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 \textit{Task} loads varied from $30$ms to $9000$ms, which provides reasonable load imbalance, causing global rescheduling to be useful in this case.
 Ring, $2$D mesh and $3$D mesh communication topologies were used to provide different levels of migration impact and communication costs.
 
-\todo[inline]{Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime} present the \textbf{very same result}. The same observation holds for Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}. You should either use tables or the figures. If you put both, it seems to me that you're trying to ``encher linguiça''.}
+%\todo[inline]{Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime} present the \textbf{very same result}. The same observation holds for Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}. You should either use tables or the figures. If you put both, it seems to me that you're trying to ``encher linguiça''.}
 
 \begin{table}[h]
 	\centering
@@ -79,25 +77,25 @@ Ring, $2$D mesh and $3$D mesh communication topologies were used to provide diff
     \label{tab:lbtest:apptime}
 \end{table}
 
-\begin{figure}
-	\centering
-	\subfigure[LB Test]{\includegraphics[width=0.45\linewidth]{images/apptime_lbtest_g5k.pdf}\label{fig:eval:g5k:lbtest:apptime}}	
-	\subfigure[LeanMD]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_g5k.pdf}\label{fig:eval:g5k:leanmd:time}}
-	\caption{Cluster Execution Results for both applications.}
-	\label{fofinho3}
-\end{figure}
+%\begin{figure}
+%	\centering
+%	\subfigure[LB Test]{\includegraphics[width=0.45\linewidth]{images/apptime_lbtest_g5k.pdf}\label{fig:eval:g5k:lbtest:apptime}}	
+%	\subfigure[LeanMD]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_g5k.pdf}\label{fig:eval:g5k:leanmd:time}}
+%	\caption{Cluster Execution Results for both applications.}
+%	\label{fofinho3}
+%\end{figure}
 
 %\todo[inline]{Análise estatística para poder dizer que esses tempos são verdadeiramente diferentes?}
 
-Each configuration of the benchmark was executed $15$ times, with results depicted on Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime}.
+Each configuration of the benchmark was executed $15$ times, with results depicted in Table~\ref{tab:lbtest:apptime}.
 Observed application times present a maximum $2\%$ standard deviation from the mean. 
 Results for \greedylb show how different communication topologies affect the scheduling performance.
 Since \greedylb migrates many \textit{tasks}, the more they communicate, the more migrations impact the application time.
 
 The increased in communication cost can be verified among all scheduling strategies, but in none as much as in \greedylb.
-Our novel approach (\packdrop) has outperformed the other descentralized strategy (\distributedlb) in the \textit{LB Test} case in this scale.
+Our novel approach (\packdrop) has outperformed the other decentralized strategy (\distributedlb) in the \textit{LB Test} case in this scale.
 However, since the platform is not large enough to present all of the potential gains of decentralized strategies, \refinelb still outperformed any other scheduler in this benchmark.
-Nevertheless, this indicates a good scalability potential for \packdrop, specially in a cluster with high communication overhead due to its Gigabit Ethernet connection.
+Nevertheless, this indicates a good scalability potential for \packdrop, specially in a cluster with high communication overhead due to its Gigabit Ethernet \tofix{connection}. %interconnection?
 
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:cluster:md}
 
@@ -105,8 +103,6 @@ Nevertheless, this indicates a good scalability potential for \packdrop, special
 Each execution ran $500$ iterations, with a first rescheduling step at the $10$th iteration. 
 Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations were used, providing different impacts of rescheduling on the application.
 \greedylb and \dummylb were excluded from this evaluation due to their high cost in an application such as \textit{LeanMD}. 
-
-\todo[inline]{If you decide to stay with tables instead of graphs, you should update the style of Table \ref{tab:eval:g5k:leanmd:time}.}
 
 \begin{table}[!ht]
 	\centering
@@ -142,19 +138,20 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 %    \label{fig:eval:g5k:leanmd:schedtime}
 %\end{figure}
 
-Each configuration of \textit{LeanMD} was executed $10$ times, making a total of $5,000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}.
+Each configuration of \textit{LeanMD} was executed $10$ times, making a total of $5,000$ steps per configuration and are depicted in Table~\ref{tab:eval:g5k:leanmd:time}.
 Observed application times presented a standard deviation from the mean lower than $2\%$ for all results presented.
 
 Results show a better overall performance of \packdrop, outperforming the other strategies in the two scenarios chosen.
-Since our strategy migrates groups of tasks, it improves locality of tasks after migration. Because of that, it was able to outperform \distributedlb.
+Since our strategy migrates groups of tasks, it preserves locality of tasks after migration. 
+Because of that, it was able to outperform \distributedlb.
 
-The \textit{load balancer decision time}, presented in Table~\ref{tab:eval:g5k:leanmd:time}, shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
+The \textit{Rescheduling Time}, presented in Table~\ref{tab:eval:g5k:leanmd:time}, shows the time taken by the periodical rescheduling (LB), task migration and the first iteration after the LB call.
 It shows the increased cost of \refinelb, which is due to both information aggregation costs and dealing with the high amounts of application data in a centralized fashion.
 \packdrop displays its effectiveness in rescheduling time, outperforming the other strategies and resulting in an overall better application time. 
 
 \subsection{Evaluation on Platform 2} \label{sec:sdumont}
 
-All experiments executed on platform 2 were compiled with \texttt{Charm++} using the \texttt{--with-production} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+All experiments executed on platform 2 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate the scalability of \packdrop.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
 
