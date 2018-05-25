@@ -54,7 +54,7 @@ Concerns towards these problems increase as systems grow in size and performance
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
 Although rescheduling algorithms have been able to greatly improve the performance of these applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
-Since mapping tasks to processing elements (PEs) is a NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized rescheduling approaches inefficient.
+Since mapping tasks to processing elements (PEs) is an NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized rescheduling approaches inefficient.
 This creates a need for scalable and decentralized rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
 The two main paths to achieve scalability in global rescheduling for iterative applications are Hierarchical and Distributed approaches.
