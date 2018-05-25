@@ -65,7 +65,7 @@ Ring, $2$D mesh and $3$D mesh communication topologies were used to provide diff
 	\centering
     \caption{Average application time for \textit{LB Test} on platform 1.}
 	\begin{tabular}{l  c  c  c}
-    	\toprule
+    \toprule
 	\multirow{2}{*}{\textbf{Scheduler}} 	& \multicolumn{3}{c}{\textbf{Network Topologies}} \\ \cmidrule{2-4}
  								& Ring & Mesh2D & Mesh3D \\
 	\midrule
@@ -111,11 +111,17 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 \begin{table}[!ht]
 	\centering
 	\caption{Average application time for \textit{LeanMD} on platform 1.}	
-	\begin{tabular}{l|c c c}
-	Scheduler & Time (Short RP) & Time (Long RP) & Mean LB Time \\ \hline
-	Distributed & $69.356$s & $68.360$s & $167.044$ms \\ 
-	PackDrop & $55.984$s & $55.516$s & $143.103$ms \\ 
-	Refine & $59.357$s & $55.899$s & $539.836$ms \\ 
+	\begin{tabular}{l c c c}
+	\toprule
+	%\textbf{Scheduler} & Time (Short RP) & Time (Long RP) & Mean LB Time \\ 
+	\multirow{2}{*}{\textbf{Scheduler}} 	& \multicolumn{2}{c}{\textbf{Rescheduling Period}} & \multirow{2}{*}{\textbf{Rescheduling Time}} \\ \cmidrule{2-3}
+ 								& Short & Long \\	
+	\midrule
+	
+	\distributedlb & $69.356$s & $68.360$s & $167.044$ms \\ 
+	\packdrop & $55.984$s & $55.516$s & $143.103$ms \\ 
+	\refinelb & $59.357$s & $55.899$s & $539.836$ms \\ 
+	\bottomrule	
 	\end{tabular}
 	\label{tab:eval:g5k:leanmd:time} 
 \end{table}
