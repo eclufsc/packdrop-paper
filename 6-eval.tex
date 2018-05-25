@@ -95,7 +95,7 @@ Since \greedylb migrates many \textit{tasks}, the more they communicate, the mor
 The increased in communication cost can be verified among all scheduling strategies, but in none as much as in \greedylb.
 Our novel approach (\packdrop) has outperformed the other decentralized strategy (\distributedlb) in the \textit{LB Test} case in this scale.
 However, since the platform is not large enough to present all of the potential gains of decentralized strategies, \refinelb still outperformed any other scheduler in this benchmark.
-Nevertheless, this indicates a good scalability potential for \packdrop, specially in a cluster with high communication overhead due to its Gigabit Ethernet \tofix{connection}. %interconnection?
+Nevertheless, this indicates a good scalability potential for \packdrop, specially in a cluster with high communication overhead due to its Gigabit Ethernet connection. %interconnection?
 
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:cluster:md}
 
@@ -175,12 +175,12 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 %	\label{tab:eval:sdumont:leanmd}
 %\end{table}
 
-\todo[inline]{It seems that these graphs have different font sizes.}
+\todo[inline]{Log times option added. If we keep the log option on resched time, it is possible to portray Refine results in a satisfatory way.}
 
 \begin{figure}[!ht]
  \centering
- \subfigure[Application Time (s).]{\includegraphics[width=0.45\linewidth]{images/apptime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
- \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.45\linewidth]{images/schedtime_leanmd_sdumont.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
+ \subfigure[Application Time (s).]{\includegraphics[width=0.49\linewidth]{images/apptime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
+ \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.49\linewidth]{images/schedtime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
  \caption{\textit{LeanMD} execution results on platform 2.}
  \label{fig:eval:sdumont:leanmd}
 \end{figure}
