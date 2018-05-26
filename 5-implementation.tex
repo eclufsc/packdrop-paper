@@ -10,8 +10,11 @@ Reductions are used to evaluate the total number of chares and the average load 
 \charm provides application-independent load balancing, which means that any application may use global rescheduling strategies implemented for this RTS.
 This way, any of the available applications for \charm can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
 
-\todo[inline]{I know that it may be not the focus here but I think that you could give more details of how Algorithms 1, 2 and 3 were implemented in the \charm LB framework. In other words, how those communications, synchronizations, and task migrations required by the algorithms work in \charm. Since we have some space left I think you may include these details here.}
-    % Agreed
+During load balancing in the \charm RTS, each instance of \packdrop runs as an individual chare.
+Remote procedures in the algorithms ($\rightarrow$) were implemented as messages, exchanged between objects.
+Reductions ($\Rightarrow$) used the RTS provided interface ({\small\texttt{CkReduction}}).
+The \textit{three-way handshake}, necessary to acknowledge a $Send$, was implemented with message exchanges.
+Finally, synchronization barriers in our algorithms use either \textit{quiescence detection} or reductions.
 
 \subsection{Benchmarks} \label{sec:benchmarks}
 
