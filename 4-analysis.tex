@@ -6,6 +6,21 @@ The complexity of the information propagation ($Gossip$) has being evaluated as 
 where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
 Here we use $fout=2$, in order to avoid network congestion. 
 
+For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
+will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
+We also assume $c_c > p_c$ for all concurrent scenarios, since communication costs are several orders of magnitude higher than computational costs.
+$C(A)$ is referred here as the total cost for a given workload $A$.
+Unmentioned lines are assumed to have non-varying cost, and thus will not interfere in the asymptotic analysis.
+
+Lines~2~and~3 are global reductions, which have a well-known cost of $O(log\ n)$.
+Lines~8~and~11 are concurrent, so their cost will be the maximum among them:
+\begin{equation}
+  max(C(BatchAssembly),C(Gossip))
+\end{equation}
+
+We also know that the worst case for \batchassembly (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
+since it would assume that a single PE contains $m$ tasks and a single task may have a load greater than the average system load, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
+
 \begin{table}[t]
 	\caption{List of symbols used in the Analysis of the Algorithm.}
 	\centering	
@@ -23,21 +38,6 @@ Here we use $fout=2$, in order to avoid network congestion.
 	\end{tabular}
 	\label{tab:analysis:symbols}
 \end{table}
-
-For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
-will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
-We also assume $c_c > p_c$ for all concurrent scenarios, since communication costs are several orders of magnitude higher than computational costs.
-$C(A)$ is referred here as the total cost for a given workload $A$.
-Unmentioned lines are assumed to have non-varying cost, and thus will not interfere in the asymptotic analysis.
-
-Lines~2~and~3 are global reductions, which have a well-known cost of $O(log\ n)$.
-Lines~8~and~11 are concurrent, so their cost will be the maximum among them:
-\begin{equation}
-  max(C(BatchAssembly),C(Gossip))
-\end{equation}
-
-We also know that the worst case for \batchassembly (Algorithm~\ref{alg::packcreation}) is rather unrealistic, 
-since it would assume that a single PE contains $m$ tasks and a single task may have a load greater than the average system load, being $O(m-1)$, assuming $1$ would not be migrated, asymptotically, $O(m)$.
 
 Thus, the cost of lines~8~and~11 is:
 \begin{equation}
