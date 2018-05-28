@@ -199,10 +199,10 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 %	\label{fig:eval:sdumont:leanmd:schedtime}
 %\end{figure}
 
-Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
+Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}, both in a $log$ scale to better exhibit the differences between \distributedlb and \packdrop.
 %\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being on average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
 In this evaluation, \refinelb had a very low efficiency, being $1$s slower than \greedylb in the $384$ PEs scenario.
-\refinelb was able to perform better as PE numbers grew, but was ultimately unable to compete with distributed approaches.
+It was able to perform better as PE numbers grew, but was ultimately unable to compete with distributed approaches.
 
 \distributedlb benefits from this platform due to Infiniband's low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 \packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.

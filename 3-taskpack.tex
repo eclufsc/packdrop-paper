@@ -41,8 +41,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$load$			& Compute load of the local PE \\
 		$load_{task}(t)$	& Compute load of a task $t$							& Equation~\ref{eq:load}	\\
 		$load_{set}(T)$	& Load of a set ($T$) 								& Equation~\ref{eq:load} \\
-		$T$				& Set of tasks 										& Equations~\ref{eq:load},~\ref{eq:taskmap} \\		
-		$M$				& Mapping of tasks									& Equation~\ref{eq:taskmap} \\
+		$T$				& Set of tasks 										& Equation~\ref{eq:load} \\		
 		$ps$			& Estimate number of tasks in a $LT$				& Equation~\ref{eq:ps} \\
 		& &\\	
 
@@ -51,6 +50,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$load_{avg}$		& Average system load of a PE 						& Section~\ref{sec:algo:creation}\\ 
 		$s$			  	& Compute load in a batch of tasks 					& Section~\ref{sec:algo:creation} \\
 		$rand(S)$		& Random element of $S$ 								& Section~\ref{sec:algo:sending} \\
+		$M$				& Mapping of tasks									& Section~\ref{sec:algo:main} \\
 		$P$				& Global set of PEs 									& Section~\ref{sec:algo:main} \\
 		$Gossip$			& Start of information propagation					& Section~\ref{sec:algo:main} \\		
 		$pack$			& Set of leaving tasks								& Section~\ref{sec:algo:main} \\
@@ -148,13 +148,8 @@ For simplicity, in the explanation of this algorithm \textit{packs} will be a sh
 
 \packdrop will run individually on each PE, in a distributed fashion. 
 It will produce a new mapping ($M'$) using a current local mapping of tasks to PEs ($M$), local load ($load$), a local PE identification ($Id_l$) and the global set of PEs ($P$).
-The mapping of tasks is defined by Equation~\ref{eq:taskmap} as a set of pairs ($task, PE$), which describe the location of tasks.
+The mapping of tasks is defined as $M:\ T \rightarrow P$, which describes the relation of each task to its corresponding physical location.
 A local mapping of tasks contains only tasks that are assigned to the current PE.
-
-\begin{equation}
-	M:\ T \rightarrow P
-	\label{eq:taskmap}
-\end{equation}
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
