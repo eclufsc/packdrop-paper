@@ -16,7 +16,7 @@ All applications were compiled with {\small\texttt{gcc}} with the following flag
 	\toprule
 	\textbf{Characteristics}	& \textbf{Platform 1} 		& \textbf{Platform 2}	\\
 	\midrule
-	\# of nodes	   		& 32 					& 16-32 \\
+	\# of nodes	   		& 32 					& 16 -- 32 \\
         \# of CPUs/node	   	& $4$ (UMA) 			& $2\times12$ (NUMA) \\
         CPU Model			& Intel Xeon X3440 		& Intel Xeon E5-2695v2 \\
         CPU Freq.  			& $2.53$GHz			& $2.4$GHz \\
@@ -48,7 +48,7 @@ Throughout this section, load balancer decision time will also be referred to as
 
 \subsection{Evaluation on Platform 1} \label{sec:cluster}
 
-All experiments executed on platform 1 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+All experiments executed on Platform 1 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Overall, $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 
 \subsubsection{Evaluation with Synthetic Load} \label{sec:cluster:lbtest}
@@ -61,7 +61,7 @@ Ring, $2$D mesh and $3$D mesh communication topologies were used to provide diff
 
 \begin{table}[h]
 	\centering
-    \caption{Average application time for \textit{LB Test} on platform 1.}
+    \caption{Average application time for \textit{LB Test} on Platform 1.}
 	\begin{tabular}{l  c  c  c}
     \toprule
 	\multirow{2}{*}{\textbf{Scheduler}} 	& \multicolumn{3}{c}{\textbf{Network Topologies}} \\ \cmidrule{2-4}
@@ -106,7 +106,7 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 
 \begin{table}[!ht]
 	\centering
-	\caption{Average application time for \textit{LeanMD} on platform 1.}	
+	\caption{Average application time for \textit{LeanMD} on Platform 1.}	
 	\begin{tabular}{l c c c}
 	\toprule
 	%\textbf{Scheduler} & Time (Short RP) & Time (Long RP) & Mean LB Time \\ 
@@ -151,7 +151,7 @@ It shows the increased cost of \refinelb, which is due to both information aggre
 
 \subsection{Evaluation on Platform 2} \label{sec:sdumont}
 
-All experiments executed on platform 2 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
+All experiments executed on Platform 2 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate the scalability of \packdrop.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
 
@@ -175,13 +175,13 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 %	\label{tab:eval:sdumont:leanmd}
 %\end{table}
 
-\todo[inline]{Log times option added. If we keep the log option on resched time, it is possible to portray Refine results in a satisfatory way.}
+%\todo[inline]{Log times option added. If we keep the log option on resched time, it is possible to portray Refine results in a satisfatory way.}
 
 \begin{figure}[!ht]
  \centering
  \subfigure[Application Time (s).]{\includegraphics[width=0.49\linewidth]{images/apptime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
  \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.49\linewidth]{images/schedtime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
- \caption{\textit{LeanMD} execution results on platform 2.}
+ \caption{\textit{LeanMD} execution results on Platform 2.}
  \label{fig:eval:sdumont:leanmd}
 \end{figure}
 
@@ -200,9 +200,11 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 %\end{figure}
 
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
-\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being on average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
+%\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being on average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
+In this evaluation, \refinelb had a very low efficiency, being $1$s slower than \greedylb in the $384$ PEs scenario.
+\refinelb was able to perform better as PE numbers grew, but was ultimately unable to compete with distributed approaches.
 
-\distributedlb benefits from this platform due to Infiniband low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
+\distributedlb benefits from this platform due to Infiniband's low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 \packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
 
 The rescheduling and application time results of \textit{LeanMD} in this platform highlight the importance of using scalable approaches to balance system load, as well as using available parallelism in execution environments.
@@ -228,6 +230,6 @@ In Sections~\ref{sec:cluster:md}~and~\ref{sec:sdumont:md}, we evaluated \packdro
 This represents ``a real world-like" scenario, in which applications may have dynamic communication patterns and high migration overhead.
 Results presented here highlight the overhead of centralized rescheduling approaches when joined with large-scale applications ($171$K tasks) and big environments, which increases work and information aggregation costs, respectively.
 
-\distributedlb outperformed our approach in the platform 2, due to its more refined approach for load balancing and high-speed network interconnection.
-However, the results show that \packdrop and its locality friendly batching of tasks for migration guarantees better performance in platform 1, which portrays a Gigabit Ethernet interconnection.
-\packdrop was able to efficiently scale applications among all observed platforms, and had a faster rescheduling time than \distributedlb in most of the observed cases.
+\distributedlb outperformed our approach in Platform 2, due to its more refined take on load balancing and high-speed network interconnection.
+However, the results show that \packdrop and its locality friendly batching of tasks for migration guarantees better performance in Platform 1, which portrays a Gigabit Ethernet interconnection.
+Finally, \packdrop was able to efficiently scale applications among all observed platforms, and had a faster rescheduling time than \distributedlb in most of the observed cases.
