@@ -53,7 +53,7 @@ In this context, uneven workload distribution and high communication overheads a
 Concerns towards these problems increase as systems grow in size and performance, consuming more resources, specially power, to solve some the most complex problems in scientific computing~\cite{exapower2015,padoin2017energy}.
 
 Applications such as simulations of molecular dynamics (MD) and hydrodynamics suffer from load imbalance due to their intrinsic dynamic and iterative nature~\cite{namd,IPDPS13:LULESH}.
-Although rescheduling algorithms have been able to greatly improve the performance of these applications~\cite{namd0}, new approaches are needed to guarantee their performance as parallel systems grow.
+Although rescheduling algorithms have been able to greatly improve the performance of these applications~\cite{namd}, new approaches are needed to guarantee their performance as parallel systems grow.
 Since mapping tasks to processing elements (PEs) is an NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized rescheduling approaches inefficient.
 This creates a need for scalable and decentralized rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
@@ -63,9 +63,9 @@ These can scale, but are usually tied to the same limitations as the centralized
 On the other hand, distributed load balancing approaches seek to achieve scalability in a decentralized fashion.
 These scale better, but have limited system information and may incur in high amounts of communication.
 
-Few are the distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{grapevine,diffus}.
+Few are the distributed strategies in the domain of global rescheduling, but their effectiveness is notable~\cite{diffus,grapevine}.
 In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique called \packdrop.
-Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and enhancing locality of migrated tasks.
+Our approach is based on the idea of grouping tasks prior to migration decisions in batches, decreasing communication overhead in algorithm decision time and preserving locality of migrated tasks, improving application makespan~\cite{Paudel2013wslocal}.
 
 % Main contributions
 In this paper, we present the following contributions: 

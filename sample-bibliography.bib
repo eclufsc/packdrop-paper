@@ -222,6 +222,75 @@
  year = {2014},
 }
 
+@INPROCEEDINGS{Cheriere2015hetdist,
+author={N. Cheriere and E. Saule},
+booktitle={2015 IEEE International Parallel and Distributed Processing Symposium Workshop},
+title={Considerations on Distributed Load Balancing for Fully Heterogeneous Machines: Two Particular Cases},
+year={2015},
+volume={},
+number={},
+pages={6-16},
+keywords={parallel programming;pattern clustering;probability;processor scheduling;resource allocation;GPU-accelerated clusters;approximation ratio;decentralized scheduling algorithms;distributed algorithms;distributed load balancing;fully heterogeneous machines;heterogeneous systems;homogeneous clusters;parallel systems;probability density function;work-stealing algorithms;Approximation algorithms;Approximation methods;Clustering algorithms;Load management;Processor scheduling;Program processors;Scheduling;Approximation Algorithms;Decentralized Algorithms;Load-Balancing;Unrelated Machine Scheduling},
+doi={10.1109/IPDPSW.2015.36},
+ISSN={},
+month={May},}
+
+@INPROCEEDINGS{Beri2015hetws,
+author={T. Beri and S. Bansal and S. Kumar},
+booktitle={2015 IEEE International Parallel and Distributed Processing Symposium Workshop},
+title={ProSteal: A Proactive Work Stealer for Bulk Synchronous Tasks Distributed on a Cluster of Heterogeneous Machines with Multiple Accelerators},
+year={2015},
+volume={},
+number={},
+pages={17-26},
+keywords={graphics processing units;parallel programming;resource allocation;shared memory systems;GPUs;ProSteal;Unicorn;bulk synchronous tasks;compute-communication overlap;half steal strategy;healthy steal success rate;heterogeneous machines;load balancing technique;many-core accelerators;multiple CPUs;multiple accelerators;proactive work stealer;random victim selection;remote data transfers;shared memory parallel programming;termination detection;Convolution;Data transfer;Graphics processing units;Load management;Matrix decomposition;Performance evaluation;Pipelines;Heterogeneous Architectures;High Performance Computing;Hybrid CPU-GPU Clusters;Multi Scheduling;Work Stealing},
+doi={10.1109/IPDPSW.2015.7},
+ISSN={},
+month={May},}
+
+@INPROCEEDINGS{Paudel2013wslocal,
+author={J. Paudel and O. Tardieu and J. N. Amaral},
+booktitle={2013 42nd International Conference on Parallel Processing},
+title={On the Merits of Distributed Work-Stealing on Selective Locality-Aware Tasks},
+year={2013},
+volume={},
+number={},
+pages={100-109},
+keywords={distributed shared memory systems;performance evaluation;resource allocation;scheduling;Cowichan suites;Lonestar suites;X10;application-level task locality;asynchronous partitioned global address space programming model;distributed memory cluster;distributed shared-memory systems;distributed work-stealing;migration across nodes;performance evaluation;processor cluster;scheduler;selective locality-aware tasks;work-stealing load-balancing algorithms;work-stealing strategy;Distributed databases;Instruction sets;Parallel processing;Runtime;Sociology;Statistics;APGAS;Distributed Work Stealing;Performance;X10},
+doi={10.1109/ICPP.2013.19},
+ISSN={0190-3918},
+month={Oct},}
+
+@INPROCEEDINGS{Jeannot2016topo,
+author={E. Jeannot and G. Mercier and F. Tessier},
+booktitle={2016 First International Workshop on Communication Optimizations in HPC (COMHPC)},
+title={Topology and Affinity Aware Hierarchical and Distributed Load-Balancing in Charm++},
+year={2016},
+volume={},
+number={},
+pages={63-72},
+keywords={object-oriented programming;parallel machines;parallel programming;resource allocation;topology;trees (mathematics);LibTopoMap;TreeMatch;charm++;distributed load-balancing;parallel supercomputers;topology-aware load balancing;Central Processing Unit;Conferences;Load management;Network topology;Optimization;Runtime;Topology},
+ISSN={},
+month={Nov},}
+
+@inproceedings{Diener2017locality,
+ author = {Diener, Matthias and White, Sam and Kale, Laxmikant V. and Campbell, Michael and Bodony, Daniel J. and Freund, Jonathan B.},
+ title = {Improving the Memory Access Locality of Hybrid MPI Applications},
+ booktitle = {Proceedings of the 24th European MPI Users' Group Meeting},
+ series = {EuroMPI '17},
+ year = {2017},
+ isbn = {978-1-4503-4849-2},
+ location = {Chicago, Illinois},
+ pages = {11:1--11:10},
+ articleno = {11},
+ numpages = {10},
+ acmid = {3127038},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {AMPI, MPI, OpenMp, hybrid applications, load balancing, memory access locality},
+} 
+
+
 @inproceedings{penna:15,
 	author   = {Pedro H. Penna and
                 M\'arcio Catro and
@@ -233,6 +302,18 @@
 	booktitle = {XV Simpósio em Sistemas Computacionais de Alto Desempenho (WSCAD-SSC)},
 	year      = {2015}
 }
+
+@INPROCEEDINGS{schedmatters2016,
+author={J. Benson and T. Estrada and A. L. Rosenberg and M. Taufer},
+booktitle={2016 28th International Symposium on Computer Architecture and High Performance Computing (SBAC-PAD)},
+title={Scheduling Matters: Area-Oriented Heuristic for Resource Management},
+year={2016},
+volume={},
+number={},
+pages={214-221},
+keywords={cloud computing;scheduling;workflow management software;DAG workflow;area-oriented heuristic;capacity planning;cost reduction;resource management;resource utilization;Capacity planning;Context;Optimization;Processor scheduling;Resource management;Schedules;Scheduling},
+ISSN={},
+month={Oct},}
 
 @misc{packdrop,
     author = "Student T",
@@ -468,7 +549,7 @@ pages="114--125",
 abstract="Work Stealing has proved to be an effective method for load balancing regular divide-and-conquer (D{\&}C) applications on heterogeneous distributed systems, but there have been relatively few attempts to adapt it to address irregular D{\&}C applications. For such applications, it is essential to have a mechanism that can estimate dynamic system load during the execution of the applications. In this paper, we evaluate a number of work-stealing algorithms on a set of generic Unbalanced Tree Search (UTS) benchmarks. We present a novel Feudal Stealing work-stealing algorithm and show, using simulations, that it delivers consistently better speedups than other work-stealing algorithms for irregular D{\&}C applications on high-latency heterogeneous distributed systems. Compared to the best known work-stealing algorithm for high-latency distributed systems, we achieve improvements of between 9{\%} and 48{\%} for irregular D{\&}C applications.",
 }
 
-@article{DBLP:journals/ijpp/YangH18,
+@article{Yang18wssurvey,
   author    = {Jixiang Yang and
                Qingbi He},
   title     = {Scheduling Parallel Computations by Work Stealing: {A} Survey},
@@ -537,7 +618,6 @@ year={2011},
 volume={},
 number={},
 pages={765-771},
-doi={10.1109/HPCC.2011.109},
 ISSN={},
 month={Sept},
 }

@@ -1,6 +1,6 @@
 \section{Implementation} \label{sec:impl}
 
-\packdrop was implemented as a load balancing strategy in \charm\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR,sc14charm}.
+\packdrop was implemented as a load balancing strategy in \charm\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR}.
 \textit{Chares} are mapped as \textit{tasks} to PEs and the \charm runtime system (RTS) provides the load information needed for our rescheduling strategy.
 
 The \charm RTS allows for the desired asynchronous behavior of \packdrop.
@@ -24,8 +24,8 @@ It simulates work with a variety of communication topologies, such as ring, mesh
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
 The second one is a MD mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
-This mini-app simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art MD application NAMD, winner of the Golden Bell Award~\cite{grapevine}.
-LeanMD uses geometric decomposition in a three-dimensional ($3$D) simulation space.
+This mini-app simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art MD application NAMD, winner of the Golden Bell Award~\cite{namd,namd0}.
+\textit{LeanMD} uses geometric decomposition in a three-dimensional ($3$D) simulation space.
 However, since the number of simulated atoms in each region affects the number of exchanged messages, it has an irregular and dynamic communication pattern, even though it respects the geometric distribution.
 
 \subsection{Other schedulers}

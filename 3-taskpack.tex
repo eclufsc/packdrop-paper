@@ -16,14 +16,14 @@ Overall, our approach intends to:
 
 \begin{enumerate}
 	\item \textit{Reduce unnecessary communication} between PEs;
-	\item \textit{Exploit task locality} within PEs, since migrations are done in groups;
+	\item \textit{Exploit locality} among tasks in the same PE, since migrations are done in groups;
 	\item \textit{Accelerate the decision making process}, consequence of the first; and
 	\item \textit{Reduce the application makespan}.
 \end{enumerate}
 
-We first explain two algorithms that are used by \packdrop: \batchassembly (Algorithm~\ref{alg::packcreation}) and \batchsend (Algorithm~\ref{alg::packsend}).
+We will first explain two algorithms that are used by \packdrop: \batchassembly (Algorithm~\ref{alg::packcreation}) and \batchsend (Algorithm~\ref{alg::packsend}).
 Then, the complete strategy, called \packdrop, will be presented in Algorithm~\ref{alg::packdrop}.
-We assume that the \packdrop algorithm is executed on each PE and communicates with other remote \packdrop instances via message passing.
+The \packdrop algorithm will be executed on each PE and communicates with other remote \packdrop instances via message passing.
 For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:algo:symbols}.
 
 %\todo[inline]{Qual a lógica para a ordem na tabela? Aceito opiniões sobre como ordenar a tabela}
@@ -42,7 +42,8 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$load_{task}(t)$	& Compute load of a task $t$							& Equation~\ref{eq:load}	\\
 		$load_{set}(T)$	& Load of a set ($T$) 								& Equation~\ref{eq:load} \\
 		$T$				& Set of tasks 										& Equation~\ref{eq:load} \\		
-		$ps$			& Estimate number of tasks in a $LT$				& Equation~\ref{eq:ps} \\
+		$ps$				& Estimate number of tasks in a $LT$					& Equation~\ref{eq:ps} \\
+		$ttc$			& Total number of tasks in the system				& Equation~\ref{eq:ps} \\
 		& &\\	
 
 		$\rightarrow$ 	& Remote procedure call 								& Section~\ref{sec:algo} \\
@@ -67,6 +68,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 	\end{tabular}
 	}
 	\label{tab:algo:symbols}
+	\vspace{-10pt}
 \end{table}
 
 \subsection{\batchassembly Algorithm} \label{sec:algo:creation}

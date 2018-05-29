@@ -13,7 +13,7 @@
 %	\item Refine-oriented bin packing to solve aforementioned issues.
 %\end{itemize}
 
-Global rescheduling is a well-studied problem in High Performance Computing (HPC)~\cite{Deveci2015,Zheng2010}.
+Global rescheduling is a well-studied problem in High Performance Computing (HPC)~\cite{Deveci2015,diffus,grapevine,hwtopo,ZoltanParHypRepart07,Jeannot2016topo,schedmatters2016}.
 Redistributing the workload among PEs of a parallel system is a way to mitigate load imbalance created by dynamic applications.
 This is done in order to achieve strong scalability, and thus, efficient use of computing resources.
 In this section, we will discuss how different approaches seek to perform load balancing in distributed systems, why they lack scalability, and how we intend to mitigate migration, communication, and scalability issues in our proposed solution.
@@ -28,15 +28,15 @@ Although centralized algorithms are used the most, their sequential and data dep
 Different approaches have been used to scale scheduling strategies, being \textit{hierarchical} and \textit{distributed} the most widespread ones.
 
 
-Hierarchical algorithms will work differently in different granularity levels, exploring parallelism and delivering better performance~\cite{hybrid,nuco}.
+Hierarchical algorithms will work differently in different granularity levels, exploring parallelism and delivering better performance~\cite{hybrid}.
 These strategies are able to acquire as much static system information as the centralized techniques, while taking advantage of system parallelism.
-Some hierarchical strategies have used topology-aware approaches to increase mapping affinity~\cite{nuco,hwtopo}, while others rely on a hypergraph representation to precisely describe application communication patterns~\cite{ZoltanParHypRepart07}.
+Some hierarchical strategies have used topology-aware approaches to increase mapping affinity~\cite{hwtopo,Jeannot2016topo}, while others rely on a hypergraph representation to precisely describe application communication patterns~\cite{ZoltanParHypRepart07}.
 However, these approaches still tend to create communication bottlenecks and may take too long to aggregate the necessary information to perform the rescheduling itself.
 As parallel systems grow, the cost of having all this system information increases, and tend become inefficient.
 
-\textit{Work stealing} is one of the most broadly used distributed techniques for balancing load in parallel systems~\cite{DBLP:journals/ijpp/YangH18,Janjic2013}.
+\textit{Work stealing} is one of the most broadly used distributed techniques for balancing load in parallel systems~\cite{Yang18wssurvey,Janjic2013}.
 The essence of work stealing makes it a very effective solution for highly irregular parallel and distributed applications.
-However, work stealing may not be as effective, since its concurrent and randomized nature may interfere with iterative application execution~\cite{lifflander2012work}.
+However, work stealing may not be as effective, since its concurrent and randomized nature may interfere with iterative application execution~\cite{Beri2015hetws}.
 
 Also in the distributed domain, diffusive techniques have been used to irradiate work in an iterative fashion among PEs~\cite{diffus}.
 Although such an approach is interesting, since it may not impact much communication costs, it may also have a high convergence time, easily becoming inefficient in very imbalanced scenarios.
