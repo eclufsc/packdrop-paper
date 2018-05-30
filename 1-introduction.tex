@@ -57,15 +57,15 @@ Although rescheduling algorithms have been able to greatly improve the performan
 Since mapping tasks to processing elements (PEs) is an NP-Hard problem~\cite{npcomplete}, the increase in application data and platform size makes centralized rescheduling approaches inefficient.
 This creates a need for scalable and decentralized rescheduling approaches, avoiding both excess of data to process and network contention~\cite{trahay2009scalable}.
 
-The two main paths to achieve scalability in global rescheduling for iterative applications are Hierarchical and Distributed approaches.
+The two main paths to achieve scalability in global rescheduling for iterative applications are \textit{hierarchical} and \textit{distributed} approaches.
 Hierarchical load balancing explores parallelism using different approaches for fine-grain and coarse-grain steps~\cite{hybrid}.
-Although more scalable, hierarchical approaches are often tied to the limitations of centralized approaches, as data is still aggregated in parent nodes.
-On the other hand, distributed load balancing approaches seek to achieve scalability through multiple smaller and decentralized scheduling decisions.
+Although scalable, hierarchical schedulers are often tied to the same limitations of centralized approaches, as data is still aggregated in parent nodes.
+On the other hand, distributed load balancing approaches seek to achieve scalability through multiple smaller, decentralized scheduling decisions.
 Albeit more scalable than hierarchical approaches, decentralized schedulers have limited system information and often incur in higher amounts of communication.
 
 Despite their notable effectiveness, few are the distributed strategies in the domain of global rescheduling~\cite{diffus,grapevine}.
-In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique called \packdrop.
-Our approach is based on the idea of grouping tasks in batches prior to migration decisions, ultimately decreasing the communication overhead present in the schedule decision time and preserving the locality of migrated tasks~\cite{Paudel2013wslocal}.
+In this paper, we present the concept of \textit{Batch Task Migration} and a novel distributed global rescheduling algorithm that applies this technique, called \packdrop.
+Our approach is based on the idea of grouping tasks in batches prior to migration decisions, decreasing the communication overhead in the scheduling decision time and preserving the locality of migrated tasks~\cite{Paudel2013wslocal}.
 
 % Main contributions
 In this paper, we present the following contributions: 
