@@ -16,8 +16,8 @@ Overall, our approach intends to:
 
 \begin{enumerate}
 	\item \textit{Reduce unnecessary communication} between PEs;
-	\item \textit{Exploit locality} among tasks in the same PE, since migrations are done in groups;
-	\item \textit{Accelerate the decision making process}, consequence of the first; and
+	\item \textit{Exploit locality} among tasks in the same PE through grouped migrations;
+	\item \textit{Accelerate the decision making process};
 	\item \textit{Reduce the application makespan}.
 \end{enumerate}
 
@@ -155,11 +155,9 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
-In this implementation we used two constants. 
-The first one ($v$) was set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$).
-The second one ($ps$) is defined in Equation~\ref{eq:ps} and was set to $2$.
-This was done in order to both increase communication efficiency (later explained in Section~\ref{sec:analysis}) and ensure precise balancing.
-As $ps$ grows, so does communication efficiency, but in order to do so, fine-grain migrations are compromised.
+In this implementation we used two constants: (i) ($v$) is set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$) and (ii) ($ps$) is defined in Equation~\ref{eq:ps} and is set to $2$.
+This configuration aims to both increase communication efficiency (later explained in Section~\ref{sec:analysis}) and ensure precise balancing.
+Finally, as $ps$ grows, so does the communication efficiency, but in order to do so, fine-grain migrations are compromised.
 % We could add another sentence claming the application's dynamic nature would impact the fine-grain migrations anyway, but this paragraph is already waaaaaay too long.
 
 \begin{equation}
@@ -203,9 +201,8 @@ After a pack is sent, PEs will accept or reject it based on their current load, 
 \end{algorithm}
 
 If one or more packs were not successfully exchanged, an \textit{overloaded} PE must attempt a new \batchsend, in order to achieve load balance, as specified in Section~\ref{sec:algo:sending}.
-Once the PEs know their new mappings, tasks are migrated and the strategy is finished, requesting the confirmed migrations to the RTS (line~$15$). 
+As soon as the PEs know their new mappings, tasks are migrated and the strategy is finished, requesting the confirmed migrations to the RTS (line~$15$). 
 The $TaskMap$ function will take care of informing the new mapping ($M'$) to all tasks received via $Send$ and removed via \batchsend.
 
 \packdrop intends to remap tasks to PEs in a distributed, workload-aware fashion.
-This approach is the basis for new batch task migration distributed strategies that may take other factors into account.
-
+This approach is the basis for new batch task migration distributed strategies that might take other factors into account.
