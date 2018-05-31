@@ -91,8 +91,8 @@ With this information, each PE will take the task with the smallest load within 
 Then, if the sum of all tasks in the pack is greater than the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
 The process is repeated until the load of the set becomes greater than the upper bound~(line~$2$).
 
-Any unfinished $LT$s should be sent even if those are not complete.
-This is done to avoid having an overloaded PE that can still migrate tasks.
+Any unfinished $LT$s should be sent even if these are not complete.
+This is done in order to prioritize migration from overloaded PEs, even if they cannot assemble a complete batch.
 A PE that receives this load will not receive as much load as others, but since the PE will not overload, it should not be prejudicial to global system balance.
 
 \begin{algorithm}[b]
