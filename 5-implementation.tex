@@ -1,7 +1,7 @@
 \section{Implementation} \label{sec:impl}
 
 \packdrop was implemented as a load balancing strategy in \charm\footnote{Available at: \texttt{https://github.com/viniciusmctf/\\packdrop-code/tree/SBAC-Release}}, a parallel programming model that provides a \textit{load balancing framework} based on migration of its parallel, message-driven objects, the \textit{chares}~\cite{CharmLOTR}.
-\textit{Chares} are mapped as \textit{tasks} to PEs and the \charm runtime system (RTS) provides the load information needed for our rescheduling strategy.
+\textit{Chares} are mapped as \textit{tasks} to PEs and the \charm RTS provides the load information needed for our rescheduling strategy.
 
 The \charm RTS allows for the desired asynchronous behavior of \packdrop.
 It also provides the necessary reduction and quiescence detection mechanisms used in this implementation.
@@ -11,7 +11,7 @@ Reductions are used to evaluate the total number of chares and the average load 
 This way, any of the available applications for \charm can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
 
 During load balancing in the \charm RTS, each instance of \packdrop runs as an individual chare.
-Remote procedures in the algorithms ($\rightarrow$) were implemented as messages, exchanged between objects.
+Remote procedures in the algorithms ($\rightarrow$) were implemented as messages exchanged between objects.
 Reductions ($\Rightarrow$) used the RTS provided interface ({\small\texttt{CkReduction}}).
 The \textit{three-way handshake}, necessary to acknowledge a $Send$, was implemented with message exchanges.
 Finally, synchronization barriers in our algorithms use either quiescence detection or reductions.
@@ -23,8 +23,8 @@ The first one is a synthetic benchmark called \textit{LB Test}.
 It simulates work with a variety of communication topologies, such as ring, meshes and randomized patterns.
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
-The second one is a MD mini-app called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
-This mini-app simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art MD application NAMD, winner of the Golden Bell Award~\cite{namd,namd0}.
+The second one is a molecular dynamics application called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
+This application simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art NAMD application, which was the winner of the Golden Bell Award~\cite{namd,namd0}.
 \textit{LeanMD} uses geometric decomposition in a three-dimensional ($3$D) simulation space.
 However, since the number of simulated atoms in each region affects the number of exchanged messages, it has an irregular and dynamic communication pattern, even though it respects the geometric distribution.
 
