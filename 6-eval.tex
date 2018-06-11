@@ -155,8 +155,10 @@ It shows the increased cost of \refinelb, which is due to both information aggre
 All experiments executed on Platform 2 were compiled with \charm using the {\small\texttt{--with-production}} option, combined with the specifications detailed on Table~\ref{tab:ptinfo}.
 Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate the scalability of \packdrop.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
+In this platform, we focused on the \textit{LeanMD} application, since \textit{LB Test}'s synthetic behavior is well represented in Section~\ref{sec:cluster:lbtest}.
+%Furthermore, the synthetic nature of \textit{LB Test}, as well as the lack of relevant locality on its tasks, make it a much more \textit{compute-centered} application.
 
-\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
+%\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
 
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:sdumont:md}
 
@@ -180,15 +182,23 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 
 %\todo[inline]{Log times option added. If we keep the log option on resched time, it is possible to portray Refine results in a satisfatory way.}
 
-\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
-\todo[inline]{Marcio: It you be better to put the legend of Figs. 1a and 1b out of the graph (in a single line above the graphs). Moreover, number of y-axis in Fig. 1b are to close to each other. Finally, the y-axis in Fig. 1b is weird: where is the 0 there?}
+%\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
+%\todo[inline]{Marcio: It you be better to put the legend of Figs. 1a and 1b out of the graph (in a single line above the graphs). Moreover, number of y-axis in Fig. 1b are to close to each other. Finally, the y-axis in Fig. 1b is weird: where is the 0 there?}
 
-\begin{figure}[t]
- \centering
- \subfigure[Application Time (s).]{\includegraphics[width=0.49\linewidth]{images/apptime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
- \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.49\linewidth]{images/schedtime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
- \caption{\textit{LeanMD} execution results on Platform 2.}
- \label{fig:eval:sdumont:leanmd}
+%\begin{figure}[t]
+% \centering
+% \subfigure[Application Time (s).]{\includegraphics[width=0.49\linewidth]{images/apptime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
+% \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.49\linewidth]{images/schedtime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
+% \caption{\textit{LeanMD} execution results on Platform 2.}
+% \label{fig:eval:sdumont:leanmd}
+%\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/leanmd_sdumont-cropped.pdf}
+	\caption{\textit{LeanMD} execution results on Platform 2.}
+	\label{fig:eval:sdumont:leanmd}
+	\vspace{-5pt}	
 \end{figure}
 
 %\begin{figure}[!ht]
@@ -205,16 +215,15 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 %	\label{fig:eval:sdumont:leanmd:schedtime}
 %\end{figure}
 
-Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}, both in a $log$ scale to better exhibit the differences between \distributedlb and \packdrop.
-%\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being on average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
+Results of mean application and rescheduling time are displayed in Figure~\ref{fig:eval:sdumont:leanmd} (to the left and right, respectively), both in a $log$ scale to better exhibit the differences between \distributedlb and \packdrop.
 In this evaluation, \refinelb had a very low efficiency, being $1$s slower than \greedylb in the $384$ PEs scenario.
 It was able to perform better as we increased the number of PEs, but was ultimately unable to compete with distributed approaches.
 
-\distributedlb benefits from this platform due to Infiniband's low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
-\packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
+\distributedlb benefits from this platform due to Infiniband's low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd}.
+\packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb. %, displayed in Figure~\ref{fig:eval:sdumont:leanmd}.
 
 The rescheduling and application time results of \textit{LeanMD} in this platform highlight the importance of using scalable approaches to balance system load, as well as using available parallelism in execution environments.
-This is specially visible in \greedylb results on Figure~\ref{fig:eval:sdumont:leanmd:apptime}, where the application performance was decreased after the global rescheduling process.
+This is specially visible in \greedylb results on Figure~\ref{fig:eval:sdumont:leanmd}, where the application performance was decreased after the global rescheduling process.
 Increased migration costs and higher \textit{hop} counts in communication, consequences of load balancing, heavily impacted \textit{LeanMD} in this case.
 
 \subsection{Performance Evaluation Overview} \label{eval:overview}

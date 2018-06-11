@@ -8,7 +8,8 @@ It also provides the necessary reduction and quiescence detection mechanisms use
 Reductions are used to evaluate the total number of chares and the average load in the system, while the quiescence detection is necessary to finalize the information propagation step of the algorithm.
 
 \charm provides application-independent load balancing, which means that any application may use global rescheduling strategies implemented for this RTS.
-This way, any of the available applications for \charm can be used to evaluate our strategy and compare it to other load balancers available for this RTS.
+%Because of this, we may use any available application to evaluate our strategy, and compare it to other \charm implementations.
+This way, any of the available applications for \charm can be used to evaluate and compare our strategy to other load balancers in this RTS.
 
 During load balancing in the \charm RTS, each instance of \packdrop runs as an individual chare.
 Remote procedures in the algorithms ($\rightarrow$) were implemented as messages exchanged between objects.
