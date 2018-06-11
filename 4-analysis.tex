@@ -10,7 +10,7 @@ For the sake of simplicity, in the remainder of this analysis, the number of tas
 will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
 We also assume $c_c > p_c$ for all concurrent scenarios, since communication costs are several orders of magnitude higher than computational costs.
 $C(A)$ is referred here as the total cost for a given workload $A$.
-Unmentioned lines are assumed to have non-varying cost, and thus will not interfere in the asymptotic analysis.
+Unmentioned lines are assumed to have non-varying costs, and thus will not interfere in the asymptotic analysis.
 
 Lines~2~and~3 are global reductions, which have a well-known cost of $O(log\ n)$.
 Lines~8~and~11 are concurrent, so their cost will be the maximum among them:
@@ -49,7 +49,7 @@ complexity of these lines to $O(log\ n)$.
 Finally, line~14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
 Let $ps$ be the average number of tasks inside of a $LT$, and $m_l$ the maximum number of tasks in a given overloaded PE.
 At this step, a solution without \textit{Batch Task Migration} would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
-This is the most expensive in Algorithm~\ref{alg::packdrop}, and as such it is the most interesting one to optimize.
+This is the most expensive part of Algorithm~\ref{alg::packdrop}, and as such it is the most interesting one to optimize.
 Our final asymptotic complexity is:
 
 \begin{equation}
