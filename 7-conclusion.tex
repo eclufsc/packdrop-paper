@@ -5,7 +5,7 @@ It intends to preserve task communication locality, migrating multiple work unit
 This preserves communication efficiency, while other workload-aware strategies perform rescheduling without considering task locality.
 
 Our approach also mitigates communication costs during algorithm execution time.
-We guarantee this by transmitting information about multiple migrations at a time, in \textit{Batches}.
+We guarantee this by transmitting information about multiple migrations at a time, in \textit{batches}.
 Thanks to this, our novel scheduler (presented in Section~\ref{sec:algo:main}) has an increased performance in high communication overhead platforms, discussed in Section~\ref{sec:cluster}.
 
 We have evaluated our strategy in two different execution environments. 
