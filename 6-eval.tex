@@ -156,6 +156,8 @@ All experiments executed on Platform 2 were compiled with \charm using the {\sma
 Different numbers of homogeneous $2\times 12$ PEs compute nodes ($2$ NUMA-nodes with $12$ cores each) were used to evaluate the scalability of \packdrop.
 We ranged from $16$ ($384$ PEs) to $32$ ($768$ PEs) unique nodes in our evaluation. 
 
+\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
+
 \subsubsection{Evaluation with Molecular Dynamics} \label{sec:sdumont:md}
 
 \textit{LeanMD} experiments generated a $10\times15\times10$ space, with a total of $171$K \textit{tasks}.
@@ -178,7 +180,10 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 
 %\todo[inline]{Log times option added. If we keep the log option on resched time, it is possible to portray Refine results in a satisfatory way.}
 
-\begin{figure}[!ht]
+\todo[inline]{Marcio: you should briefly explain here why you did not include results with LB Test.}
+\todo[inline]{Marcio: It you be better to put the legend of Figs. 1a and 1b out of the graph (in a single line above the graphs). Moreover, number of y-axis in Fig. 1b are to close to each other. Finally, the y-axis in Fig. 1b is weird: where is the 0 there?}
+
+\begin{figure}[t]
  \centering
  \subfigure[Application Time (s).]{\includegraphics[width=0.49\linewidth]{images/apptime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:apptime}}
  \subfigure[Rescheduling Time (s).]{\includegraphics[width=0.49\linewidth]{images/schedtime_leanmd_sdumont_log.pdf}\label{fig:eval:sdumont:leanmd:schedtime}}
@@ -203,7 +208,7 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 Results of mean application time are displayed in Figure~\ref{fig:eval:sdumont:leanmd:apptime} and mean rescheduling time in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}, both in a $log$ scale to better exhibit the differences between \distributedlb and \packdrop.
 %\refinelb was excluded from this evaluation since \textit{LeanMD} input presents more data than \refinelb is able to process in a reasonable time, being on average $1,000$ms slower than \greedylb in the $384$ PEs test case. % Nenhuma ideia de tempo geral? O que é razoável?
 In this evaluation, \refinelb had a very low efficiency, being $1$s slower than \greedylb in the $384$ PEs scenario.
-It was able to perform better as PE numbers grew, but was ultimately unable to compete with distributed approaches.
+It was able to perform better as we increased the number of PEs, but was ultimately unable to compete with distributed approaches.
 
 \distributedlb benefits from this platform due to Infiniband's low latency communication costs, which reflects on improved total application times, as seen in Figure~\ref{fig:eval:sdumont:leanmd:apptime}.
 \packdrop followed it closely and we can see that its rescheduling time in larger systems outperforms \distributedlb, displayed in Figure~\ref{fig:eval:sdumont:leanmd:schedtime}.
