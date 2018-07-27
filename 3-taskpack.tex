@@ -8,7 +8,7 @@
 
 The role of the global rescheduler is to ultimately reduce the application makespan. 
 Thus, the scheduler policy must incur low overheads as to not overshadow its benefits. 
-Moreover, we envision that a \textit{Batch Task Migration} approach can ensure a quick and informed remapping of tasks, ultimately reducing the amount of messages during the scheduling decision process. 
+Moreover, we envision that a \textit{Batch Task Migration} approach can ensure a quick and informed remapping of tasks, basically reducing the amount of messages during the scheduling decision process. 
 Therefore, this section is dedicated to present our \packdrop strategy as a distributed refinement-based technique that implements our proposed \textit{Batch Task Migration} approach.
 
 %In this work we present the \textit{PackDrop} strategy, a distributed refinement-based technique implementing our new approach. 
@@ -49,7 +49,6 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$\rightarrow$ 	& Remote procedure call 								& Section~\ref{sec:algo} \\
 		$\Rightarrow$ 	& Reduction process 									& Section~\ref{sec:algo} \\
 		$load_{avg}$		& Average system load of a PE 						& Section~\ref{sec:algo:creation}\\ 
-		$s$			  	& Compute load in a batch of tasks 					& Section~\ref{sec:algo:creation} \\
 		$rand(S)$		& Random element of $S$ 								& Section~\ref{sec:algo:sending} \\
 		$M$				& Mapping of tasks									& Section~\ref{sec:algo:main} \\
 		$P$				& Global set of PEs 									& Section~\ref{sec:algo:main} \\
@@ -57,8 +56,9 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 		$pack$			& Set of leaving tasks								& Section~\ref{sec:algo:main} \\
 		& &\\
 				
-		$LT$				& Set of tasks leaving a PE 							& Algorithm~\ref{alg::packcreation} \\
-		$L$				& Set of tasks, subset of $LT$						& Algorithm~\ref{alg::packcreation} \\
+		$LT$				& List of sets of tasks leaving a PE					& Algorithm~\ref{alg::packcreation} \\
+		$L$				& Set of tasks assemblying a batch, subset of $T$ 	& Algorithm~\ref{alg::packcreation} \\
+		$s$			  	& Threshold of load in a batch of tasks 				& Algorithm~\ref{alg::packcreation} \\
 		$G$				& Target for task receiving							& Algorithm~\ref{alg::packsend} \\
 		$BG$				& Pairs expecting migration ack						& Algorithm~\ref{alg::packsend} \\ 
 		$Send(T)\rightarrow G $ & Send a set $T$ to target $G$				& Algorithm~\ref{alg::packsend} \\ 
@@ -74,7 +74,7 @@ For clarity, all symbols used in the algorithms are listed in Table~\ref{tab:alg
 \subsection{\batchassembly Algorithm} \label{sec:algo:creation}
 
 The \batchassembly algorithm is presented in Algorithm~\ref{alg::packcreation}.
-It uses an estimated batch size ($s$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($v$), to create a set of leaving tasks ($LT$).
+It uses an estimated batch size ($s$), a set of local tasks ($T$), the current PE $load$ and a threshold for PE loads ($v$), to create a list of leaving packs ($LT$).
 The threshold is used to calculate an upper bound of the average system load ($load_{avg}$), using Equation~\ref{eq:ceil}. 
 The load of any set of tasks is given by Equation~\ref{eq:load}.
 
@@ -88,17 +88,18 @@ The load of any set of tasks is given by Equation~\ref{eq:load}.
 \end{equation}
 
 With this information, each PE will take the task with the smallest load within its pool, and add it to a set of tasks ($L$) (lines~$3-5$).
-Then, if the sum of all tasks in the pack is greater than the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
+Then, if the sum of all tasks in the pack ($L$) is greater than the expected batch size ($s$), the batch is assembled and the strategy starts creating another one (lines~$6-9$).
 The process is repeated until the load of the set becomes greater than the upper bound~(line~$2$).
 
-Any unfinished $LT$s should be sent even if these are not complete.
+Any unfinished packs should be sent even if these are not complete.
 This is done in order to prioritize migration from overloaded PEs, even if they cannot assemble a complete batch.
 A PE that receives this load will not receive as much load as others, but since the PE will not overload, it should not be prejudicial to global system balance.
+%It is important to note that every pack ($L$) structure is preserved after the insertion on $LT$, so every pack will have roughly the same load on the migration step.
 
 \begin{algorithm}[b]
     \DontPrintSemicolon
-    \KwIn{$s$, expected load of a batch; $T$, set of local tasks; $load_{avg}$, average global PE load; $v$, imbalance tolerance ratio.}
-    \KwOut{$LT$, set of tasks leaving this PE.}
+    \KwIn{$s$, load threshold of a batch; $T$, set of local tasks; $load_{avg}$, average global PE load; $v$, imbalance tolerance ratio.}
+    \KwOut{$LT$, list of packs leaving this PE.}
     $L \gets \varnothing,\ LT \gets \varnothing$ \\
     \While{$load_{set}(T) > ub(load_{avg},v)$}{
         $t \gets a \in   T\ |\ a$ is the lower bound of $T$\\
@@ -106,11 +107,11 @@ A PE that receives this load will not receive as much load as others, but since 
         $\textit{L} \gets L\ \cup\ \{t\}$\\
         %$load \gets load - t$\\
         \If{$load_{set}(L) > s$}{
-            $LT \gets LT\ \cup\ L$\\
+            $LT \gets LT\ \cup\ \{L\}$\\
             $L \gets \varnothing $
         }
     }
-    $LT \gets LT\ \cup\ L$   
+    $LT \gets LT\ \cup\ \{L\}$   
     \caption{\batchassembly} 
     \label{alg::packcreation}
 \end{algorithm}
@@ -121,7 +122,7 @@ The \batchsend algorithm is presented in Algorithm~\ref{alg::packsend}.
 The algorithm will use the $LT$s, produced by \batchassembly, and the set of $Targets$, produced by an information propagation step ($Gossip$~\cite{gossip}), in order to schedule packs on remote PEs.
 This will produce a set of expected Batch/Target ($BG$) pairs, which should be confirmed by the remote target.
 
-For each subset $b \subset LT$ (as assigned in Algorithm~\ref{alg::packcreation}), the algorithm will select a random target from $G$~(line~$3$).
+For each subset $b \in LT$ (as assigned in Algorithm~\ref{alg::packcreation}), the algorithm will select a random target from $G$~(line~$3$).
 It will invoke a remote $Send$ procedure on the target $g$~(line~$4$), and register its attempt in a pair ($b$, $g$).
 This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
 
@@ -130,7 +131,7 @@ This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
     \KwIn{$LT$, set of tasks leaving the local PE; $G$, set of possible migration targets.}
     \KwOut{$BG$, set of expected migrations.}
     $BG \gets \varnothing$ \\
-    \ForEach{$b \subset LT$}{
+    \ForEach{$b \in LT$}{
         %$b\ \gets p\ |\ p\ \in\ LT$\\
         $g\ \gets  rand(G)$\\
         $Send(b)\rightarrow g$\\
@@ -155,7 +156,7 @@ A local mapping of tasks contains only tasks that are assigned to the current PE
 
 The first part of the algorithm (lines $1-6$) is the information sharing and setup process. 
 This process is done through $2$ global reductions of average PE load (line~$2$) and global number of tasks (line~$3$).
-In this implementation we used two constants: (i) $v$ is set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$); and (ii) $ps$ is defined in Equation~\ref{eq:ps} and is set to $2$.
+In this implementation we used two constants: (i) $v$ is set to $0.05$ in order to limit the imbalance at $5\%$ (line~$5$); and (ii) in Equation~\ref{eq:ps}, a constant is set to $2$, in order to determine $ps$.
 
 \begin{equation}
 	ps = 2-\frac{|P|}{ttc}

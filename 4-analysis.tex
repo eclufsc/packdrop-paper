@@ -43,7 +43,7 @@ Thus, the cost of lines~8~and~11 is:
 \begin{equation}
  max((p_c\times m),\ (c_c\times log\ n))
 \end{equation}
-and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchAssembly)\in C(Gossip)$, which makes the 
+and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchAssembly)< C(Gossip)$, which makes the 
 complexity of these lines to $O(log\ n)$.
 
 Finally, line~14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
