@@ -25,7 +25,7 @@ It simulates work with a variety of communication topologies, such as ring, mesh
 \textit{LB Test} is known to have a low migration cost, with light \textit{chares}, and most of its load bound to computation, instead of communication.
 
 The second one is a molecular dynamics application called \textit{LeanMD}\footnote{Available at: \texttt{http://charmplusplus.org/miniApps}}.
-This application simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art NAMD application, which was the winner of the Golden Bell Award~\cite{namd,namd0}.
+This application simulates the behavior of atoms and it mimics the force computation done in the state-or-the-art NAMD application, which was the winner of the Golden Bell Award~\cite{namd}.
 \textit{LeanMD} uses geometric decomposition in a three-dimensional ($3$D) simulation space.
 However, since the number of simulated atoms in each region affects the number of exchanged messages, it has an irregular and dynamic communication pattern, even though it respects the geometric distribution.
 

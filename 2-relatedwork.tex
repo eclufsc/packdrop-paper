@@ -27,14 +27,14 @@ In the centralized domain, strategies implement a variety of heuristics in order
 Although centralized algorithms are used the most, their sequential and data dependent approach lacks scalability, as load balancing overheads exceeds its benefits with the increasing amount of input data.
 Different scheduling approaches are designed to tackle this scalability problem, being \textit{hierarchical} and \textit{distributed} the most widespread ones.
 
-Hierarchical algorithms approach load balancing in different granularity levels, exploring parallelism and delivering better performance~\cite{Unat2017localitysurvey}.
+Hierarchical algorithms approach load balancing in different granularity levels, exploring parallelism and delivering better performance~\cite{hybrid,Unat2017localitysurvey}.
 These strategies are able to acquire as much static system information as the centralized techniques, while exploiting system parallelism.
 Some hierarchical strategies have used topology-aware approaches to increase mapping affinity~\cite{hwtopo,Jeannot2016topo}.
 Others rely on a hypergraph representation to precisely describe application communication patterns~\cite{ZoltanParHypRepart07}.
 However, these approaches still tend to create communication bottlenecks and may incur undesired overheads to aggregate the required information for rescheduling.
 As parallel systems grow, the amount of system data increases, and so does the cost of querying this information, which leads hierarchical approaches to be inefficient in larger systems.
 
-\textit{Work stealing} is one of the most broadly used distributed techniques for balancing load in parallel systems~\cite{Yang18wssurvey,AlOmairy2015}.
+\textit{Work stealing} is one of the most broadly used distributed techniques for balancing load in parallel systems~\cite{Yang18wssurvey,AlOmairy2015,Janjic2013}.
 The essence of work stealing makes it a very effective solution for highly irregular parallel and distributed applications.
 However, work stealing may not be as effective, since its concurrent and randomized nature may interfere with iterative application execution cycle~\cite{Beri2015hetws}.
 
