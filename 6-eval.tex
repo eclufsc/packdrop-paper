@@ -4,7 +4,7 @@ We used two platforms to evaluate the performance of \textit{PackDrop}:
 
 \begin{itemize}
 	\item \textbf{Platform 1:} A cluster called \textit{Graphene} from \textit{Grid'5000} with $4$ PEs per node and  a Gigabit Ethernet interconnection network.
-	\item \textbf{Platform 2:} A subset of a tightly coupled supercomputer called \textit{Santos Dumont} from the Brazilian National Laboratory for Scientific Computing (LNCC) with $24$ PEs per node and an Infiniband interconnection network.% supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
+	\item \textbf{Platform 2:} A subset of a larger computational cluster called \textit{Santos Dumont} from the Brazilian National Laboratory for Scientific Computing (LNCC) with $24$ PEs per node and an Infiniband interconnection network.% supported by Intel's Parallel Studio XE implementation of \texttt{MPI} (v2017.4).
 \end{itemize}
 
 All applications were compiled with {\small\texttt{gcc}} with the following flags: {\small\texttt{-std=c++11 -O3}}. Details of both platforms are available on Table~\ref{tab:ptinfo}.
@@ -55,7 +55,7 @@ Overall, $32$ homogeneous compute nodes were used, with a total of $128$ PEs.
 \subsubsection{Evaluation with Synthetic Load} \label{sec:cluster:lbtest}
 
 \textit{LB Test} experiments had a total of $18,990$ \textit{tasks}, executed over $150$ iterations, performing load balance every $40$ iterations.
-\textit{Task} loads varied from $30$ms to $9000$ms, which provides reasonable load imbalance, causing global rescheduling to be useful in this case.
+\textit{Task} loads varied from $30$ms to $9,000$ms, which provides reasonable load imbalance, causing global rescheduling to be useful in this case.
 Ring, $2$D mesh and $3$D mesh communication topologies were used to provide different levels of migration impact and communication costs.
 
 %\todo[inline]{Figure~\ref{fig:eval:g5k:lbtest:apptime} and Table~\ref{tab:lbtest:apptime} present the \textbf{very same result}. The same observation holds for Table~\ref{tab:eval:g5k:leanmd:time} and in Figure~\ref{fig:eval:g5k:leanmd:time}. You should either use tables or the figures. If you put both, it seems to me that you're trying to ``encher linguiça''.}
@@ -196,7 +196,7 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 \begin{figure}
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/leanmd_sdumont-cropped.pdf}
-	\caption{\textit{LeanMD} execution results on Platform 2.}
+	\caption{\textit{LeanMD} execution results on Platform 2, displayed in logarithmic scale.}
 	\label{fig:eval:sdumont:leanmd}
 	\vspace{-5pt}	
 \end{figure}
