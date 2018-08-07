@@ -3,13 +3,13 @@
 This section presents an analysis of \packdrop (Algorithm~\ref{alg::packdrop}). 
 Symbols presented in this section are available on Tables~\ref{tab:algo:symbols}~and~\ref{tab:analysis:symbols}.
 The complexity of the information propagation ($Gossip$) has being evaluated as $O(log_{fout}n)$~\cite{grapevine},
-where $fout$ is the fanout for the algorithm and $n$ is the number of PEs in the system.
+where $fout$ is the $Gossip$ fanout and $n$ is the number of PEs in the system.
 Here we use $fout=2$, in order to avoid network congestion. 
 
 For the sake of simplicity, in the remainder of this analysis, the number of tasks in the system
 will be referred to as $m$, and the costs for computation and communication will be represented as $p_c$ and $c_c$, respectively.
 We also assume $c_c > p_c$ for all concurrent scenarios, since communication costs are several orders of magnitude higher than computational costs.
-$C(A)$ is referred here as the total cost for a given workload $A$.
+$C(A)$ is referred here as the complexity class of a given workload $A$, similar to its total cost.
 Unmentioned lines are assumed to have non-varying costs, and thus will not interfere in the asymptotic analysis.
 
 Lines~2~and~3 are global reductions, which have a well-known cost of $O(log\ n)$.
@@ -31,7 +31,7 @@ since it would assume that a single PE contains $m$ tasks and a single task may 
 		$fout$			& $Gossip$ protocol's \textit{fanout} \\ 
 		$p_c$			& Computational (processing) base cost \\
 		$c_c$			& Communication base cost \\
-		$C(A)$			& The total cost of a given function $A$ \\
+		$C(A)$			& The complexity class of a given function $A$ \\
 		$m$				& Number of tasks in the system \\
 		$m_l$			& $max(|T|)$ in an overloaded PE \\
 		\bottomrule
@@ -43,11 +43,11 @@ Thus, the cost of lines~8~and~11 is:
 \begin{equation}
  max((p_c\times m),\ (c_c\times log\ n))
 \end{equation}
-and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchAssembly)< C(Gossip)$, which makes the 
+and since $c_c$ is several orders of magnitude bigger than $p_c$, we could assume $C(BatchAssembly) \in C(Gossip)$, which makes the 
 complexity of these lines to $O(log\ n)$.
 
 Finally, line~14 will have a complexity equal to the largest number of packs migrated by an overloaded PE.
-Let $ps$ be the average number of tasks inside of a $LT$, and $m_l$ the maximum number of tasks in a given overloaded PE.
+Let $ps$ be the average number of tasks inside of an $LT$, and $m_l$ the maximum number of tasks in a given overloaded PE.
 At this step, a solution without \textit{Batch Task Migration} would have a cost of $c_c\times m_l$, while our approach will divide this complexity by $ps$. 
 This is the most expensive part of Algorithm~\ref{alg::packdrop}, and as such it is the most interesting one to optimize.
 Our final asymptotic complexity is:
