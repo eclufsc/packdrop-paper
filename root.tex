@@ -2,11 +2,11 @@
 %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 %        1         2         3         4         5         6         7         8
 
-\documentclass[a4paper, 10pt, conference]{IEEEtran}  % Comment this line out if you need a4paper
+\documentclass[a4paper, 10pt, twocolumn, final]{article}  % Comment this line out if you need a4paper
 
 %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
 
-\IEEEoverridecommandlockouts                              % This command is only needed if
+%\IEEEoverridecommandlockouts                              % This command is only needed if
                                                           % you want to use the \thanks command
 
 
@@ -19,7 +19,7 @@
 \usepackage{mathptmx} % assumes new font selection scheme installed
 \usepackage{times} % assumes new font selection scheme installed
 \usepackage[utf8]{inputenc}
-\usepackage[onelanguage,ruled,linesnumbered]{algorithm2e}
+\usepackage[onelanguage,linesnumbered, boxruled]{algorithm2e}
 \usepackage{booktabs} % For formal tables
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -34,7 +34,7 @@
 \newcommand{\packdrop}{$PackDrop$\xspace}
 \newcommand{\batchsend}{$BatchSend$\xspace}
 \newcommand{\batchassembly}{$BatchAssembly$\xspace}
-
+\providecommand{\keywords}[1]{\textbf{\textit{Index terms---}} #1}
 \newcommand{\distributedlb}{$Distributed$\xspace}
 \newcommand{\dummylb}{$Dummy$\xspace}
 \newcommand{\greedylb}{$Greedy$\xspace}
@@ -43,16 +43,12 @@
 
 \newcommand\tofix[1]{\textcolor{orange}{#1}}
 
-\title{A Batch Task Migration Approach\\ for Decentralized Global Rescheduling}
+\title{A Batch Task Migration Approach for Decentralized Global Rescheduling}
 
 % Organizar as linhas de autores de forma diferente. Está muito caótico com múltiplas pessoas da mesma instituição as vezes separadas e as vezes juntas
 
 \author{
-\IEEEauthorblockN{Vinicius Freitas$^\star$, Alexandre de L. Santana$^\star$, Márcio Castro$^\star$, Laércio L. Pilla$^{\star\dagger}$\thanks{This work was partially supported by the  Brazilian Federal Agency for the Support and Evaluation of Graduate Education (CAPES) and by the Brazilian Council of Technological and Scientific Development (CNPq), project grant 401266/2016-8.}}
-\IEEEauthorblockA{$^\star$ Federal University of Santa Catarina (UFSC) --- Florianópolis, Brazil\\
-$^\dagger$ Univ. Grenoble Alpes, Inria, CNRS, Grenoble INP, LIG --- Grenoble, France\\
-Email: {\smaller\texttt{\{vinicius.mctf,alexandre.santana\}@posgrad.ufsc.br, marcio.castro@ufsc.br, laercio.lima@inria.fr}}}
-}
+Vinicius Freitas\thanks{Vinicius Freitas is with the Embedded Computing Lab (ECL) and with the Distributed Systems Research Lab (LaPeSD) at the Federal University of Santa Catarina (UFSC) --- Florianópolis, Brazil.  Contact information: {\footnotesize \tt vinicius.mct.freitas@gmail.com}} , Alexandre de L. Santana\thanks{Alexandre de L. Santana is with ECL at UFSC --- Florianópolis, Brazil.} , Márcio Castro\thanks{Márcio Castro is with LaPeSD at UFSC --- Florianópolis, Brazil. Contact information: {\footnotesize \tt marcio.castro@ufsc.br}} , Laércio L. Pilla\thanks{Laércio is with the Univ. Grenoble Alpes, Inria, CNRS, Grenoble INP, LIG --- Grenoble, France. Contact information: {\footnotesize \tt laercio.lima@inria.fr}} \thanks{This work was partially supported by the  Brazilian Federal Agency for the Support and Evaluation of Graduate Education (CAPES) and by the Brazilian Council of Technological and Scientific Development (CNPq), project grant 401266/2016-8.}}
 
 \begin{document}
 
@@ -77,9 +73,9 @@ Email: {\smaller\texttt{\{vinicius.mctf,alexandre.santana\}@posgrad.ufsc.br, mar
 
 \end{abstract}
 
-\begin{IEEEkeywords}
+\begin{keywords}
 High Performance Computing, Global Rescheduling, Load Balancing, Performance Evaluation, Parallel Algorithms
-\end{IEEEkeywords}
+\end{keywords}
 
 \input{1-introduction.tex}
 \input{2-relatedwork.tex}
@@ -97,7 +93,7 @@ The authors acknowledge the National Laboratory for Scientific Computing (LNCC/M
 
 Experiments presented in this paper were carried out using the Grid'5000 testbed, supported by a scientific interest group hosted by Inria and including CNRS, RENATER and several Universities as well as other organizations (see \texttt{https://www.grid5000.fr}).
 
-\bibliographystyle{IEEEtran}
-\bibliography{IEEEfull,sample-bibliography}
+\bibliographystyle{siam}
+\bibliography{sample-bibliography}
 
 \end{document}

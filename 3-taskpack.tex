@@ -96,7 +96,7 @@ This is done in order to prioritize migration from overloaded PEs, even if they 
 A PE that receives this load will not receive as much load as others, but since the PE will not overload, it should not be prejudicial to global system balance.
 %It is important to note that every pack ($L$) structure is preserved after the insertion on $LT$, so every pack will have roughly the same load on the migration step.
 
-\begin{algorithm}[b]
+\begin{algorithm}[h]
     \DontPrintSemicolon
     \KwIn{$s$, load threshold of a batch; $T$, set of local tasks; $load_{avg}$, average global PE load; $v$, imbalance tolerance ratio.}
     \KwOut{$LT$, list of packs leaving this PE.}
@@ -126,7 +126,7 @@ For each subset $b \in LT$ (as assigned in Algorithm~\ref{alg::packcreation}), t
 It will invoke a remote $Send$ procedure on the target $g$~(line~$4$), and register its attempt in a pair ($b$, $g$).
 This pair is then stored in the expecting confirmation set ($BG$) (line~$5$).
 
-\begin{algorithm}[t]
+\begin{algorithm}[h]
     \DontPrintSemicolon
     \KwIn{$LT$, set of tasks leaving the local PE; $G$, set of possible migration targets.}
     \KwOut{$BG$, set of expected migrations.}
@@ -177,7 +177,7 @@ At this point, PEs will send their packs using \batchsend (Algorithm~\ref{alg::p
 After a pack is sent, PEs will accept or reject it based on their current load. 
 This is done via a \textit{three-way handshake}, so both parts confirm the migration.
 
-\begin{algorithm}[t]
+\begin{algorithm}[h]
 	\DontPrintSemicolon
     \KwIn{$M$, local mapping of tasks; $load$, local PE load; $P$, set of all PEs in the system; $Id_{l}$, local PE identifier.}
     \KwOut{$  M'$, new mapping of local tasks.}

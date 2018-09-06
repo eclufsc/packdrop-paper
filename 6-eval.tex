@@ -12,6 +12,7 @@ All applications were compiled with {\small\texttt{gcc}} with the following flag
 \begin{table}[t]
     \centering
     	\caption{Overview of the experimental platforms.}
+	\resizebox{\columnwidth}{!}{
 	\begin{tabular}{lll}
 	\toprule
 	\textbf{Characteristics}	& \textbf{Platform 1} 		& \textbf{Platform 2}	\\
@@ -28,6 +29,7 @@ All applications were compiled with {\small\texttt{gcc}} with the following flag
         Communication		& UDP					& MPI $3.1.0$	\\
         \bottomrule
 	\end{tabular}
+	}
     \label{tab:ptinfo}
 \end{table}
 
@@ -75,6 +77,7 @@ Ring, $2$D mesh and $3$D mesh communication topologies were used to provide diff
         \refinelb 			& $45.491$s & $46.293$s & $47.219$s \\
         \bottomrule
 	\end{tabular}
+	
     \label{tab:lbtest:apptime}
 \end{table}
 
@@ -108,6 +111,7 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 \begin{table}[!ht]
 	\centering
 	\caption{Average application time for \textit{LeanMD} on Platform 1.}	
+	\resizebox{\columnwidth}{!}{
 	\begin{tabular}{l c c c}
 	\toprule
 	%\textbf{Scheduler} & Time (Short RP) & Time (Long RP) & Mean LB Time \\ 
@@ -120,6 +124,7 @@ Rescheduling periods (RP) of every $30$ (short) and every $60$ (long) iterations
 	\refinelb & $59.357$s & $55.899$s & $539.836$ms \\ 
 	\bottomrule	
 	\end{tabular}
+	}
 	\label{tab:eval:g5k:leanmd:time} 
 \end{table}
 
@@ -195,7 +200,7 @@ Rescheduling was performed every $30$ iterations and each configuration of \text
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/leanmd_sdumont-cropped.pdf}
+	\includegraphics[width=\linewidth]{images/leanmd_final_plot.pdf}
 	\caption{\textit{LeanMD} execution results on Platform 2, displayed in logarithmic scale.}
 	\label{fig:eval:sdumont:leanmd}
 	\vspace{-5pt}	
